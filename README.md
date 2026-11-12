@@ -18,14 +18,18 @@ src/
       Utiles.java             # Parseo de números, grillas y matrices
       Matematicas.java        # MCD/MCM, aritmética modular, resto chino, Möbius, dígitos
       Rango.java              # Intervalos [inicio, fin]: intersección, resta, unión
+      Grilla.java             # Grilla de caracteres: búsqueda, vecinos, rotaciones
       BFS.java                # Búsqueda en anchura genérica
+      Dijkstra.java           # Camino de costo mínimo genérico (y A*)
       y2025/
         Dia01.java            # Solución día 1
         Dia02.java            # Solución día 2
+        Dia03.java            # Solución día 3
     resources/
       inputs/y2025/
         day01.txt             # Input del día 1
         day02.txt             # Input del día 2
+        day03.txt             # Input del día 3
   test/
     java/advent/code/
       PruebaPunto.java
@@ -33,14 +37,18 @@ src/
       PruebaUtiles.java
       PruebaMatematicas.java
       PruebaRango.java
+      PruebaGrilla.java
       PruebaBFS.java
+      PruebaDijkstra.java
       y2025/
         Dia01Prueba.java
         Dia02Prueba.java
+        Dia03Prueba.java
 soluciones/
   2025/
     dia01.md                  # Documentación detallada del día 1
     dia02.md                  # Documentación detallada del día 2
+    dia03.md                  # Documentación detallada del día 3
 ```
 
 ## Librerías incluidas
@@ -85,3 +93,4 @@ Esto genera automáticamente la clase de solución, la clase de prueba y el arch
 |-----|--------|---------|---------|---------------|
 | [01](src/main/java/advent/code/y2025/Dia01.java) | Entrada Secreta | 1043 | 5963 | [ver](soluciones/2025/dia01.md) |
 | [02](src/main/java/advent/code/y2025/Dia02.java) | Tienda de Regalos | 38310256125 | 58961152806 | [ver](soluciones/2025/dia02.md) |
+| [03](src/main/java/advent/code/y2025/Dia03.java) | Vestíbulo | 17412 | 172681562473501 | [ver](soluciones/2025/dia03.md) |
