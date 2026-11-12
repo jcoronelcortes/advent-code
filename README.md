@@ -19,6 +19,7 @@ src/
       Resolvedor.java         # Interfaz base para todas las soluciones
       EntradaSalida.java      # Lectura de archivos de input
       Punto.java              # Coordenadas 2D (record)
+      Punto3D.java            # Coordenadas 3D (record, long): distancia al cuadrado y Manhattan
       Direccion.java          # Enum de direcciones cardinales
       Utiles.java             # Números (int y long) de texto, líneas no vacías, secciones
       Matematicas.java        # MCD/MCM, aritmética modular, resto chino, Möbius, dígitos
@@ -29,8 +30,9 @@ src/
       Dijkstra.java           # Camino de costo mínimo genérico (y A*)
       Camino.java             # Resultado de BFS y Dijkstra: nodos + costo
       Memoizador.java         # Función recursiva con caché (programación dinámica)
+      ConjuntosDisjuntos.java # Union-find: unir grupos, mismo grupo, tamaños
       y2025/
-        Dia01.java ... Dia07.java
+        Dia01.java ... Dia08.java
     resources/
       inputs/y2025/           # Inputs personales (NO se suben al repositorio)
         dia01.txt ...
@@ -39,12 +41,13 @@ src/
       RespuestasPrueba.java   # Regresión: cada día sigue dando la respuesta aceptada
       PruebaPunto.java, PruebaDireccion.java, PruebaUtiles.java, PruebaMatematicas.java,
       PruebaRango.java, PruebaConjuntoRangos.java, PruebaGrilla.java, PruebaBFS.java,
-      PruebaDijkstra.java, PruebaMemoizador.java
+      PruebaDijkstra.java, PruebaMemoizador.java, PruebaConjuntosDisjuntos.java,
+      PruebaPunto3D.java
       y2025/
-        Dia01Prueba.java ... Dia07Prueba.java
+        Dia01Prueba.java ... Dia08Prueba.java
 soluciones/
   2025/
-    dia01.md ... dia07.md     # Documentación detallada de cada día
+    dia01.md ... dia08.md     # Documentación detallada de cada día
 enunciados/                   # Enunciados copiados del sitio (NO se suben al repositorio)
 nuevo-dia.sh                  # Genera los archivos de un día nuevo
 ```
@@ -116,3 +119,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [05](src/main/java/advent/code/y2025/Dia05.java) | Cafetería | 635 | 369761800782619 | [ver](soluciones/2025/dia05.md) |
 | [06](src/main/java/advent/code/y2025/Dia06.java) | Compactador de Basura | 6171290547579 | 8811937976367 | [ver](soluciones/2025/dia06.md) |
 | [07](src/main/java/advent/code/y2025/Dia07.java) | Laboratorios | 1635 | 58097428661390 | [ver](soluciones/2025/dia07.md) |
+| [08](src/main/java/advent/code/y2025/Dia08.java) | Patio de Juegos | 171503 | 9069509600 | [ver](soluciones/2025/dia08.md) |
