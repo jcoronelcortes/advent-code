@@ -1,15 +1,14 @@
 # Año 2025 — Día 7: Laboratorios
 
-## Descripción del problema
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/7](https://adventofcode.com/2025/day/7). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
-Al salir del compactador llegamos a un ala de investigación del Polo Norte que estudia la **teletransportación**. Subimos al teletransportador y aparecemos en una sala sin puertas, con el teletransportador echando humo: el diagnóstico apunta a un problema en uno de los **colectores de taquiones**.
+## Parte 1
 
-El input es el diagrama del colector:
+### Enunciado
 
-- Un haz de taquiones entra por `S` y **siempre baja**.
-- El espacio vacío (`.`) no lo afecta.
-- Al llegar a un **divisor** (`^`) el haz se detiene, y salen dos haces nuevos: uno desde la posición inmediata a la **izquierda** del divisor y otro desde la inmediata a la **derecha**.
-- Si dos haces llegan a la misma posición, se **funden** en uno.
+Nos despedimos de los cefalópodos y salimos a los pasillos de un ala de investigación del Polo Norte. Un cartel grande dice "centro de teletransportación", y no resistimos la tentación de subirnos a la gran plataforma amarilla. De pronto aparecemos en una sala sin puertas, cuya única salida es el teletransportador... que está echando humo mágico.
+
+En la sala hay repuestos, manuales y equipos de diagnóstico. Al conectar uno, muestra el código de error **0H-N0**: hay un problema en uno de los **colectores de taquiones**. Encontramos un diagrama del colector (el input):
 
 ```
 .......S.......
@@ -30,19 +29,14 @@ El input es el diagrama del colector:
 ...............
 ```
 
-El input real es una grilla de 142 × 141 con 1754 divisores. Los divisores aparecen solo en filas alternas, nunca pegados entre sí ni en los bordes.
+- Un **haz de taquiones** entra al colector por la posición `S` y **siempre baja**.
+- El haz atraviesa libremente el espacio vacío (`.`).
+- Si el haz llega a un **divisor** (`^`), se detiene, y en su lugar salen **dos haces nuevos**: uno desde la posición inmediatamente a la **izquierda** del divisor y otro desde la inmediatamente a la **derecha**.
+- Si dos haces caen en la misma posición, se juntan en uno solo.
 
----
+#### Ejemplo
 
-## Parte 1
-
-### Pregunta
-
-¿Cuántas veces se divide el haz?
-
-### Ejemplo
-
-El diagrama final con los haces (`|`):
+El haz baja desde `S` hasta el primer divisor, que lo parte en dos; esos dos bajan hasta los dos divisores siguientes, que en total generan solo **tres** haces, porque ambos vierten en la columna que está entre ellos. El proceso sigue hasta que cada haz llega a un divisor o sale del colector. Con los haces dibujados como `|`, queda así:
 
 ```
 .......S.......
@@ -63,11 +57,17 @@ El diagrama final con los haces (`|`):
 |.|.|.|.|.|||.|
 ```
 
-En la fila 4, los dos divisores vierten haces en la misma columna central, así que entre los dos generan solo **3** haces, no 4. El ejemplo tiene 22 divisores, pero al de la fila 14, columna 9 no le llega ningún haz (en la fila 13 la columna 9 está vacía), así que no cuenta.
+En este ejemplo, el haz se divide **21** veces en total.
 
-Resultado del ejemplo: **21**
+#### Pregunta
 
-### Desarrollo de la solución
+Para reparar el teletransportador, primero hay que entender cómo se dividen los haces. En el diagrama del colector, ¿cuántas veces se divide el haz?
+
+### Solución
+
+#### El input real
+
+Es una grilla de 142 × 141 con 1754 divisores. Los divisores aparecen solo en filas alternas, nunca pegados entre sí ni en los bordes.
 
 #### Clave: los haces solo bajan
 
@@ -94,10 +94,10 @@ for (int fila = inicio.y() + 1; fila < grilla.filas(); fila++) {
 
         if (grilla.obtener(new Punto(columna, fila)) == DIVISOR) {
             divisiones++;
-            if (columna > 0) siguientes[columna - 1] += caminos;
-            if (columna < columnas - 1) siguientes[columna + 1] += caminos;
+            if (columna > 0) siguientes[columna - 1] = Math.addExact(siguientes[columna - 1], caminos);
+            if (columna < columnas - 1) siguientes[columna + 1] = Math.addExact(siguientes[columna + 1], caminos);
         } else {
-            siguientes[columna] += caminos;
+            siguientes[columna] = Math.addExact(siguientes[columna], caminos);
         }
     }
     haces = siguientes;
@@ -119,17 +119,25 @@ Un haz nuevo "sale" junto al divisor en su misma fila y empieza a bajar desde ah
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-Resulta que el colector es **cuántico**: se envía una sola partícula, y en cada divisor toma **los dos** caminos. Según la interpretación de muchos mundos, en cada divisor se divide el tiempo: en una línea temporal la partícula fue a la izquierda y en otra a la derecha. ¿En cuántas líneas temporales distintas termina la partícula?
+Terminado el análisis, empezamos a reparar el teletransportador. Al abrir el costado para cambiar el colector roto, descubrimos que no es un colector clásico: es un colector **cuántico**.
 
-### Ejemplo
+En un colector cuántico se envía **una sola partícula**, que en cada divisor toma **los dos** caminos, izquierda y derecha. Como eso es imposible, el manual recomienda la interpretación de **muchos mundos**: cada vez que la partícula llega a un divisor, lo que se divide es el tiempo. En una **línea temporal** la partícula fue a la izquierda, y en otra fue a la derecha.
 
-El enunciado muestra algunas líneas temporales: la que siempre va a la izquierda, la que alterna izquierda y derecha, y otra que termina en el **mismo punto** que la alternada pero por un camino totalmente distinto. Esa última es la diferencia clave con la parte 1: dos caminos que llegan al mismo lugar **no se funden**, cuentan como líneas temporales distintas.
+Lo que hay que saber es cuántas líneas temporales quedan activas después de que la partícula completa todos sus recorridos posibles por el colector.
 
-Resultado del ejemplo: **40**
+#### Ejemplo
 
-### Desarrollo de la solución
+Con el mismo diagrama hay muchas líneas temporales: por ejemplo, aquella en la que la partícula siempre fue a la izquierda, o aquella en la que alternó izquierda y derecha en cada divisor. Incluso hay líneas temporales que terminan en el **mismo punto** que otra, pero por un camino totalmente distinto: siguen siendo líneas temporales diferentes.
+
+En total, la partícula termina en **40** líneas temporales distintas.
+
+#### Pregunta
+
+Aplicando la interpretación de muchos mundos al diagrama del colector, ¿en cuántas líneas temporales distintas termina una sola partícula de taquiones?
+
+### Solución
 
 #### Clave: es contar caminos, y la parte 1 ya lo hacía
 
@@ -137,17 +145,14 @@ Cada línea temporal es un camino distinto desde `S` hasta salir por abajo. La s
 
 ```java
 // Dia07.java — parte2()
-long lineasTemporales = 0;
-for (long caminos : simular(Grilla.desdeLineas(lineas)).haces()) {
-    lineasTemporales = Math.addExact(lineasTemporales, caminos);
-}
+return String.valueOf(Matematicas.sumaExacta(simular(Grilla.desdeLineas(lineas)).haces()));
 ```
 
 #### Por qué no enumerar los caminos
 
 La cantidad de caminos crece de forma **exponencial** con el número de divisores: con el input real son ~5,8·10¹³. Recorrerlos uno por uno sería imposible. Sumar conteos por columna es **programación dinámica**: todos los caminos que llegan a la misma celda se tratan juntos, sumando sus cantidades, en una sola pasada.
 
-Como los números son grandes, las sumas usan `Math.addExact`, que lanza una excepción si un conteo no cupiera en un `long` en vez de dar un resultado incorrecto en silencio.
+Como los números son grandes, las sumas usan `Math.addExact` (en la simulación) y `Matematicas.sumaExacta` (al final), que lanzan una excepción si un conteo no cupiera en un `long` en vez de dar un resultado incorrecto en silencio.
 
 #### Verificación
 

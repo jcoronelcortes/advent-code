@@ -1,10 +1,12 @@
 # Año 2025 — Día 11: Reactor
 
-## Descripción del problema
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/11](https://adventofcode.com/2025/day/11). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
-Bajo la fábrica hay un **reactor** toroidal, y los elfos no logran que se comunique con un rack de servidores nuevo. Entre ambos hay una maraña de cables y dispositivos. Creen que el problema aparece cuando los datos siguen cierto **camino** por los dispositivos.
+## Parte 1
 
-El input es la lista de dispositivos y sus salidas:
+### Enunciado
+
+Desde una escotilla en el piso de la fábrica llega un pitido fuerte. Al bajar por la escalera encontramos su origen: un gran **reactor** con forma de toroide que alimenta la fábrica. Unos elfos corren entre el reactor y un rack de servidores recién instalado, porque no logran que el reactor se comunique con él. Entre ambos hay una maraña de cables y dispositivos, y una elfa nos trae la lista de los **dispositivos y sus salidas** (el input):
 
 ```
 aaa: you hhh
@@ -19,31 +21,31 @@ hhh: ccc fff iii
 iii: out
 ```
 
-`bbb: ddd eee` significa que `bbb` tiene salidas hacia `ddd` y `eee`. Los datos solo fluyen hacia las salidas, nunca hacia atrás: es un **grafo dirigido**.
+Cada línea da el nombre de un dispositivo y los dispositivos a los que van sus salidas: `bbb: ddd eee` significa que `bbb` tiene una salida hacia `ddd` y otra hacia `eee`. Los datos **solo fluyen hacia las salidas**, nunca hacia atrás.
 
-El input real tiene 607 dispositivos y 1581 conexiones, y **no tiene ciclos** (es un DAG): se verificó con un orden topológico que incluye todos los dispositivos. Esto es esencial, porque con un ciclo habría infinitos caminos.
+Los elfos creen que la falla no está en un dispositivo en particular, sino que aparece cuando los datos siguen cierto **camino**. A nosotros nos toca la parte que empieza en el dispositivo que tenemos al lado (al que le pegaron una etiqueta que dice `you`) y termina en la salida principal al reactor (`out`). Para ayudar a encontrar el camino problemático, hay que encontrar **todos** los caminos de `you` a `out`.
 
----
+#### Ejemplo
 
-## Parte 1
-
-### Pregunta
-
-¿Cuántos caminos distintos hay desde el dispositivo `you` hasta la salida `out`?
-
-### Ejemplo
-
-| Camino |
-|--------|
+| Camino de `you` a `out` |
+|-------------------------|
 | `you → bbb → ddd → ggg → out` |
 | `you → bbb → eee → out` |
 | `you → ccc → ddd → ggg → out` |
 | `you → ccc → eee → out` |
 | `you → ccc → fff → out` |
 
-Resultado del ejemplo: **5**
+En total hay **5** caminos distintos.
 
-### Desarrollo de la solución
+#### Pregunta
+
+¿Cuántos caminos distintos llevan de `you` a `out`?
+
+### Solución
+
+#### El input real
+
+Hay 607 dispositivos y 1581 conexiones, y **no hay ciclos** (es un DAG): se verificó con un orden topológico que incluye todos los dispositivos. Esto es esencial, porque con un ciclo habría infinitos caminos.
 
 #### Clave: los caminos desde un nodo son la suma de los caminos desde sus salidas
 
@@ -84,11 +86,11 @@ El costo es lineal en la cantidad de conexiones. Los dispositivos sin línea en 
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-Los elfos descubrieron que el camino problemático pasa por **`dac`** (un conversor digital-analógico) y por **`fft`** (un dispositivo que hace una transformada rápida de Fourier). ¿Cuántos caminos de **`svr`** (el rack de servidores) a `out` pasan por **ambos**, en cualquier orden?
+Gracias en parte a nuestro análisis, los elfos averiguaron algo más: el camino problemático pasa tanto por **`dac`** (un conversor digital-analógico) como por **`fft`** (un dispositivo que hace una transformada rápida de Fourier). Todavía no saben cuál es el camino exacto, así que ahora hay que encontrar todos los caminos desde **`svr`** (el rack de servidores) hasta `out` que visiten **los dos** dispositivos, en cualquier orden.
 
-### Ejemplo
+#### Ejemplo
 
 Con otra lista de dispositivos:
 
@@ -108,11 +110,16 @@ ggg: out
 hhh: out
 ```
 
-Hay 8 caminos de `svr` a `out`, pero solo 2 pasan por `dac` y `fft`: `svr,aaa,fft,ccc,eee,dac,fff,ggg,out` y el mismo terminando por `hhh`.
+hay 8 caminos de `svr` a `out`, pero solo **2** pasan por `dac` y por `fft`:
 
-Resultado del ejemplo: **2**
+- `svr → aaa → fft → ccc → eee → dac → fff → ggg → out`
+- `svr → aaa → fft → ccc → eee → dac → fff → hhh → out`
 
-### Desarrollo de la solución
+#### Pregunta
+
+De todos los caminos de `svr` a `out`, ¿cuántos pasan por `dac` y por `fft`?
+
+### Solución
 
 #### Clave: dividir el camino en tramos
 
@@ -130,15 +137,15 @@ Como `contarCaminos` ya recibía origen y destino como parámetros, la parte 2 s
 
 ```java
 // Dia11.java — contarCaminosPor()
-long primeroA = Math.multiplyExact(Math.multiplyExact(
+long primeroA = Matematicas.productoExacto(
         contarCaminos(conexiones, desde, a),
-        contarCaminos(conexiones, a, b)),
+        contarCaminos(conexiones, a, b),
         contarCaminos(conexiones, b, hasta));
 long primeroB = ...;   // lo mismo con a y b intercambiados
-return Math.addExact(primeroA, primeroB);
+return Matematicas.sumaExacta(primeroA, primeroB);
 ```
 
-Los números son grandes: en total hay ~9·10¹⁶ caminos de `svr` a `out` (todavía caben en un `long`), y las multiplicaciones y sumas usan `Math.multiplyExact` y `Math.addExact` para detectar un desborde en vez de dar un resultado incorrecto.
+Los números son grandes: en total hay ~9·10¹⁶ caminos de `svr` a `out` (todavía caben en un `long`), y las multiplicaciones y sumas usan `Matematicas.productoExacto` y `sumaExacta` para detectar un desborde en vez de dar un resultado incorrecto.
 
 #### Verificación
 

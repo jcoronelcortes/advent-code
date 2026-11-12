@@ -162,27 +162,29 @@ EOF
 crear "$DOC" <<EOF
 # Año ${ANIO} — Día ${DIA_NUM}: ${TITULO}
 
-## Descripción del problema
-
-TODO: contexto del problema y formato del input.
-
----
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/${ANIO}/day/${DIA_NUM}](https://adventofcode.com/${ANIO}/day/${DIA_NUM}). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
 ## Parte 1
 
-### Pregunta
+### Enunciado
+
+TODO: historia, reglas, formato del input, ejemplo y pregunta, con palabras propias.
+
+#### Ejemplo
 
 TODO
 
-### Ejemplo
+#### Pregunta
 
-TODO: tabla con el ejemplo del enunciado.
+TODO
 
-Resultado del ejemplo: **TODO**
+### Solución
 
-### Desarrollo de la solución
+#### El input real
 
-TODO: idea clave, fragmentos de código y verificación con el ejemplo.
+TODO: tamaño y particularidades del input.
+
+TODO: idea clave, fragmentos de código y verificación con un método independiente.
 
 **Resultado con el input real: TODO**
 
@@ -190,7 +192,13 @@ TODO: idea clave, fragmentos de código y verificación con el ejemplo.
 
 ## Parte 2
 
+### Enunciado
+
 _Pendiente: aún no se ha publicado el enunciado de la segunda parte en el repositorio._
+
+### Solución
+
+TODO
 
 ---
 

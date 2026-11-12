@@ -32,7 +32,7 @@ mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025"
 - `enunciados/{anio}/dia{DD}_parte{N}.txt` — enunciados copiados del sitio (**ignorados por git**)
 - `src/test/java/advent/code/y{anio}/Dia{DD}Prueba.java` — pruebas JUnit 5 por día con los ejemplos del enunciado
 - `src/test/java/advent/code/RespuestasPrueba.java` — regresión con las respuestas aceptadas; se omite si falta el input
-- `soluciones/{anio}/dia{DD}.md` — documentación detallada de cada día
+- `soluciones/{anio}/dia{DD}.md` — documentación de cada día: por cada parte, el **enunciado** (redactado en español con palabras propias, nunca traducción literal) y debajo su **solución** (idea, implementación, verificación y resultado)
 
 ### Utilidades compartidas (`advent.code`)
 
@@ -57,7 +57,7 @@ Revisar antes de escribir código nuevo:
 1. Ejecutar `./nuevo-dia.sh {anio} {dia} "Título"`: genera clase, prueba, documentación, fila del README y enunciados vacíos `dia{DD}_parte{N}.txt` (y descarga el input si está definida `AOC_SESSION`)
 2. Pegar el input en `src/main/resources/inputs/y{anio}/dia{DD}.txt` (y opcionalmente el enunciado en `enunciados/{anio}/`)
 3. Completar el ejemplo del enunciado en `Dia{DD}Prueba.java` y quitar `@Disabled`
-4. Resolver, verificar la respuesta con un método independiente (fuerza bruta) y documentar en `soluciones/{anio}/dia{DD}.md`
+4. Resolver, verificar la respuesta con un método independiente (fuerza bruta) y documentar en `soluciones/{anio}/dia{DD}.md`: enunciado redactado con palabras propias y debajo la solución, por cada parte
 5. Agregar las respuestas a `RespuestasPrueba` y a la tabla del README
 6. Ejecutar con `mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="{anio} {dia}"`
 
@@ -67,4 +67,4 @@ Revisar antes de escribir código nuevo:
 - Toda la documentación del repositorio debe estar en español
 - Las clases de prueba deben terminar en `Prueba` (ej. `Dia01Prueba`); las de utilidades empiezan con `Prueba` (ej. `PruebaGrilla`)
 - En pruebas jqwik (`@Property`) usar `@Label`, no `@DisplayName`: jqwik omite en silencio las propiedades con `@DisplayName`. Tampoco ejecuta `@BeforeEach` de JUnit, así que la instancia se crea dentro de la propiedad
-- No subir inputs ni enunciados de Advent of Code al repositorio
+- No subir inputs ni enunciados de Advent of Code al repositorio. En `soluciones/` el enunciado va **redactado con palabras propias** (no traducido literalmente), por la misma razón

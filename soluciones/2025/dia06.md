@@ -1,10 +1,16 @@
 # Año 2025 — Día 6: Compactador de Basura
 
-## Descripción del problema
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/6](https://adventofcode.com/2025/day/6). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
-Por saltar con demasiado entusiasmo, caemos por el ducto de basura a un compactador cuya puerta está sellada magnéticamente. Una familia de cefalópodos promete abrirla, pero tardará un rato. Mientras tanto, nos piden ayuda con la tarea de matemáticas de la más pequeña.
+## Parte 1
 
-El input es la **hoja de ejercicios**: varios problemas puestos uno **al lado del otro**. Cada problema tiene sus números en vertical (uno por fila) y, en la última fila, la operación a aplicar: suma (`+`) o multiplicación (`*`). Los problemas están separados por una **columna completa de espacios**.
+### Enunciado
+
+Después de ayudar en la cocina, nos ponemos a recrear con los elfos una escena de película y, con demasiado entusiasmo, saltamos al ducto de basura. Tras una breve caída aparecemos dentro de un **compactador de basura** con la puerta sellada magnéticamente.
+
+Se nos acerca una familia de **cefalópodos**, que cree poder abrir la puerta, aunque les llevará un rato. Mientras esperamos, nos piden ayuda con la tarea de matemáticas de la más pequeña.
+
+La matemática de los cefalópodos no es tan distinta de la nuestra. La hoja de ejercicios (el input) tiene una lista de problemas, y en cada uno hay que **sumar** (`+`) o **multiplicar** (`*`) un grupo de números. Lo raro es cómo están dispuestos: los problemas están **uno al lado del otro**, formando una lista horizontal muy larga.
 
 ```
 123 328  51 64
@@ -13,28 +19,33 @@ El input es la **hoja de ejercicios**: varios problemas puestos uno **al lado de
 *   +   *   +
 ```
 
-El input real tiene 4 filas de números y una de operaciones, con 1000 problemas en una hoja de ~3750 columnas.
+- Los números de cada problema están **en vertical**, uno por fila.
+- Debajo de cada problema está el símbolo de la operación.
+- Los problemas están separados por una **columna formada solo por espacios**.
+- La alineación de los números dentro de un problema (a la izquierda o a la derecha) no importa.
 
----
+Para revisar su trabajo, los alumnos cefalópodos calculan el **gran total**: la suma de los resultados de todos los problemas. La hoja real es mucho más ancha, y hay que recorrerla entera.
 
-## Parte 1
+#### Ejemplo
 
-### Pregunta
+| Problema | Cuenta | Resultado |
+|----------|--------|-----------|
+| 1 | `123 * 45 * 6` | 33210 |
+| 2 | `328 + 64 + 98` | 490 |
+| 3 | `51 * 387 * 215` | 4243455 |
+| 4 | `64 + 23 + 314` | 401 |
 
-Resolver cada problema y sumar todos los resultados (el "gran total"). La alineación de los números dentro de cada problema (a la izquierda o a la derecha) no importa.
+El gran total del ejemplo es `33210 + 490 + 4243455 + 401 =` **4277556**.
 
-### Ejemplo
+#### Pregunta
 
-| Problema | Operación | Resultado |
-|----------|-----------|-----------|
-| 123, 45, 6 | `*` | 33210 |
-| 328, 64, 98 | `+` | 490 |
-| 51, 387, 215 | `*` | 4243455 |
-| 64, 23, 314 | `+` | 401 |
+Resolviendo los problemas de la hoja, ¿cuál es el gran total?
 
-Resultado del ejemplo: `33210 + 490 + 4243455 + 401 =` **4277556**
+### Solución
 
-### Desarrollo de la solución
+#### El input real
+
+La hoja tiene 4 filas de números y una de operaciones, con 1000 problemas a lo ancho de ~3750 columnas.
 
 La dificultad está en el **parseo**: el cálculo es una suma o un producto.
 
@@ -80,13 +91,15 @@ Cada fila del bloque, sin espacios, es un número. La operación se aplica con `
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-Los cefalópodos adultos explican que su matemática se escribe **de derecha a izquierda y en columnas**: cada número ocupa su propia columna, con el dígito más significativo arriba. Los problemas siguen separados por columnas de espacios y la operación sigue abajo. ¿Cuál es el nuevo gran total?
+Los cefalópodos grandes vuelven a ver cómo vamos y notan que nuestro gran total no coincide con el que espera la hoja: se olvidaron de explicar cómo se **lee** la matemática de los cefalópodos.
 
-### Ejemplo
+Se escribe **de derecha a izquierda y en columnas**: cada número ocupa su propia columna, con el dígito más significativo arriba y el menos significativo abajo. Los problemas siguen separados por columnas de espacios, y el símbolo de abajo sigue siendo la operación.
 
-Leyendo cada columna de arriba hacia abajo, de derecha a izquierda:
+#### Ejemplo
+
+Con la misma hoja:
 
 ```
 123 328  51 64
@@ -95,16 +108,22 @@ Leyendo cada columna de arriba hacia abajo, de derecha a izquierda:
 *   +   *   +
 ```
 
-| Problema (de derecha a izquierda) | Columnas | Resultado |
-|-----------------------------------|----------|-----------|
-| `64 / 23 / 314`, `+` | `4`, `431`, `623` | 1058 |
-| ` 51 / 387 / 215`, `*` | `175`, `581`, `32` | 3253600 |
-| `328 / 64 / 98`, `+` | `8`, `248`, `369` | 625 |
-| `123 / 45 / 6`, `*` | `356`, `24`, `1` | 8544 |
+leyendo cada problema columna por columna, de derecha a izquierda, los problemas cambian por completo:
 
-Resultado del ejemplo: `1058 + 3253600 + 625 + 8544 =` **3263827**
+| Problema (de derecha a izquierda) | Cuenta | Resultado |
+|-----------------------------------|--------|-----------|
+| el de más a la derecha | `4 + 431 + 623` | 1058 |
+| el segundo | `175 * 581 * 32` | 3253600 |
+| el tercero | `8 + 248 + 369` | 625 |
+| el de más a la izquierda | `356 * 24 * 1` | 8544 |
 
-### Desarrollo de la solución
+Ahora el gran total es `1058 + 3253600 + 625 + 8544 =` **3263827**.
+
+#### Pregunta
+
+Resolviendo otra vez los problemas de la hoja, leídos a la manera de los cefalópodos, ¿cuál es el gran total?
+
+### Solución
 
 #### Por qué la parte 1 guardaba el bloque de texto
 

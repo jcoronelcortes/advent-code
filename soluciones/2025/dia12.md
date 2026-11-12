@@ -1,48 +1,68 @@
 # Año 2025 — Día 12: Granja de Árboles de Navidad
 
-## Descripción del problema
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/12](https://adventofcode.com/2025/day/12). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
-Saltamos por un ducto de ventilación y aparecemos en una caverna llena de árboles de Navidad. Los elfos están preocupados por los **regalos**: es tradición ponerlos debajo de los árboles, pero tienen formas muy raras y temen que no quepan.
+## Parte 1
+
+### Enunciado
+
+Queda poco tiempo y casi todo está decorado. No hay más escaleras, ascensores ni teletransportadores para seguir bajando, pero sí un ducto de ventilación. Saltamos adentro y, después de unos minutos de golpes, salimos a una caverna grande y bien iluminada, llena de **árboles de Navidad**.
+
+Los elfos que decoran a toda prisa están preocupados por una sola cosa: los **regalos** para los elfos pequeños. Es tradición ponerlos debajo de los árboles, y temen que no quepan. Los regalos vienen en unas pocas **formas** estándar pero muy raras, y tanto las formas como las regiones bajo los árboles se miden en unidades de una grilla.
 
 El input tiene dos secciones:
 
-1. **Formas de los regalos**: un índice y un dibujo de 3×3 (`#` es parte del regalo).
-2. **Regiones bajo los árboles**: `12x5: 1 0 1 0 2 2` significa una región de 12 de ancho por 5 de largo, donde hay que acomodar 1 regalo de forma 0, ninguno de forma 1, 1 de forma 2, etc.
+1. **Las formas de los regalos.** Cada una empieza con su índice y dos puntos, seguidos de un dibujo, donde `#` es parte del regalo y `.` no.
+2. **Las regiones bajo los árboles.** Cada línea da el ancho y el largo de la región y cuántos regalos de cada forma hay que acomodar en ella: `12x5: 1 0 1 0 3 2` es una región de 12 de ancho por 5 de largo, donde va 1 regalo de forma 0, ninguno de forma 1, 1 de forma 2, ninguno de forma 3, 3 de forma 4 y 2 de forma 5.
 
 ```
-0:          4:
-###         ###
-##.         #..
-##.         ###
-...
+0:      1:      2:      3:      4:      5:
+###     ###     .##     ##.     ###     ###
+##.     ##.     ###     ###     #..     .#.
+##.     .##     ##.     ##.     ###     ###
+
 4x4: 0 0 0 0 2 0
 12x5: 1 0 1 0 2 2
 12x5: 1 0 1 0 3 2
 ```
 
-Los regalos se pueden **rotar y voltear**, pero siempre sobre la grilla y **sin superponerse**: los `.` de una forma no ocupan lugar, así que otro regalo puede encajar ahí.
+(En el input, cada forma va en su propio bloque, una debajo de la otra; aquí se muestran en fila para ahorrar espacio.)
 
-El input real tiene 6 formas (de 5 a 7 celdas cada una) y **1000 regiones** de entre ~35 y ~50 de lado, con cientos de regalos cada una.
+Las reglas para acomodar los regalos:
 
----
+- Se pueden **rotar y voltear**, pero siempre alineados con la grilla.
+- **No se pueden apilar ni superponer**: dos regalos no pueden tener un `#` en la misma posición.
+- Sí pueden **encajar** entre sí: el `.` de una forma no ocupa lugar, así que otro regalo puede usar esa posición.
 
-## Parte 1
-
-### Pregunta
-
-¿En cuántas regiones caben todos sus regalos?
-
-### Ejemplo
+#### Ejemplo
 
 | Región | Regalos | ¿Caben? |
 |--------|---------|---------|
-| `4x4` | dos de forma 4 | sí: `AAA.` / `ABAB` / `ABAB` / `.BBB` |
-| `12x5` | 1, 0, 1, 0, 2, 2 | sí |
-| `12x5` | 1, 0, 1, 0, **3**, 2 | no, de ninguna forma |
+| `4x4` | dos de forma 4 | sí |
+| `12x5` | uno de forma 0, uno de forma 2, dos de forma 4 y dos de forma 5 | sí |
+| `12x5` | lo mismo, pero con **tres** de forma 4 | no, de ninguna manera |
 
-Resultado del ejemplo: **2**
+Una forma de acomodar los regalos de las dos primeras regiones (cada letra es un regalo):
 
-### Desarrollo de la solución
+```
+AAA.        ....AAAFFE.E
+ABAB        .BBBAAFFFEEE
+ABAB        DDDBAAFFCECE
+.BBB        DBBB....CCC.
+            DDD.....C.C.
+```
+
+En el ejemplo, los regalos caben en **2** regiones.
+
+#### Pregunta
+
+¿En cuántas de las regiones bajo los árboles caben todos los regalos indicados?
+
+### Solución
+
+#### El input real
+
+Hay 6 formas (de 5 a 7 celdas cada una) y **1000 regiones** de entre ~35 y ~50 de lado, con cientos de regalos cada una.
 
 #### El problema general es muy difícil
 
@@ -81,6 +101,12 @@ Las orientaciones de cada forma (hasta 8: 4 rotaciones, con y sin volteo) se cal
 ---
 
 ## Parte 2
+
+### Enunciado
+
+El día 12 es el último del año y su segunda parte **no tiene un problema propio**: la segunda estrella se obtiene al completar todos los demás días.
+
+### Solución
 
 El último día no tiene un segundo problema: su segunda estrella se obtiene al completar los otros 11 días. `parte2` devuelve el texto fijo `"estrella final"`, para que la tabla anual y `RespuestasPrueba` traten este día igual que los demás.
 

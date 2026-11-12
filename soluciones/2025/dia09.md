@@ -1,10 +1,14 @@
 # Año 2025 — Día 9: Sala de Cine
 
-## Descripción del problema
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/9](https://adventofcode.com/2025/day/9). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
-Bajamos por el poste de bomberos del patio de juegos y caemos en la **sala de cine** de la base del Polo Norte. Los elfos están cambiando algunas baldosas del piso, que forman una gran grilla. Algunas baldosas son **rojas**, y quieren encontrar el rectángulo más grande que tenga baldosas rojas en **dos esquinas opuestas**.
+## Parte 1
 
-El input es la lista de posiciones `X,Y` de las baldosas rojas:
+### Enunciado
+
+Nos deslizamos por el poste de bomberos de una esquina del patio de juegos y caemos en la **sala de cine** de la base del Polo Norte. El piso es una gran grilla de baldosas cuadradas con un dibujo curioso, y los elfos están redecorando: van a cambiar algunas baldosas.
+
+Algunas baldosas son **rojas**, y los elfos quieren encontrar el **rectángulo más grande** que tenga baldosas rojas en **dos esquinas opuestas**. Tienen la lista de las posiciones `X,Y` de las baldosas rojas (el input):
 
 ```
 7,1
@@ -16,6 +20,8 @@ El input es la lista de posiciones `X,Y` de las baldosas rojas:
 2,3
 7,3
 ```
+
+Con las rojas como `#` y las demás como `.`, el piso del ejemplo se ve así:
 
 ```
 ..............
@@ -29,30 +35,30 @@ El input es la lista de posiciones `X,Y` de las baldosas rojas:
 ..............
 ```
 
-El input real tiene 496 baldosas con coordenadas entre ~1 500 y ~98 500.
+Se pueden elegir dos baldosas rojas cualesquiera como esquinas opuestas. El área del rectángulo se mide en **baldosas**, incluidas las de los bordes.
+
+#### Ejemplo
+
+| Esquinas | Área |
+|----------|------|
+| `2,5` y `9,7` | 24 |
+| `7,1` y `11,7` | 35 |
+| `7,3` y `2,3` (un rectángulo de una sola fila) | 6 |
+| `2,5` y `11,1` | **50** |
+
+El rectángulo más grande del ejemplo tiene área **50**.
+
+#### Pregunta
+
+Usando dos baldosas rojas como esquinas opuestas, ¿cuál es el área del rectángulo más grande posible?
+
+### Solución
+
+#### El input real
+
+Hay 496 baldosas con coordenadas entre ~1 500 y ~98 500.
 
 **Observación sobre el input:** cada baldosa comparte fila o columna con la siguiente, y la última con la primera. En orden, las baldosas son los vértices de un **polígono cerrado** de lados horizontales y verticales. La parte 1 no lo usa, pero se conserva el orden del input por si la parte 2 lo necesita (y lo necesitó).
-
----
-
-## Parte 1
-
-### Pregunta
-
-Eligiendo dos baldosas rojas como esquinas opuestas, ¿cuál es el área del rectángulo más grande?
-
-### Ejemplo
-
-| Esquinas | Rectángulo | Área |
-|----------|------------|------|
-| `2,5` y `9,7` | 8 × 3 | 24 |
-| `7,1` y `11,7` | 5 × 7 | 35 |
-| `7,3` y `2,3` | 6 × 1 | 6 |
-| `2,5` y `11,1` | 10 × 5 | **50** |
-
-Resultado del ejemplo: **50**
-
-### Desarrollo de la solución
 
 #### El área cuenta baldosas, no distancias
 
@@ -85,13 +91,15 @@ Con 496 baldosas hay `496 · 495 / 2 ≈ 123 000` pares: se prueban todos y se q
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-Los elfos solo pueden cambiar baldosas **rojas o verdes**. Las verdes son las que unen cada baldosa roja con la siguiente en línea recta (el borde del polígono) y todas las del **interior** del polígono. El rectángulo sigue necesitando baldosas rojas en dos esquinas opuestas, pero ahora todas sus baldosas tienen que ser rojas o verdes. ¿Cuál es el área del rectángulo más grande?
+Los elfos recuerdan algo importante: solo pueden cambiar baldosas **rojas o verdes**, así que el rectángulo solo puede contener baldosas de esos dos colores.
 
-### Ejemplo
+En la lista, cada baldosa roja está unida a la anterior y a la siguiente por una línea recta de baldosas **verdes**. La lista es circular: la primera roja también está unida a la última. Dos baldosas consecutivas de la lista siempre están en la misma fila o en la misma columna. Además, todas las baldosas **dentro** de ese circuito cerrado de rojas y verdes también son verdes. El resto de las baldosas no es ni roja ni verde.
 
-Baldosas rojas (`#`) y verdes (`X`):
+#### Ejemplo
+
+En el piso del ejemplo, las baldosas verdes (`X`) son:
 
 ```
 ..............
@@ -105,16 +113,22 @@ Baldosas rojas (`#`) y verdes (`X`):
 ..............
 ```
 
-| Esquinas | Área | ¿Válido? |
-|----------|------|----------|
+El rectángulo sigue necesitando baldosas rojas en dos esquinas opuestas, pero **todas** sus demás baldosas tienen que ser rojas o verdes, y eso reduce bastante las opciones:
+
+| Esquinas | Área | ¿Sirve? |
+|----------|------|---------|
 | `7,3` y `11,1` | 15 | sí |
 | `9,7` y `9,5` | 3 | sí |
 | `9,5` y `2,3` | **24** | sí |
-| `2,5` y `11,1` (el mayor de la parte 1) | 50 | no: incluye baldosas de afuera |
+| `2,5` y `11,1` (el mayor de la parte 1) | 50 | no: incluye baldosas que no son rojas ni verdes |
 
-Resultado del ejemplo: **24**
+El rectángulo más grande que solo tiene baldosas rojas y verdes tiene área **24**.
 
-### Desarrollo de la solución
+#### Pregunta
+
+Usando dos baldosas rojas como esquinas opuestas, ¿cuál es el área del rectángulo más grande que contiene solo baldosas rojas y verdes?
+
+### Solución
 
 Dicho de otro modo: el rectángulo tiene que quedar **completamente dentro del polígono** (borde incluido). La parte 1 ya probaba todos los pares; ahora, además, hay que saber rápido si cada rectángulo está adentro.
 

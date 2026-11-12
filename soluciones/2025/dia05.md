@@ -1,13 +1,17 @@
 # Año 2025 — Día 5: Cafetería
 
-## Descripción del problema
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/5](https://adventofcode.com/2025/day/5). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
-Los montacargas derriban la pared y, efectivamente, al otro lado hay una cafetería. En la cocina los elfos están en problemas: justo antes de Navidad cambiaron a un nuevo sistema de inventario y ya no saben qué ingredientes están **frescos** y cuáles **descompuestos**.
+## Parte 1
 
-El input es la base de datos del sistema y tiene dos secciones separadas por una línea en blanco:
+### Enunciado
 
-1. **Rangos de IDs frescos**, inclusivos (`3-5` significa 3, 4 y 5). Los rangos pueden solaparse.
-2. **IDs de ingredientes disponibles**, uno por línea.
+Los montacargas derriban la pared y, efectivamente, al otro lado hay una **cafetería**. En la cocina hay alboroto: justo antes de Navidad los elfos cambiaron a un sistema de inventario nuevo, tan complicado que ya no saben qué ingredientes están **frescos** y cuáles **descompuestos**. Nos dan una copia de la base de datos (el input).
+
+La base de datos trabaja con **IDs de ingredientes** y tiene dos secciones, separadas por una línea en blanco:
+
+1. una lista de **rangos de IDs frescos**;
+2. una lista de **IDs de ingredientes disponibles**, uno por línea.
 
 ```
 3-5
@@ -23,20 +27,12 @@ El input es la base de datos del sistema y tiene dos secciones separadas por una
 32
 ```
 
-En el input real los IDs llegan a ~5·10¹⁴, así que no caben en un `int`: todo se trabaja con `long`. Hay 183 rangos y 1000 IDs.
+Los rangos son inclusivos: `3-5` significa que los IDs 3, 4 y 5 están frescos. Los rangos pueden solaparse, y un ID es fresco si está en **cualquiera** de ellos.
 
----
+#### Ejemplo
 
-## Parte 1
-
-### Pregunta
-
-Un ID es fresco si cae en **al menos un** rango. ¿Cuántos de los IDs disponibles son frescos?
-
-### Ejemplo
-
-| ID | Rangos que lo contienen | ¿Fresco? |
-|----|-------------------------|----------|
+| ID disponible | Rangos que lo contienen | ¿Fresco? |
+|---------------|-------------------------|----------|
 | 1 | ninguno | no |
 | 5 | `3-5` | sí |
 | 8 | ninguno | no |
@@ -44,9 +40,17 @@ Un ID es fresco si cae en **al menos un** rango. ¿Cuántos de los IDs disponibl
 | 17 | `16-20` y `12-18` | sí |
 | 32 | ninguno | no |
 
-Resultado del ejemplo: **3**
+En el ejemplo hay **3** IDs disponibles frescos.
 
-### Desarrollo de la solución
+#### Pregunta
+
+¿Cuántos de los IDs de ingredientes disponibles están frescos?
+
+### Solución
+
+#### El input real
+
+Hay 183 rangos y 1000 IDs disponibles. Los IDs llegan a ~5·10¹⁴, así que no caben en un `int`: todo se trabaja con `long`.
 
 #### La idea directa
 
@@ -67,7 +71,7 @@ Para cada ID, revisar si está en algún rango. Con 183 rangos y 1000 IDs son ~1
 ```java
 // ConjuntoRangos.java — contiene()
 int bajo = 0;
-int alto = unidos.size() - 1;
+int alto = rangos.size() - 1;
 int candidato = -1;             // último rango con inicio <= valor
 while (bajo <= alto) {
     int medio = (bajo + alto) >>> 1;
@@ -107,17 +111,21 @@ El parseo separa las dos secciones con `Utiles.secciones` (record `BaseDeDatos`)
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-Ahora la lista de IDs disponibles no importa. ¿Cuántos IDs **distintos** consideran frescos los rangos? Un ID que está en varios rangos se cuenta una sola vez.
+Los elfos empiezan a llevar el inventario descompuesto al ducto de basura del fondo de la cocina. Para no tener que preguntarnos cada vez que llegue mercadería nueva, quieren saber **todos** los IDs que los rangos consideran frescos. Un ID sigue siendo fresco si está en cualquier rango.
 
-### Ejemplo
+Esta vez la segunda sección de la base de datos (los IDs disponibles) no importa: solo cuentan los rangos.
 
-Los rangos `3-5`, `10-14`, `16-20` y `12-18` consideran frescos los IDs 3, 4, 5 y del 10 al 20.
+#### Ejemplo
 
-Resultado del ejemplo: `3 + 11 =` **14**
+Los rangos `3-5`, `10-14`, `16-20` y `12-18` consideran frescos los IDs 3, 4, 5, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 y 20: un total de **14** IDs. Los que están en más de un rango (como el 17) se cuentan una sola vez.
 
-### Desarrollo de la solución
+#### Pregunta
+
+Según los rangos de IDs frescos, ¿cuántos IDs de ingredientes se consideran frescos en total?
+
+### Solución
 
 #### Por qué no se pueden enumerar los IDs
 

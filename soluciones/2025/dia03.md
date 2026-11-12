@@ -1,10 +1,14 @@
 # Año 2025 — Día 3: Vestíbulo
 
-## Descripción del problema
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/3](https://adventofcode.com/2025/day/3). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
-Llegamos al vestíbulo, pero los ascensores y la escalera mecánica están sin energía. Cerca hay baterías de emergencia, cada una etiquetada con su **voltaje**: un dígito del 1 al 9.
+## Parte 1
 
-Las baterías están organizadas en **bancos**: cada línea del input es un banco, y cada dígito es una batería.
+### Enunciado
+
+Bajamos una escalera corta hasta el enorme **vestíbulo** y pasamos el control de seguridad. Pero los ascensores principales tienen una luz roja: una subida de tensión los quemó. La elfa que intenta repararlos sugiere bajar por la **escalera mecánica** hasta el departamento de impresión, aunque también está apagada; por suerte no se quemó, solo le falta energía.
+
+Cerca hay **baterías** de emergencia para alimentar la escalera. Cada una tiene un **voltaje** del 1 al 9. Las baterías están organizadas en **bancos**: cada línea del input es un banco, y cada dígito es una batería.
 
 ```
 987654321111111
@@ -13,28 +17,26 @@ Las baterías están organizadas en **bancos**: cada línea del input es un banc
 818181911112111
 ```
 
----
+En cada banco hay que encender **exactamente dos** baterías. El voltaje que produce el banco es el número formado por los dígitos de las baterías encendidas, **en el orden en que están**: las baterías no se pueden reordenar. Por ejemplo, en el banco `12345`, encender la batería 2 y la 4 produce `24`.
 
-## Parte 1
+El voltaje total es la suma del **máximo** voltaje que puede producir cada banco.
 
-### Pregunta
-
-En cada banco hay que encender **exactamente dos** baterías. El banco produce el número formado por los dígitos encendidos, **en el orden en que aparecen** (no se pueden reordenar). Por ejemplo, en `12345` encender la 2 y la 4 produce `24`.
-
-¿Cuál es la **suma** del máximo voltaje que puede producir cada banco?
-
-### Ejemplo
+#### Ejemplo
 
 | Banco | Baterías encendidas | Máximo |
 |-------|---------------------|--------|
-| `987654321111111` | **98**7654321111111 (las dos primeras) | 98 |
-| `811111111111119` | **8**1111111111111**9** (la primera y la última) | 89 |
-| `234234234234278` | 2342342342342**78** (las dos últimas) | 78 |
-| `818181911112111` | 818181**9**1111**2**111 | 92 |
+| `987654321111111` | las dos primeras | 98 |
+| `811111111111119` | el 8 y el 9 | 89 |
+| `234234234234278` | las dos últimas | 78 |
+| `818181911112111` | el 9 y el 2 | 92 |
 
-Resultado del ejemplo: `98 + 89 + 78 + 92 =` **357**
+El voltaje total del ejemplo es `98 + 89 + 78 + 92 =` **357**.
 
-### Desarrollo de la solución
+#### Pregunta
+
+Buscando el máximo voltaje de cada banco del input, ¿cuál es el voltaje total?
+
+### Solución
 
 #### La idea obvia: probar todas las parejas
 
@@ -90,9 +92,7 @@ Este caso muestra por qué importa la ventana: el 9 es el mayor dígito, pero si
 
 ```java
 // Dia03.java — sumarMaximos()
-for (String linea : lineas) {
-    String banco = linea.trim();
-    if (banco.isEmpty()) continue;
+for (String banco : Utiles.lineasNoVacias(lineas)) {
     total += maximoVoltaje(banco, cantidad);
 }
 ```
@@ -107,24 +107,28 @@ La parte 1 llama a `sumarMaximos(lineas, 2)`.
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-La escalera mecánica necesita más voltaje: ahora hay que encender **exactamente doce** baterías en cada banco. El voltaje sigue siendo el número formado por los dígitos encendidos, ahora de 12 cifras.
+La escalera mecánica no se mueve: necesita más voltaje para vencer la fricción estática. La elfa aprieta el gran botón rojo que desactiva el límite de seguridad (y tiene que confirmar "sí, estoy seguro" tantas veces que perdemos la cuenta).
 
-El input es el mismo de la Parte 1.
+Ahora hay que encender **exactamente doce** baterías en cada banco. El voltaje sigue siendo el número formado por los dígitos encendidos en su orden; la única diferencia es que ahora tiene 12 cifras en vez de 2. Los bancos son los mismos de la parte 1.
 
-### Ejemplo
+#### Ejemplo
 
 | Banco | Baterías que quedan apagadas | Máximo |
 |-------|------------------------------|--------|
-| `987654321111111` | tres `1` del final | 987654321111 |
-| `811111111111119` | tres `1` | 811111111119 |
-| `234234234234278` | un `2`, un `3` y otro `2` del principio | 434234234278 |
-| `818181911112111` | tres `1` del principio | 888911112111 |
+| `987654321111111` | algunos 1 del final | 987654321111 |
+| `811111111111119` | algunos 1 | 811111111119 |
+| `234234234234278` | un 2, un 3 y otro 2 cerca del principio | 434234234278 |
+| `818181911112111` | algunos 1 cerca del principio | 888911112111 |
 
-Resultado del ejemplo: **3121910778619**
+El voltaje total del ejemplo es **3121910778619**.
 
-### Desarrollo de la solución
+#### Pregunta
+
+Encendiendo doce baterías por banco, ¿cuál es el nuevo voltaje total?
+
+### Solución
 
 #### Mismo algoritmo, otro número
 

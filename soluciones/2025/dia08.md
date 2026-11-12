@@ -1,50 +1,62 @@
 # Año 2025 — Día 8: Patio de Juegos
 
-## Descripción del problema
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/8](https://adventofcode.com/2025/day/8). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
-El teletransportador nos deja en un enorme espacio subterráneo con un patio de juegos gigante. Los elfos están colgando **cajas de conexión** eléctricas y quieren unirlas con guirnaldas de luces: cuando dos cajas se conectan, la electricidad pasa entre ellas, y todas las cajas conectadas directa o indirectamente forman un **circuito**.
+## Parte 1
 
-El input es la lista de posiciones 3D de las cajas, una por línea (`X,Y,Z`):
+### Enunciado
+
+Con el teletransportador reparado, volvemos a subirnos y aparecemos en un enorme espacio subterráneo con un **patio de juegos** gigante. Allí, un grupo de elfos prepara un ambicioso adorno navideño: colgaron muchas **cajas de conexión** eléctricas pequeñas y planean unirlas con largas guirnaldas de luces.
+
+La mayoría de las cajas no tiene electricidad propia, pero cuando dos cajas se conectan con una guirnalda, la electricidad puede pasar entre ellas. Las cajas conectadas entre sí, directa o indirectamente, forman un **circuito**. Los elfos tienen la lista de las posiciones de todas las cajas en el espacio (el input): una por línea, con sus coordenadas `X,Y,Z`.
 
 ```
 162,817,812
 57,618,57
 906,360,560
-...
+592,479,940
+352,342,300
+466,668,158
+542,29,236
+431,825,988
+739,650,466
+52,470,668
+216,146,977
+819,987,18
+117,168,530
+805,96,715
+346,949,466
+970,615,88
+941,993,340
+862,61,35
+984,92,344
 425,690,689
 ```
 
-Para ahorrar luces, los elfos conectan primero los pares de cajas **más cercanos** según la distancia en línea recta (euclidiana).
+Para ahorrar luces, los elfos conectan primero los pares de cajas **más cercanos** en línea recta. Cada conexión une dos cajas; si el siguiente par más cercano ya está en el mismo circuito, **no pasa nada**, pero esa conexión igual cuenta.
 
-El input real tiene 1000 cajas con coordenadas de hasta 5 dígitos.
+#### Ejemplo
 
----
+Con las 20 cajas del ejemplo:
 
-## Parte 1
+| Paso | Par más cercano | Efecto |
+|------|-----------------|--------|
+| 1 | `162,817,812` y `425,690,689` | se forma un circuito de 2 cajas; las otras 18 siguen solas |
+| 2 | `162,817,812` y `431,825,988` | ese circuito crece a 3 cajas |
+| 3 | `906,360,560` y `805,96,715` | nuevo circuito de 2 cajas |
+| 4 | `431,825,988` y `425,690,689` | ya estaban en el mismo circuito: no pasa nada |
 
-### Pregunta
+Los elfos temen no tener suficientes alargues para tantos circuitos, y quieren saber cuán grandes serán. Después de las **10** conexiones más cortas quedan 11 circuitos: uno de 5 cajas, uno de 4, dos de 2 y siete de una sola caja. El producto de los tres circuitos más grandes es `5 · 4 · 2 =` **40**.
 
-Conectar los **1000 pares** de cajas más cercanos. Después, ¿cuál es el producto de los tamaños de los **3 circuitos más grandes**?
+#### Pregunta
 
-Un detalle importante: si el siguiente par más cercano ya está en el mismo circuito, "no pasa nada", pero el par **igual cuenta** como una de las conexiones.
+Conectando los **1000** pares de cajas más cercanos, ¿cuál es el producto de los tamaños de los tres circuitos más grandes?
 
-### Ejemplo
+### Solución
 
-Con las 20 cajas del ejemplo y solo **10** conexiones:
+#### El input real
 
-| Paso | Par conectado | Efecto |
-|------|---------------|--------|
-| 1 | `162,817,812` – `425,690,689` | circuito de 2 |
-| 2 | `162,817,812` – `431,825,988` | ese circuito pasa a 3 |
-| 3 | `906,360,560` – `805,96,715` | nuevo circuito de 2 |
-| 4 | `431,825,988` – `425,690,689` | ya estaban juntas: no pasa nada |
-| … | … | … |
-
-Tras las 10 conexiones quedan 11 circuitos de tamaños 5, 4, 2, 2 y siete de 1.
-
-Resultado del ejemplo: `5 · 4 · 2 =` **40**
-
-### Desarrollo de la solución
+Hay 1000 cajas con coordenadas de hasta 5 dígitos.
 
 Es el comienzo del **algoritmo de Kruskal** (árbol de expansión mínima): recorrer las aristas de menor a mayor peso y unir sus extremos.
 
@@ -89,17 +101,21 @@ Como el ejemplo usa 10 conexiones y el input real 1000, la cantidad es un parám
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-Seguir conectando los pares más cercanos hasta que **todas** las cajas queden en un solo circuito. ¿Cuál es el producto de las coordenadas X de las dos cajas de la **última conexión** necesaria?
+Los elfos tenían razón: no alcanzan los alargues. Hay que seguir conectando cajas, siempre el par más cercano que todavía no esté conectado, hasta que **todas** formen un único circuito grande.
 
-### Ejemplo
+Para elegir el alargue adecuado, los elfos necesitan saber a qué distancia de la pared están las dos cajas de la **última conexión** necesaria, y para eso multiplican sus coordenadas X.
 
-La primera conexión que deja las 20 cajas en un único circuito es la de `216,146,977` y `117,168,530`.
+#### Ejemplo
 
-Resultado del ejemplo: `216 · 117 =` **25272**
+Siguiendo con el ejemplo, la primera conexión que deja todas las cajas en un solo circuito es la de `216,146,977` y `117,168,530`. El producto de sus coordenadas X es `216 · 117 =` **25272**.
 
-### Desarrollo de la solución
+#### Pregunta
+
+Conectando los pares más cercanos hasta que todas las cajas estén en el mismo circuito, ¿cuál es el producto de las coordenadas X de las dos últimas cajas que hay que conectar?
+
+### Solución
 
 #### Clave: es Kruskal completo
 

@@ -1,10 +1,14 @@
 # Año 2025 — Día 4: Departamento de Impresión
 
-## Descripción del problema
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/4](https://adventofcode.com/2025/day/4). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
-Bajamos por la escalera mecánica al departamento de impresión, lleno de grandes **rollos de papel**. Los elfos creen que detrás de la pared hay una cafetería, pero los montacargas están demasiado ocupados moviendo rollos como para derribarla. Si optimizamos su trabajo, tendrán tiempo libre.
+## Parte 1
 
-El input es una grilla: `@` es un rollo de papel y `.` un espacio vacío.
+### Enunciado
+
+La escalera mecánica nos deja en el **departamento de impresión**, que ya se prepara para Navidad: hay grandes **rollos de papel** por todas partes y una impresora gigante en un rincón. Lo que necesitamos es seguir bajando, y los elfos creen que detrás de la pared del fondo hay una cafetería. Podrían derribar la pared, pero sus **montacargas** están demasiado ocupados moviendo rollos. Si optimizamos ese trabajo, quizás les quede tiempo libre.
+
+Los rollos (`@`) están sobre una gran grilla, y los elfos tienen un diagrama de dónde está cada uno (el input):
 
 ```
 ..@@.@@@@.
@@ -19,17 +23,11 @@ El input es una grilla: `@` es un rollo de papel y `.` un espacio vacío.
 @.@.@@@.@.
 ```
 
----
+Un montacargas solo puede **acceder** a un rollo si entre sus **8 posiciones vecinas** (incluidas las diagonales) hay **menos de 4** rollos.
 
-## Parte 1
+#### Ejemplo
 
-### Pregunta
-
-Un montacargas puede acceder a un rollo si en las **8 posiciones vecinas** (incluidas las diagonales) hay **menos de 4** rollos. ¿Cuántos rollos son accesibles?
-
-### Ejemplo
-
-Los rollos accesibles del ejemplo (marcados con `x`):
+Los rollos accesibles del ejemplo, marcados con `x`, son 13:
 
 ```
 ..xx.xx@x.
@@ -44,11 +42,13 @@ x.@@@.@@@@
 x.x.@@@.x.
 ```
 
-Por ejemplo, el rollo de la esquina inferior izquierda (fila 9, columna 0) solo tiene 3 posiciones vecinas dentro de la grilla y una sola tiene un rollo, así que es accesible. En cambio, el rollo de la fila 0, columna 7 tiene exactamente 4 rollos alrededor (columnas 6 y 8 de su fila, y columnas 6 y 8 de la fila 1), por lo que no lo es: la condición es estrictamente *menos* de 4.
+Por ejemplo, el rollo de la esquina inferior izquierda tiene solo 3 posiciones vecinas dentro de la grilla, y en una sola hay un rollo: es accesible. En cambio, el rollo de la fila 0, columna 7 tiene exactamente 4 rollos alrededor, y no lo es: la condición es estrictamente *menos* de 4.
 
-Resultado del ejemplo: **13**
+#### Pregunta
 
-### Desarrollo de la solución
+En el diagrama completo, ¿cuántos rollos de papel son accesibles para un montacargas?
+
+### Solución
 
 Es una simulación directa: para cada `@` se cuentan los `@` entre sus 8 vecinos y se cuenta el rollo si son menos de 4. Se reutiliza la utilidad `Grilla`:
 
@@ -82,21 +82,25 @@ static int rollosVecinos(Grilla grilla, Punto punto) {
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-Una vez que un rollo es accesible, se puede **retirar**. Al retirarlo, otros rollos pueden quedar accesibles y también retirarse. Si se repite el proceso hasta que no quede ningún rollo accesible, ¿cuántos rollos se retiran en total?
+Ahora los elfos quieren acceder a la mayor cantidad de papel posible. Un rollo accesible se puede **retirar**, y al retirarlo es posible que otros rollos queden accesibles y también se puedan retirar. El proceso se repite hasta que no quede ningún rollo accesible.
 
-### Ejemplo
+#### Ejemplo
 
-El enunciado muestra el proceso por rondas, retirando en cada una todos los rollos accesibles:
+Con el mismo diagrama, una forma de retirar la mayor cantidad posible es hacerlo por rondas, sacando en cada una todos los rollos accesibles en ese momento:
 
 | Ronda | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
 |-------|---|---|---|---|---|---|---|---|---|
 | Rollos retirados | 13 | 12 | 7 | 5 | 2 | 1 | 1 | 1 | 1 |
 
-Resultado del ejemplo: **43**
+Después de la novena ronda no queda ningún rollo accesible. En total se retiran **43** rollos.
 
-### Desarrollo de la solución
+#### Pregunta
+
+Partiendo del diagrama original, ¿cuántos rollos de papel en total pueden retirar los elfos con sus montacargas?
+
+### Solución
 
 #### Clave: el orden no importa
 

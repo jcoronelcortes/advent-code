@@ -1,40 +1,45 @@
 # Año 2025 — Día 1: Entrada Secreta
 
-## Descripción del problema
-
-Llegamos a la entrada secreta del Polo Norte y la contraseña cambió. Un documento en la pared explica que la contraseña está guardada en una caja de seguridad con un dial circular que va del **0 al 99**. El dial comienza apuntando al **50**.
-
-El input es una secuencia de instrucciones de rotación, una por línea. Cada instrucción tiene la forma `L68` o `R48`, donde la letra indica la dirección (`L` = izquierda, hacia números menores; `R` = derecha, hacia números mayores) y el número indica cuántos clicks girar.
-
-El dial es circular: girar a la izquierda desde el 0 lleva al 99, y girar a la derecha desde el 99 lleva al 0.
-
----
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/1](https://adventofcode.com/2025/day/1). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
 ## Parte 1
 
-### Pregunta
+### Enunciado
 
-¿Cuántas veces **termina** el dial apuntando al 0 después de completar cada rotación?
+Llegamos a la entrada secreta de la base del Polo Norte, pero la contraseña cambió y no sirve. En la pared hay un documento de seguridad que explica dónde encontrarla: está guardada en una **caja fuerte con un dial circular** numerado del **0 al 99**, que al comenzar apunta al **50**.
 
-### Ejemplo
+El documento trae una lista de giros para aplicar al dial, uno por línea (es el input). Cada giro tiene la forma `L68` o `R48`:
 
-| Instrucción | Posición final | ¿Llega a 0? |
-|-------------|---------------|-------------|
-| Inicio      | 50            |             |
-| L68         | 82            |             |
-| L30         | 52            |             |
-| R48         | **0**         | ✓           |
-| L5          | 95            |             |
-| R60         | 55            |             |
-| L55         | **0**         | ✓           |
-| L1          | 99            |             |
-| L99         | **0**         | ✓           |
-| R14         | 14            |             |
-| L82         | 32            |             |
+- la letra es la dirección: `L` gira a la **izquierda** (hacia números menores) y `R` a la **derecha** (hacia números mayores);
+- el número es la cantidad de **clics** que se gira.
 
-Resultado del ejemplo: **3**
+El dial es circular: un clic a la izquierda desde el 0 lleva al 99, y un clic a la derecha desde el 99 lleva al 0.
 
-### Desarrollo de la solución
+Según el documento, la contraseña no es la posición final del dial, sino **cuántas veces queda apuntando al 0 al terminar un giro**.
+
+#### Ejemplo
+
+| Giro | Posición al terminar | ¿Termina en 0? |
+|------|----------------------|----------------|
+| inicio | 50 | |
+| `L68` | 82 | |
+| `L30` | 52 | |
+| `R48` | **0** | ✓ |
+| `L5` | 95 | |
+| `R60` | 55 | |
+| `L55` | **0** | ✓ |
+| `L1` | 99 | |
+| `L99` | **0** | ✓ |
+| `R14` | 14 | |
+| `L82` | 32 | |
+
+El dial termina en 0 tres veces, así que la contraseña del ejemplo es **3**.
+
+#### Pregunta
+
+Aplicando todos los giros del input, ¿cuántas veces termina el dial apuntando al 0?
+
+### Solución
 
 #### Paso 1 — Parsear cada instrucción
 
@@ -88,32 +93,36 @@ for (Rotacion rotacion : leerRotaciones(lineas)) {
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-Ahora hay que contar cuántas veces el dial **pasa por 0 o termina en 0** durante cada rotación, incluyendo las posiciones intermedias de cada click.
+Con esa contraseña la puerta no abre. Mientras esperamos armamos un muñeco de nieve, y al rodar las bolas aparece otro documento de seguridad tirado en la nieve: por nuevos protocolos, hay que usar otro **método de contraseña**.
 
-### Ejemplo
+Con el método nuevo hay que contar **cada clic** que deja al dial apuntando al 0, sin importar si ocurre **en medio de un giro** o al terminarlo. Los giros son los mismos de la parte 1.
 
-Con las mismas instrucciones, ahora también cuentan los pasos intermedios:
+#### Ejemplo
 
-| Instrucción | ¿Pasa por 0? | Conteo |
-|-------------|-------------|--------|
-| L68 desde 50 | Sí, 1 vez (al bajar de 1 a 0) | +1 |
-| L30 desde 82 | No                             | +0 |
-| R48 desde 52 | Sí, termina en 0              | +1 |
-| L5  desde 0  | No                             | +0 |
-| R60 desde 95 | Sí, 1 vez (al subir de 99 a 0) | +1 |
-| L55 desde 55 | Sí, termina en 0              | +1 |
-| L1  desde 0  | No                             | +0 |
-| L99 desde 99 | Sí, termina en 0              | +1 |
-| R14 desde 0  | No                             | +0 |
-| L82 desde 14 | Sí, 1 vez (al bajar de 1 a 0) | +1 |
+| Giro | Posición al terminar | Veces que pasa por 0 |
+|------|----------------------|----------------------|
+| `L68` desde 50 | 82 | 1 (en medio del giro) |
+| `L30` | 52 | 0 |
+| `R48` | 0 | 1 (al terminar) |
+| `L5` | 95 | 0 |
+| `R60` | 55 | 1 (en medio del giro) |
+| `L55` | 0 | 1 (al terminar) |
+| `L1` | 99 | 0 |
+| `L99` | 0 | 1 (al terminar) |
+| `R14` | 14 | 0 |
+| `L82` | 32 | 1 (en medio del giro) |
 
-Total: **6** (3 finales + 3 intermedios)
+Son 3 veces al terminar un giro más 3 en medio de un giro: la nueva contraseña es **6**.
 
-> Caso especial del enunciado: `R1000` desde 50 pasa por 0 exactamente **10 veces**.
+Hay que tener cuidado con los giros largos: desde el 50, un solo giro `R1000` pasa por el 0 **diez veces** antes de volver al 50.
 
-### Desarrollo de la solución
+#### Pregunta
+
+Con el método nuevo, ¿cuál es la contraseña que abre la puerta?
+
+### Solución
 
 #### El problema de simular click a click
 

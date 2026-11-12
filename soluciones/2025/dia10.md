@@ -1,10 +1,14 @@
 # Año 2025 — Día 10: Fábrica
 
-## Descripción del problema
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/10](https://adventofcode.com/2025/day/10). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
-Al otro lado del pasillo hay una fábrica con todas las máquinas apagadas: nadie recuerda el procedimiento de inicio porque un perro Shiba Inu se comió esa parte del manual. Solo quedan los diagramas de luces, los esquemas de los botones y los requisitos de voltaje de cada máquina.
+## Parte 1
 
-El input describe una máquina por línea:
+### Enunciado
+
+Al otro lado del pasillo hay una gran **fábrica**. Los elfos tienen todo el tiempo del mundo para decorar, pero porque las máquinas están apagadas y nadie sabe el procedimiento de inicio: un perro Shiba Inu se comió esa parte del manual. Solo quedan, para cada máquina, un diagrama de **luces indicadoras**, los esquemas de cableado de sus **botones** y unos **requisitos de voltaje**.
+
+El manual describe una máquina por línea (el input):
 
 ```
 [.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
@@ -12,31 +16,31 @@ El input describe una máquina por línea:
 [.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}
 ```
 
-- `[.##.]`: **diagrama de luces** indicadoras (`#` = encendida). Todas empiezan apagadas.
-- `(1,3)`: un **botón** y las luces que alterna al apretarlo (índices desde 0).
-- `{3,5,4,7}`: requisitos de **voltaje** (no se usan en la parte 1).
+- Entre corchetes está el **diagrama de luces**: `.` es apagada y `#` encendida. La máquina tiene tantas luces como indica el diagrama, y **todas empiezan apagadas**. Para arrancar la máquina, las luces tienen que quedar exactamente como en el diagrama: `[.##.]` pide la primera apagada, la segunda y la tercera encendidas y la cuarta apagada.
+- Entre paréntesis están los **botones**. Cada uno indica qué luces **alterna** (enciende si estaba apagada, apaga si estaba encendida), contando desde 0. Por ejemplo, `(0,3,4)` alterna la primera, la cuarta y la quinta luz: si las luces estaban `[#.....]`, quedan `[...##.]`.
+- Entre llaves están los requisitos de voltaje, que **por ahora no importan**.
 
-El input real tiene 187 máquinas, con hasta 10 luces y 13 botones cada una.
+Cada botón se puede apretar las veces que se quiera, siempre una cantidad entera (no existe apretar "medio botón", ni una cantidad negativa). Para ahorrar tiempo, hay que encontrar la **menor cantidad de pulsaciones** que deja las luces de cada máquina como en su diagrama.
 
----
+#### Ejemplo
 
-## Parte 1
+| Máquina | Mínimo | Una forma de lograrlo |
+|---------|--------|-----------------------|
+| `[.##.]` | 2 | apretar `(0,2)` y `(0,1)` una vez cada uno |
+| `[...#.]` | 3 | apretar `(0,4)`, `(0,1,2)` y `(1,2,3,4)` una vez cada uno |
+| `[.###.#]` | 2 | apretar `(0,3,4)` y `(0,1,2,4,5)` una vez cada uno |
 
-### Pregunta
+En la primera máquina también funciona apretar los tres primeros botones (3 pulsaciones), o `(1,3)`, `(2,3)` y dos veces `(0,1)` (4 pulsaciones), pero el mínimo es 2. En total, el ejemplo necesita `2 + 3 + 2 =` **7** pulsaciones.
+
+#### Pregunta
 
 ¿Cuál es la menor cantidad total de pulsaciones para dejar las luces de todas las máquinas como en sus diagramas?
 
-### Ejemplo
+### Solución
 
-| Máquina | Mínimo | Una forma |
-|---------|--------|-----------|
-| `[.##.]` | 2 | `(0,2)` y `(0,1)` |
-| `[...#.]` | 3 | `(0,4)`, `(0,1,2)` y `(1,2,3,4)` |
-| `[.###.#]` | 2 | `(0,3,4)` y `(0,1,2,4,5)` |
+#### El input real
 
-Resultado del ejemplo: `2 + 3 + 2 =` **7**
-
-### Desarrollo de la solución
+Hay 187 máquinas, con hasta 10 luces y 13 botones cada una.
 
 #### Luces y botones como bits
 
@@ -83,21 +87,31 @@ El parseo usa expresiones regulares para el diagrama `[...]`, cada botón `(...)
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-Ahora los botones controlan **contadores de voltaje** (uno por cada número de `{...}`), que empiezan en 0. Cada pulsación de un botón **suma 1** a los contadores que indica. ¿Cuál es la menor cantidad total de pulsaciones para que los contadores de cada máquina queden **exactamente** en sus requisitos?
+Las máquinas empiezan a encenderse, y ahora toca ocuparse del voltaje. Debajo de los botones de cada máquina hay una palanca que los cambia de modo: en vez de configurar las luces, pasan a **aumentar contadores de voltaje** (el diagrama de luces ya no importa).
 
-### Ejemplo
+Cada máquina tiene un contador por cada número de los requisitos de voltaje, y **todos empiezan en 0**. Por ejemplo, `{3,5,4,7}` indica cuatro contadores que tienen que terminar en 3, 5, 4 y 7, respectivamente.
 
-| Máquina | Requisitos | Mínimo | Una forma |
-|---------|------------|--------|-----------|
-| 1 | `{3,5,4,7}` | 10 | `(3)`×1, `(1,3)`×3, `(2,3)`×3, `(0,2)`×1, `(0,1)`×2 |
-| 2 | `{7,5,12,7,2}` | 12 | `(0,2,3,4)`×2, `(2,3)`×5, `(0,1,2)`×5 |
-| 3 | `{10,11,11,5,10,5}` | 11 | `(0,1,2,3,4)`×5, `(0,1,2,4,5)`×5, `(1,2)`×1 |
+Los esquemas de los botones siguen valiendo: ahora cada botón indica qué contadores **aumenta en 1** cada vez que se aprieta. Por ejemplo, `(1,3)` suma 1 al segundo y al cuarto contador: si estaban en `{0,1,2,3}`, quedan en `{0,2,2,4}`.
 
-Resultado del ejemplo: `10 + 12 + 11 =` **33**
+Cada máquina tiene que quedar con sus contadores **exactamente** en los requisitos, y al dedo ya le duele tanto apretar botones que hay que hacerlo con la **menor cantidad de pulsaciones** posible.
 
-### Desarrollo de la solución
+#### Ejemplo
+
+| Máquina | Requisitos | Mínimo | Una forma de lograrlo |
+|---------|------------|--------|-----------------------|
+| 1 | `{3,5,4,7}` | 10 | `(3)` una vez, `(1,3)` tres veces, `(2,3)` tres veces, `(0,2)` una vez y `(0,1)` dos veces |
+| 2 | `{7,5,12,7,2}` | 12 | `(0,2,3,4)` dos veces, `(2,3)` cinco veces y `(0,1,2)` cinco veces |
+| 3 | `{10,11,11,5,10,5}` | 11 | `(0,1,2,3,4)` cinco veces, `(0,1,2,4,5)` cinco veces y `(1,2)` una vez |
+
+En total, el ejemplo necesita `10 + 12 + 11 =` **33** pulsaciones.
+
+#### Pregunta
+
+¿Cuál es la menor cantidad total de pulsaciones para dejar los contadores de voltaje de todas las máquinas exactamente en sus requisitos?
+
+### Solución
 
 #### Es programación lineal entera
 

@@ -1,46 +1,46 @@
 # Año 2025 — Día 2: Tienda de Regalos
 
-## Descripción del problema
-
-Tomamos el ascensor hasta la tienda de regalos del Polo Norte. Un elfo jugando con la computadora de la tienda agregó un montón de **IDs de producto inválidos** a la base de datos, y nos piden encontrarlos.
-
-El input es una única línea con **rangos de IDs** separados por comas. Cada rango tiene la forma `inicio-fin` (ambos inclusivos):
-
-```
-11-22,95-115,998-1012,1188511880-1188511890,...
-```
-
-Ningún ID tiene ceros a la izquierda (`0101` no es un ID; `101` sí lo es y es válido).
-
----
+> El enunciado de cada parte está redactado en español con palabras propias a partir del original en [adventofcode.com/2025/day/2](https://adventofcode.com/2025/day/2). No es una traducción literal: el creador de Advent of Code pide no republicar el texto de sus problemas.
 
 ## Parte 1
 
-### Pregunta
+### Enunciado
 
-Un ID es **inválido** si está formado únicamente por una secuencia de dígitos **repetida dos veces**: `55` (5 dos veces), `6464` (64 dos veces), `123123` (123 dos veces).
+Entramos y tomamos el ascensor hasta su única otra parada: la **tienda de regalos** del Polo Norte. Desde ahí se llega al vestíbulo y al resto de la base. Uno de los vendedores nos reconoce y pide ayuda: un elfo pequeño estuvo jugando con una computadora de la tienda y agregó a la base de datos un montón de **IDs de producto inválidos**.
 
-¿Cuánto da la **suma** de todos los IDs inválidos que aparecen en los rangos?
+Los vendedores ya revisaron casi todo; solo faltan algunos **rangos de IDs**, que son el input. Vienen en una sola línea larga, separados por comas, y cada rango indica su primer y su último ID separados por un guion (ambos incluidos):
 
-### Ejemplo
+```
+11-22,95-115,998-1012,1188511880-1188511890,222220-222224,
+1698522-1698528,446443-446449,38593856-38593862,565653-565659,
+824824821-824824827,2121212118-2121212124
+```
 
-| Rango | IDs inválidos | Suma |
-|-------|---------------|------|
-| 11-22 | 11, 22 | 33 |
-| 95-115 | 99 | 99 |
-| 998-1012 | 1010 | 1010 |
-| 1188511880-1188511890 | 1188511885 | 1188511885 |
-| 222220-222224 | 222222 | 222222 |
-| 1698522-1698528 | — | 0 |
-| 446443-446449 | 446446 | 446446 |
-| 38593856-38593862 | 38593859 | 38593859 |
-| 565653-565659 | — | 0 |
-| 824824821-824824827 | — | 0 |
-| 2121212118-2121212124 | — | 0 |
+(Aquí el ejemplo está partido en varias líneas para que se lea mejor.)
 
-Resultado del ejemplo: **1227775554**
+Como el elfo solo hacía patrones tontos, un ID es **inválido** si está formado únicamente por una secuencia de dígitos **repetida dos veces**: `55` (el 5 dos veces), `6464` (el 64 dos veces) o `123123` (el 123 dos veces). Ningún ID empieza con cero: `0101` no es un ID, y `101` es un ID válido.
 
-### Desarrollo de la solución
+#### Ejemplo
+
+| Rango | IDs inválidos |
+|-------|---------------|
+| `11-22` | 11 y 22 |
+| `95-115` | 99 |
+| `998-1012` | 1010 |
+| `1188511880-1188511890` | 1188511885 |
+| `222220-222224` | 222222 |
+| `1698522-1698528` | ninguno |
+| `446443-446449` | 446446 |
+| `38593856-38593862` | 38593859 |
+| los otros tres | ninguno |
+
+La suma de todos los IDs inválidos del ejemplo es **1227775554**.
+
+#### Pregunta
+
+¿Cuánto suman todos los IDs inválidos que aparecen en los rangos del input?
+
+### Solución
 
 #### Paso 1 — Parsear los rangos
 
@@ -148,31 +148,35 @@ for (Rango rango : leerRangos(lineas)) {
 
 ## Parte 2
 
-### Pregunta
+### Enunciado
 
-El elfo hizo más patrones. Ahora un ID es inválido si está formado por una secuencia de dígitos repetida **al menos** dos veces: `12341234` (1234 dos veces), `123123123` (123 tres veces), `1212121212` (12 cinco veces), `1111111` (1 siete veces).
+El vendedor descubre enseguida que todavía quedan IDs inválidos en los rangos: parece que el elfo también hacía otros patrones.
 
-El input es el mismo de la Parte 1.
+Ahora un ID es inválido si está formado por una secuencia de dígitos repetida **al menos dos veces**: `12341234` (el 1234 dos veces), `123123123` (el 123 tres veces), `1212121212` (el 12 cinco veces) o `1111111` (el 1 siete veces). Los rangos son los mismos de la parte 1.
 
-### Ejemplo
+#### Ejemplo
 
-| Rango | IDs inválidos | Cambio respecto a la Parte 1 |
-|-------|---------------|------------------------------|
-| 11-22 | 11, 22 | igual |
-| 95-115 | 99, **111** | `111` = "1" × 3 |
-| 998-1012 | **999**, 1010 | `999` = "9" × 3 |
-| 1188511880-1188511890 | 1188511885 | igual |
-| 222220-222224 | 222222 | igual |
-| 1698522-1698528 | — | igual |
-| 446443-446449 | 446446 | igual |
-| 38593856-38593862 | 38593859 | igual |
-| 565653-565659 | **565656** | "56" × 3 |
-| 824824821-824824827 | **824824824** | "824" × 3 |
-| 2121212118-2121212124 | **2121212121** | "21" × 5 |
+| Rango | IDs inválidos | Cambio respecto de la parte 1 |
+|-------|---------------|-------------------------------|
+| `11-22` | 11 y 22 | igual |
+| `95-115` | 99 y **111** | 111 = "1" tres veces |
+| `998-1012` | **999** y 1010 | 999 = "9" tres veces |
+| `1188511880-1188511890` | 1188511885 | igual |
+| `222220-222224` | 222222 | igual |
+| `1698522-1698528` | ninguno | igual |
+| `446443-446449` | 446446 | igual |
+| `38593856-38593862` | 38593859 | igual |
+| `565653-565659` | **565656** | "56" tres veces |
+| `824824821-824824827` | **824824824** | "824" tres veces |
+| `2121212118-2121212124` | **2121212121** | "21" cinco veces |
 
-Resultado del ejemplo: **4174379265**
+Con la regla nueva, la suma del ejemplo es **4174379265**.
 
-### Desarrollo de la solución
+#### Pregunta
+
+Con la regla nueva, ¿cuánto suman todos los IDs inválidos de los rangos del input?
+
+### Solución
 
 #### Paso 1 — Generalizar la fórmula
 
