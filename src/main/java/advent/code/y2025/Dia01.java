@@ -1,6 +1,7 @@
 package advent.code.y2025;
 
 import advent.code.Resolvedor;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class Dia01 implements Resolvedor {
             if (!linea.matches("[LR]\\d+")) continue;
 
             char direccion = linea.charAt(0);
-            int distancia = Integer.parseInt(linea.substring(1));
+            int distancia = NumberUtils.toInt(linea.substring(1));
 
             int delta = (direccion == 'R') ? distancia : -distancia;
             posicion = ((posicion + delta) % TAMANIO_DIAL + TAMANIO_DIAL) % TAMANIO_DIAL;
@@ -68,7 +69,7 @@ public class Dia01 implements Resolvedor {
             if (!linea.matches("[LR]\\d+")) continue;
 
             char direccion = linea.charAt(0);
-            int distancia = Integer.parseInt(linea.substring(1));
+            int distancia = NumberUtils.toInt(linea.substring(1));
 
             contador += contarPasosPorCero(posicion, direccion, distancia);
 

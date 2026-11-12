@@ -1,11 +1,11 @@
 package advent.code;
 
-import java.io.BufferedReader;
+import org.apache.commons.io.IOUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Utilidades de entrada/salida para los desafíos de Advent of Code.
@@ -35,8 +35,6 @@ public class EntradaSalida {
         if (flujo == null) {
             throw new IOException("Archivo de entrada no encontrado: " + ruta);
         }
-        try (BufferedReader lector = new BufferedReader(new InputStreamReader(flujo))) {
-            return lector.lines().collect(Collectors.toList());
-        }
+        return IOUtils.readLines(flujo, StandardCharsets.UTF_8);
     }
 }
