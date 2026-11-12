@@ -140,3 +140,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | Día | Título | Parte 1 | Parte 2 | Documentación |
 |-----|--------|---------|---------|---------------|
 | [01](src/main/java/advent/code/y2024/Dia01.java) | Histeria del Historiador | 2378066 | 18934359 | [ver](soluciones/2024/dia01.md) |
+| [02](src/main/java/advent/code/y2024/Dia02.java) | Reportes del Reno de Nariz Roja | 306 | 366 | [ver](soluciones/2024/dia02.md) |
