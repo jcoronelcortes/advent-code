@@ -134,3 +134,9 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [10](src/main/java/advent/code/y2025/Dia10.java) | Fábrica | 491 | 20617 | [ver](soluciones/2025/dia10.md) |
 | [11](src/main/java/advent/code/y2025/Dia11.java) | Reactor | 749 | 420257875695750 | [ver](soluciones/2025/dia11.md) |
 | [12](src/main/java/advent/code/y2025/Dia12.java) | Granja de Árboles de Navidad | 538 | estrella final | [ver](soluciones/2025/dia12.md) |
+
+### 2024
+
+| Día | Título | Parte 1 | Parte 2 | Documentación |
+|-----|--------|---------|---------|---------------|
+| [01](src/main/java/advent/code/y2024/Dia01.java) | Histeria del Historiador | 2378066 | 18934359 | [ver](soluciones/2024/dia01.md) |

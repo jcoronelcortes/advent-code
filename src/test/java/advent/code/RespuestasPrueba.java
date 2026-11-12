@@ -35,7 +35,8 @@ class RespuestasPrueba {
             "2025, 9, 4777824480,  1542119040",
             "2025, 10, 491,        20617",
             "2025, 11, 749,        420257875695750",
-            "2025, 12, 538,        estrella final"
+            "2025, 12, 538,        estrella final",
+            "2024, 1, 2378066,     18934359"
     })
     void respuestas(int anio, int dia, String parte1, String parte2) throws Exception {
         assumeTrue(EntradaSalida.existeEntrada(anio, dia),
