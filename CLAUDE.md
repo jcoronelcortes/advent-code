@@ -16,7 +16,7 @@ mvn clean compile
 mvn clean package
 
 # Ejecutar un día específico
-mvn exec:java -Dexec.mainClass="org.example.Main" -Dexec.args="2025 1"
+mvn exec:java -Dexec.mainClass="advent.code.Main" -Dexec.args="2025 1"
 ```
 
 ## Arquitectura
@@ -31,7 +31,7 @@ mvn exec:java -Dexec.mainClass="org.example.Main" -Dexec.args="2025 1"
 
 1. Crear `src/main/java/org/example/y{year}/Day{DD}.java` implementando `Solver`
 2. Pegar el input en `src/main/resources/inputs/y{year}/day{DD}.txt`
-3. Ejecutar con `mvn exec:java -Dexec.mainClass="org.example.Main" -Dexec.args="{year} {day}"`
+3. Ejecutar con `mvn exec:java -Dexec.mainClass="advent.code.Main" -Dexec.args="{year} {day}"`
 
 ## Convenciones
 
