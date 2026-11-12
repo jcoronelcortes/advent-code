@@ -69,8 +69,7 @@ public class Dia06 implements Resolvedor {
 
     /** Posición inicial del guardia. */
     private static Punto buscarGuardia(Grilla mapa) {
-        return mapa.buscar(GUARDIA)
-                .orElseThrow(() -> new IllegalArgumentException("El mapa no tiene al guardia '" + GUARDIA + "'"));
+        return mapa.buscarUnico(GUARDIA);
     }
 
     /** Estado completo del guardia: dónde está y hacia dónde mira. */

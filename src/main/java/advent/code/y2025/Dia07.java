@@ -80,8 +80,7 @@ public class Dia07 implements Resolvedor {
      */
     static Resultado simular(Grilla grilla) {
         int columnas = grilla.columnas();
-        Punto inicio = grilla.buscar(INICIO)
-                .orElseThrow(() -> new IllegalArgumentException("El diagrama no tiene '" + INICIO + "'"));
+        Punto inicio = grilla.buscarUnico(INICIO);
 
         long[] haces = new long[columnas];
         haces[inicio.x()] = 1;

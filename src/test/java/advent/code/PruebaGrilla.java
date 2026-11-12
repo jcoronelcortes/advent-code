@@ -255,4 +255,13 @@ class PruebaGrilla {
     void desdeLineas_sinRellenoRechaza() {
         assertThrows(IllegalArgumentException.class, () -> Grilla.desdeLineas(List.of("ab", "abc")));
     }
+
+    @Test
+    @DisplayName("buscarUnico: devuelve la única posición; falla si no está o si está repetido")
+    void buscarUnico() {
+        Grilla mapa = Grilla.desdeLineas(List.of("..#", ".^.", "#.."));
+        assertEquals(new Punto(1, 1), mapa.buscarUnico('^'));
+        assertThrows(IllegalArgumentException.class, () -> mapa.buscarUnico('S'));   // no está
+        assertThrows(IllegalArgumentException.class, () -> mapa.buscarUnico('#'));   // está dos veces
+    }
 }

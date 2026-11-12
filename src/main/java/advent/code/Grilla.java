@@ -214,6 +214,27 @@ public final class Grilla {
     }
 
     /**
+     * Posición de un carácter que tiene que aparecer <b>exactamente una vez</b>,
+     * como el punto de partida de un mapa ({@code S}, {@code ^}, {@code @}).
+     *
+     * <p>A diferencia de {@link #buscar}, falla con un mensaje claro si el
+     * carácter no está o si está más de una vez: un input mal pegado se
+     * detecta enseguida en vez de usar en silencio la primera aparición.</p>
+     *
+     * @param caracter carácter a buscar
+     * @return su única posición
+     * @throws IllegalArgumentException si no aparece o aparece más de una vez
+     */
+    public Punto buscarUnico(char caracter) {
+        List<Punto> encontrados = buscarTodos(caracter);
+        if (encontrados.size() != 1) {
+            throw new IllegalArgumentException("Se esperaba exactamente un '" + caracter
+                    + "' en la grilla y hay " + encontrados.size());
+        }
+        return encontrados.getFirst();
+    }
+
+    /**
      * Todas las posiciones que contienen el carácter.
      *
      * @param caracter carácter a buscar
