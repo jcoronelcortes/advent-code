@@ -25,7 +25,7 @@ src/
       Matematicas.java        # MCD/MCM, aritmética modular, resto chino, Möbius, dígitos
       Rango.java              # Intervalos [inicio, fin]: intersección, resta, unión
       ConjuntoRangos.java     # Unión de rangos: pertenencia (búsqueda binaria) y cantidad
-      Grilla.java             # Grilla de caracteres: búsqueda, vecinos, conteo de vecinos, rotaciones
+      Grilla.java             # Grilla de caracteres (admite líneas de distinto largo): búsqueda, vecinos, rotaciones
       BFS.java                # Búsqueda en anchura genérica
       Dijkstra.java           # Camino de costo mínimo genérico (y A*)
       Camino.java             # Resultado de BFS y Dijkstra: nodos + costo
@@ -80,6 +80,14 @@ mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025 1"
 
 Muestra el resultado de cada parte y el tiempo que tardó.
 
+### Ejecutar todo un año
+
+```bash
+mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025"
+```
+
+Ejecuta todos los días que tienen solución e input, y muestra una tabla con las respuestas y el tiempo de cada parte. Sirve para detectar si algún día se volvió lento después de un refactor.
+
 ### Correr los tests
 
 ```bash
@@ -92,7 +100,7 @@ mvn test
 ./nuevo-dia.sh 2025 4 "Título del día"
 ```
 
-Genera la clase de solución, la clase de prueba (con los tests de ejemplo marcados `@Disabled` hasta completarlos), la documentación en `soluciones/`, la fila en la tabla de este README y la carpeta del input. No sobrescribe archivos que ya existan.
+Genera la clase de solución, la clase de prueba (con los tests de ejemplo marcados `@Disabled` hasta completarlos), la documentación en `soluciones/`, la fila en la tabla de este README, el archivo del input y los archivos de enunciado vacíos (`diaNN_parte1.txt` y `diaNN_parte2.txt`, para solo pegar el texto con el nombre correcto). No sobrescribe archivos que ya existan.
 
 **Descarga automática del input (opcional):** si está definida la variable de entorno `AOC_SESSION` con el valor de la cookie `session` de adventofcode.com, el script descarga el input una sola vez (si el archivo ya tiene contenido no lo vuelve a pedir). La cookie se define en el shell, nunca en el repositorio:
 

@@ -1,29 +1,33 @@
 package advent.code;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
- * Punto de entrada principal. Recibe el año y día como argumentos,
- * carga la clase correspondiente y ejecuta ambas partes del desafío,
- * mostrando el tiempo que tarda cada una.
+ * Punto de entrada principal.
+ *
+ * <ul>
+ *   <li>{@code Principal <año> <día>}: ejecuta ambas partes de un día y
+ *       muestra el resultado y el tiempo de cada una.</li>
+ *   <li>{@code Principal <año>}: ejecuta todos los días resueltos de ese año
+ *       (los que tienen clase e input) y muestra una tabla con las respuestas,
+ *       los tiempos y el total. Sirve para ver de un vistazo si algún día se
+ *       volvió lento después de un refactor.</li>
+ * </ul>
  */
 public class Principal {
 
+    /** Último día de Advent of Code (25 hasta 2024; desde 2025 son 12, pero no hace daño probar hasta 25). */
+    private static final int ULTIMO_DIA = 25;
+
     public static void main(String[] args) throws Exception {
-        if (args.length < 2) {
-            System.out.println("Uso: Principal <año> <día>  (ej. 2025 1)");
-            return;
+        if (args.length == 1) {
+            ejecutarAnio(Integer.parseInt(args[0]));
+        } else if (args.length >= 2) {
+            ejecutarDia(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+        } else {
+            System.out.println("Uso: Principal <año> [<día>]  (ej. \"2025 1\" para un día, \"2025\" para todo el año)");
         }
-
-        int anio = Integer.parseInt(args[0]);
-        int dia  = Integer.parseInt(args[1]);
-
-        Resolvedor resolvedor = cargarResolvedor(anio, dia);
-        List<String> lineas = EntradaSalida.leerEntrada(anio, dia);
-
-        System.out.println("=== Año " + anio + " — Día " + dia + " ===");
-        ejecutar("Parte 1", () -> resolvedor.parte1(lineas));
-        ejecutar("Parte 2", () -> resolvedor.parte2(lineas));
     }
 
     /**
@@ -41,11 +45,59 @@ public class Principal {
                                  .newInstance();
     }
 
-    /** Ejecuta una parte e imprime su resultado junto con el tiempo que tardó. */
-    private static void ejecutar(String nombre, java.util.function.Supplier<String> parte) {
+    /** Ejecuta ambas partes de un día e imprime cada resultado con su tiempo. */
+    private static void ejecutarDia(int anio, int dia) throws Exception {
+        Resolvedor resolvedor = cargarResolvedor(anio, dia);
+        List<String> lineas = EntradaSalida.leerEntrada(anio, dia);
+
+        System.out.println("=== Año " + anio + " — Día " + dia + " ===");
+        Medicion parte1 = medir(() -> resolvedor.parte1(lineas));
+        System.out.printf("Parte 1: %s  (%.1f ms)%n", parte1.resultado(), parte1.milisegundos());
+        Medicion parte2 = medir(() -> resolvedor.parte2(lineas));
+        System.out.printf("Parte 2: %s  (%.1f ms)%n", parte2.resultado(), parte2.milisegundos());
+    }
+
+    /**
+     * Ejecuta todos los días del año que tengan clase e input, y muestra una
+     * tabla con las respuestas y los tiempos. Los días sin clase o sin input
+     * se omiten en silencio (todavía no se resolvieron o falta pegar el input).
+     */
+    private static void ejecutarAnio(int anio) throws Exception {
+        String formato = "%-4s  %-20s  %10s  %-20s  %10s%n";
+        System.out.println("=== Año " + anio + " ===");
+        System.out.printf(formato, "Día", "Parte 1", "ms", "Parte 2", "ms");
+
+        double total = 0;
+        int ejecutados = 0;
+        for (int dia = 1; dia <= ULTIMO_DIA; dia++) {
+            if (!EntradaSalida.existeEntrada(anio, dia)) continue;
+            Resolvedor resolvedor;
+            try {
+                resolvedor = cargarResolvedor(anio, dia);
+            } catch (ClassNotFoundException noResuelto) {
+                continue;
+            }
+
+            List<String> lineas = EntradaSalida.leerEntrada(anio, dia);
+            Medicion parte1 = medir(() -> resolvedor.parte1(lineas));
+            Medicion parte2 = medir(() -> resolvedor.parte2(lineas));
+            System.out.printf(formato, String.format("%02d", dia),
+                    parte1.resultado(), String.format("%.1f", parte1.milisegundos()),
+                    parte2.resultado(), String.format("%.1f", parte2.milisegundos()));
+
+            total += parte1.milisegundos() + parte2.milisegundos();
+            ejecutados++;
+        }
+        System.out.printf("%d días en %.1f ms%n", ejecutados, total);
+    }
+
+    /** Resultado de una parte y el tiempo que tardó. */
+    private record Medicion(String resultado, double milisegundos) {}
+
+    /** Ejecuta una parte midiendo su tiempo. */
+    private static Medicion medir(Supplier<String> parte) {
         long inicio = System.nanoTime();
         String resultado = parte.get();
-        double milisegundos = (System.nanoTime() - inicio) / 1_000_000.0;
-        System.out.printf("%s: %s  (%.1f ms)%n", nombre, resultado, milisegundos);
+        return new Medicion(resultado, (System.nanoTime() - inicio) / 1_000_000.0);
     }
 }

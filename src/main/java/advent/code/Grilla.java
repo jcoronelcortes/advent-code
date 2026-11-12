@@ -73,6 +73,29 @@ public final class Grilla {
         return new Grilla(celdas);
     }
 
+    /**
+     * Crea una grilla a partir de líneas que pueden tener distinto largo,
+     * completando las cortas con {@code relleno} a la derecha hasta el ancho
+     * de la más larga. Es común en AoC que el input no traiga los espacios
+     * del final de cada línea (ej. 2025 día 6). Igual que
+     * {@link #desdeLineas(List)}, ignora las líneas en blanco al final.
+     *
+     * @param lineas  líneas del input
+     * @param relleno carácter con que se completan las líneas cortas (normalmente {@code ' '})
+     * @return la grilla rectangular
+     */
+    public static Grilla desdeLineas(List<String> lineas, char relleno) {
+        int cantidad = lineas.size();
+        while (cantidad > 0 && lineas.get(cantidad - 1).isBlank()) cantidad--;
+        List<String> utiles = lineas.subList(0, cantidad);
+
+        int ancho = utiles.stream().mapToInt(String::length).max().orElse(0);
+        String completar = String.valueOf(relleno);
+        return desdeLineas(utiles.stream()
+                .map(linea -> linea + completar.repeat(ancho - linea.length()))
+                .toList());
+    }
+
     // -------------------------------------------------------------------------
     // Dimensiones y acceso
     // -------------------------------------------------------------------------

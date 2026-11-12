@@ -163,22 +163,6 @@ public record Rango(long inicio, long fin) implements Comparable<Rango> {
         return resultado;
     }
 
-    /**
-     * Cantidad total de enteros cubiertos por una colección de rangos,
-     * contando una sola vez los valores en zonas solapadas. Para además
-     * consultar si un valor pertenece, usar {@link ConjuntoRangos}.
-     *
-     * @param rangos rangos en cualquier orden
-     * @return cantidad de valores distintos cubiertos
-     */
-    public static long contarCubiertos(Collection<Rango> rangos) {
-        long total = 0;
-        for (Rango rango : unir(rangos)) {
-            total += rango.largo();
-        }
-        return total;
-    }
-
     @Override
     public int compareTo(Rango otro) {
         return ORDEN.compare(this, otro);

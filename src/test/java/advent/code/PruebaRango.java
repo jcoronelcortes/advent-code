@@ -147,15 +147,6 @@ class PruebaRango {
     }
 
     @Test
-    @DisplayName("contarCubiertos: cuenta una sola vez los solapamientos (AoC 2016 día 20)")
-    void contarCubiertos() {
-        // IPs bloqueadas 5-8, 0-2, 4-7 en el espacio 0..9 → libres 3 y 9
-        List<Rango> bloqueadas = List.of(new Rango(5, 8), new Rango(0, 2), new Rango(4, 7));
-        assertEquals(8, Rango.contarCubiertos(bloqueadas));
-        assertEquals(2, 10 - Rango.contarCubiertos(bloqueadas));
-    }
-
-    @Test
     @DisplayName("compareTo: ordena por inicio y luego por fin")
     void ordenar() {
         List<Rango> rangos = new ArrayList<>(List.of(new Rango(5, 9), new Rango(1, 8), new Rango(5, 6)));

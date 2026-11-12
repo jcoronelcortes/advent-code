@@ -1,5 +1,6 @@
 package advent.code.y2025;
 
+import advent.code.Grilla;
 import advent.code.Resolvedor;
 
 import java.util.ArrayList;
@@ -160,22 +161,22 @@ public class Dia06 implements Resolvedor {
      * Separa la hoja en problemas.
      *
      * <p>Las líneas del input no tienen todas el mismo largo (los espacios
-     * del final se recortan), así que primero se rellenan con espacios hasta
-     * el ancho máximo. Después se recorren las columnas: una columna formada
-     * solo por espacios separa dos problemas; cada tramo de columnas no
-     * vacías es un problema.</p>
+     * del final se recortan), así que se arma una {@link Grilla} completando
+     * con espacios hasta el ancho máximo. Después se recorren las columnas:
+     * una columna formada solo por espacios separa dos problemas; cada tramo
+     * de columnas no vacías es un problema.</p>
      *
      * @param lineas filas de la hoja (la última es la de operaciones)
      * @return problemas de izquierda a derecha
      */
     static List<Problema> leerProblemas(List<String> lineas) {
-        List<String> hoja = rellenar(lineas.stream().filter(linea -> !linea.isBlank()).toList());
-        int ancho = hoja.getFirst().length();
+        Grilla hoja = Grilla.desdeLineas(lineas, ' ');
+        int ancho = hoja.columnas();
 
         List<Problema> problemas = new ArrayList<>();
         int inicio = -1;                        // primera columna del problema actual
         for (int columna = 0; columna <= ancho; columna++) {
-            boolean separador = columna == ancho || esColumnaVacia(hoja, columna);
+            boolean separador = columna == ancho || hoja.columna(columna).isBlank();
             if (!separador && inicio < 0) {
                 inicio = columna;
             } else if (separador && inicio >= 0) {
@@ -186,23 +187,14 @@ public class Dia06 implements Resolvedor {
         return problemas;
     }
 
-    /** Rellena todas las líneas con espacios a la derecha hasta el mismo ancho. */
-    private static List<String> rellenar(List<String> lineas) {
-        int ancho = lineas.stream().mapToInt(String::length).max().orElse(0);
-        return lineas.stream().map(linea -> linea + " ".repeat(ancho - linea.length())).toList();
-    }
-
-    /** Indica si una columna está formada solo por espacios. */
-    private static boolean esColumnaVacia(List<String> hoja, int columna) {
-        return hoja.stream().allMatch(linea -> linea.charAt(columna) == ' ');
-    }
-
     /** Extrae el bloque de columnas {@code [desde, hasta)} como un problema. */
-    private static Problema recortar(List<String> hoja, int desde, int hasta) {
-        List<String> filas = hoja.subList(0, hoja.size() - 1).stream()
-                .map(linea -> linea.substring(desde, hasta))
-                .toList();
-        char operacion = hoja.getLast().substring(desde, hasta).strip().charAt(0);
+    private static Problema recortar(Grilla hoja, int desde, int hasta) {
+        int filaOperaciones = hoja.filas() - 1;
+        List<String> filas = new ArrayList<>(filaOperaciones);
+        for (int fila = 0; fila < filaOperaciones; fila++) {
+            filas.add(hoja.fila(fila).substring(desde, hasta));
+        }
+        char operacion = hoja.fila(filaOperaciones).substring(desde, hasta).strip().charAt(0);
         return new Problema(filas, operacion);
     }
 }

@@ -44,14 +44,14 @@ Dividir cada línea por espacios y emparejar los números por posición funciona
 
 #### Separar los problemas por columnas vacías
 
-1. **Rellenar las líneas.** En el input las líneas no tienen todas el mismo largo (3749 y 3752 caracteres) porque los espacios del final se recortan. Se rellenan con espacios a la derecha hasta el ancho máximo; sin esto, revisar una columna cerca del final se saldría de las líneas cortas.
+1. **Rellenar las líneas.** En el input las líneas no tienen todas el mismo largo (3749 y 3752 caracteres) porque los espacios del final se recortan. `Grilla.desdeLineas(lineas, ' ')` arma una grilla rectangular completando con espacios a la derecha hasta el ancho máximo; sin esto, revisar una columna cerca del final se saldría de las líneas cortas.
 2. **Recorrer las columnas.** Una columna con solo espacios es un separador. Cada tramo de columnas no vacías es un problema: se recortan esas columnas de cada fila (record `Problema`) y la operación se toma de la última fila.
 
 ```java
 // Dia06.java — leerProblemas()
 int inicio = -1;                        // primera columna del problema actual
 for (int columna = 0; columna <= ancho; columna++) {
-    boolean separador = columna == ancho || esColumnaVacia(hoja, columna);
+    boolean separador = columna == ancho || hoja.columna(columna).isBlank();
     if (!separador && inicio < 0) {
         inicio = columna;
     } else if (separador && inicio >= 0) {

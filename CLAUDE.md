@@ -17,12 +17,15 @@ mvn test
 
 # Ejecutar un día específico
 mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025 1"
+
+# Ejecutar todos los días de un año (tabla con respuestas y tiempos)
+mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025"
 ```
 
 ## Arquitectura
 
 - `Resolvedor.java` — interfaz que deben implementar todos los días (`parte1` y `parte2` reciben `List<String>` y devuelven `String`)
-- `Principal.java` — dispatcher: recibe año y día como args, carga la clase `advent.code.y{anio}.Dia{DD}` vía reflexión (`cargarResolvedor`), lee el input y ejecuta ambas partes mostrando el tiempo
+- `Principal.java` — dispatcher: recibe año y día como args, carga la clase `advent.code.y{anio}.Dia{DD}` vía reflexión (`cargarResolvedor`), lee el input y ejecuta ambas partes mostrando el tiempo; con solo el año ejecuta todos los días resueltos en una tabla
 - `EntradaSalida.java` — `leerEntrada(anio, dia)` lee desde resources; `existeEntrada(anio, dia)` indica si el input está
 - `src/main/java/advent/code/y{anio}/Dia{DD}.java` — una clase por día, implementa `Resolvedor`
 - `src/main/resources/inputs/y{anio}/dia{DD}.txt` — input de cada día (**ignorado por git**)
@@ -40,7 +43,7 @@ Revisar antes de escribir código nuevo:
 - `Rango` — intervalo cerrado `[inicio, fin]`: parseo `"a-b"`, intersección, resta, unión de solapados
 - `ConjuntoRangos` — unión de rangos: `contiene` (búsqueda binaria) y `cantidad`, sin enumerar valores
 - `Punto` (record, `x` = columna, `y` = fila) y `Direccion` (enum con giros); `Punto3D` (record `long`, `distanciaCuadrada`, `parsear`)
-- `Grilla` — grilla de caracteres: búsqueda, vecinos con filtro, `contarVecinos`, rotaciones, copia; `desdeLineas` ignora líneas en blanco al final
+- `Grilla` — grilla de caracteres: búsqueda, vecinos con filtro, `contarVecinos`, rotaciones, copia; `desdeLineas` ignora líneas en blanco al final y `desdeLineas(lineas, ' ')` admite líneas de distinto largo
 - `BFS` y `Dijkstra` — búsquedas genéricas con la misma forma de uso; ambas devuelven costos `long` y `Camino<N>`. `Dijkstra` admite heurística (A*) y `nodosEnCaminosMinimos`
 - `ConjuntosDisjuntos` — union-find sobre índices `0..n-1`: `unir`, `mismoGrupo`, `tamanio`, `tamanios`, `cantidadGrupos`
 - `Memoizador` — función recursiva con caché para programación dinámica (evita el `ConcurrentModificationException` de `computeIfAbsent` recursivo)
@@ -49,7 +52,7 @@ Revisar antes de escribir código nuevo:
 
 ### Agregar un nuevo día
 
-1. Ejecutar `./nuevo-dia.sh {anio} {dia} "Título"`: genera clase, prueba, documentación y fila del README (y descarga el input si está definida `AOC_SESSION`)
+1. Ejecutar `./nuevo-dia.sh {anio} {dia} "Título"`: genera clase, prueba, documentación, fila del README y enunciados vacíos `dia{DD}_parte{N}.txt` (y descarga el input si está definida `AOC_SESSION`)
 2. Pegar el input en `src/main/resources/inputs/y{anio}/dia{DD}.txt` (y opcionalmente el enunciado en `enunciados/{anio}/`)
 3. Completar el ejemplo del enunciado en `Dia{DD}Prueba.java` y quitar `@Disabled`
 4. Resolver, verificar la respuesta con un método independiente (fuerza bruta) y documentar en `soluciones/{anio}/dia{DD}.md`

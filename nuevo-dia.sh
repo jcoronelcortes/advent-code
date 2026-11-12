@@ -12,7 +12,9 @@
 #   - src/test/java/advent/code/y<anio>/DiaNNPrueba.java   pruebas con el ejemplo del enunciado
 #   - soluciones/<anio>/diaNN.md                            documentación de la solución
 #   - una fila en la tabla de soluciones del README
-#   - las carpetas para el input y el enunciado (ignoradas por git)
+#   - el input (vacío, o descargado si hay AOC_SESSION) y los archivos de
+#     enunciado diaNN_parte1.txt y diaNN_parte2.txt vacíos, con el nombre
+#     correcto para solo pegar el texto (todos ignorados por git)
 
 set -euo pipefail
 
@@ -33,6 +35,8 @@ PRUEBA="src/test/java/advent/code/y${ANIO}/Dia${DIA_FMT}Prueba.java"
 DOC="soluciones/${ANIO}/dia${DIA_FMT}.md"
 INPUT="src/main/resources/inputs/y${ANIO}/dia${DIA_FMT}.txt"
 ENUNCIADOS="enunciados/${ANIO}"
+ENUNCIADO_1="${ENUNCIADOS}/dia${DIA_FMT}_parte1.txt"
+ENUNCIADO_2="${ENUNCIADOS}/dia${DIA_FMT}_parte2.txt"
 
 mkdir -p "$(dirname "$CLASE")" "$(dirname "$PRUEBA")" "$(dirname "$DOC")" "$(dirname "$INPUT")" "$ENUNCIADOS"
 
@@ -256,10 +260,20 @@ else
     echo "  (sin AOC_SESSION: el input hay que pegarlo a mano)"
 fi
 
+# Enunciados vacíos con el nombre correcto (no se sobrescriben si ya tienen texto)
+for ENUNCIADO in "$ENUNCIADO_1" "$ENUNCIADO_2"; do
+    if [ -e "$ENUNCIADO" ]; then
+        echo "  (ya existe, no se modifica) $ENUNCIADO"
+    else
+        touch "$ENUNCIADO"
+        echo "  creado vacío: $ENUNCIADO"
+    fi
+done
+
 echo
 echo "Siguientes pasos:"
 echo "  1. Revisar o pegar el input en   $INPUT"
-echo "  2. (Opcional) pegar el enunciado en ${ENUNCIADOS}/dia${DIA_FMT}_parte1.txt"
+echo "  2. (Opcional) pegar el enunciado en $ENUNCIADO_1 (y luego $ENUNCIADO_2)"
 echo "  3. Completar el ejemplo en       $PRUEBA (y quitar @Disabled)"
 echo "  4. Al tener las respuestas, agregarlas a src/test/java/advent/code/RespuestasPrueba.java"
 echo "  5. Ejecutar: mvn exec:java -Dexec.mainClass=\"advent.code.Principal\" -Dexec.args=\"${ANIO} ${DIA_NUM}\""

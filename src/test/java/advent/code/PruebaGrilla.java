@@ -237,4 +237,22 @@ class PruebaGrilla {
         assertEquals(2, bloque.contarVecinosCardinales(new Punto(2, 2), '@'));  // (2,1) y (1,2)
         assertEquals(0, bloque.contarVecinos(new Punto(0, 0), '#'));
     }
+
+    @Test
+    @DisplayName("desdeLineas con relleno: completa las líneas cortas a la derecha")
+    void desdeLineas_conRelleno() {
+        Grilla rellena = Grilla.desdeLineas(List.of("ab", "abcd", "", "a", "", ""), '.');
+        assertEquals(4, rellena.filas());       // las líneas en blanco al final se ignoran; la del medio no
+        assertEquals(4, rellena.columnas());
+        assertEquals("ab..", rellena.fila(0));
+        assertEquals("abcd", rellena.fila(1));
+        assertEquals("....", rellena.fila(2));
+        assertEquals("a...", rellena.fila(3));
+    }
+
+    @Test
+    @DisplayName("desdeLineas sin relleno: sigue rechazando líneas de distinto largo")
+    void desdeLineas_sinRellenoRechaza() {
+        assertThrows(IllegalArgumentException.class, () -> Grilla.desdeLineas(List.of("ab", "abc")));
+    }
 }

@@ -47,6 +47,17 @@ class PruebaConjuntoRangos {
     }
 
     @Test
+    @DisplayName("cantidad: IPs bloqueadas (AoC 2016 día 20)")
+    void cantidad_ipsBloqueadas() {
+        // IPs bloqueadas 5-8, 0-2, 4-7 en el espacio 0..9 → libres 3 y 9
+        ConjuntoRangos bloqueadas = new ConjuntoRangos(List.of(new Rango(5, 8), new Rango(0, 2), new Rango(4, 7)));
+        assertEquals(8, bloqueadas.cantidad());
+        assertEquals(2, 10 - bloqueadas.cantidad());
+        assertFalse(bloqueadas.contiene(3));
+        assertFalse(bloqueadas.contiene(9));
+    }
+
+    @Test
     @DisplayName("conjunto vacío")
     void vacio() {
         ConjuntoRangos vacio = new ConjuntoRangos(List.of());
