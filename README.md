@@ -4,52 +4,53 @@
 
 [Advent of Code](https://adventofcode.com) es una competencia anual de programación que se realiza cada diciembre. Consiste en 25 días de puzzles, donde cada día se publican dos problemas de dificultad creciente. Cada problema tiene un input personalizado y dos partes, siendo la segunda más compleja que la primera.
 
+## Requisitos
+
+- Java 25
+- Maven 3.9+
+
 ## Estructura del proyecto
 
 ```
 src/
   main/
     java/advent/code/
-      Principal.java          # Punto de entrada — recibe año y día como args
+      Principal.java          # Punto de entrada — recibe año y día, muestra resultado y tiempo
       Resolvedor.java         # Interfaz base para todas las soluciones
       EntradaSalida.java      # Lectura de archivos de input
-      Punto.java              # Coordenadas 2D reutilizables
+      Punto.java              # Coordenadas 2D (record)
       Direccion.java          # Enum de direcciones cardinales
-      Utiles.java             # Parseo de números, grillas y matrices
+      Utiles.java             # Extracción de números (int y long) de texto
       Matematicas.java        # MCD/MCM, aritmética modular, resto chino, Möbius, dígitos
       Rango.java              # Intervalos [inicio, fin]: intersección, resta, unión
       Grilla.java             # Grilla de caracteres: búsqueda, vecinos, rotaciones
       BFS.java                # Búsqueda en anchura genérica
       Dijkstra.java           # Camino de costo mínimo genérico (y A*)
+      Camino.java             # Resultado de BFS y Dijkstra: nodos + costo
       y2025/
-        Dia01.java            # Solución día 1
-        Dia02.java            # Solución día 2
-        Dia03.java            # Solución día 3
+        Dia01.java ... Dia03.java
     resources/
-      inputs/y2025/
-        day01.txt             # Input del día 1
-        day02.txt             # Input del día 2
-        day03.txt             # Input del día 3
+      inputs/y2025/           # Inputs personales (NO se suben al repositorio)
+        day01.txt ...
   test/
     java/advent/code/
-      PruebaPunto.java
-      PruebaDireccion.java
-      PruebaUtiles.java
-      PruebaMatematicas.java
-      PruebaRango.java
-      PruebaGrilla.java
-      PruebaBFS.java
-      PruebaDijkstra.java
+      RespuestasPrueba.java   # Regresión: cada día sigue dando la respuesta aceptada
+      PruebaPunto.java, PruebaDireccion.java, PruebaUtiles.java, PruebaMatematicas.java,
+      PruebaRango.java, PruebaGrilla.java, PruebaBFS.java, PruebaDijkstra.java
       y2025/
-        Dia01Prueba.java
-        Dia02Prueba.java
-        Dia03Prueba.java
+        Dia01Prueba.java ... Dia03Prueba.java
 soluciones/
   2025/
-    dia01.md                  # Documentación detallada del día 1
-    dia02.md                  # Documentación detallada del día 2
-    dia03.md                  # Documentación detallada del día 3
+    dia01.md ... dia03.md     # Documentación detallada de cada día
+enunciados/                   # Enunciados copiados del sitio (NO se suben al repositorio)
+nuevo-dia.sh                  # Genera los archivos de un día nuevo
 ```
+
+### Inputs y enunciados
+
+El creador de Advent of Code [pide no publicar](https://adventofcode.com/about) los inputs ni los enunciados, así que `src/main/resources/inputs/` y `enunciados/` están en el `.gitignore`. Al clonar el repositorio hay que pegar los inputs propios en `src/main/resources/inputs/y{anio}/day{DD}.txt`.
+
+Las pruebas no dependen de los inputs: usan los ejemplos de los enunciados. La única excepción es `RespuestasPrueba`, que se **omite** automáticamente cuando falta el input de un día (por ejemplo, en CI).
 
 ## Librerías incluidas
 
@@ -60,6 +61,8 @@ soluciones/
 | [Apache Commons Math3](https://commons.apache.org/proper/commons-math/) | Combinatoria, primos, álgebra lineal |
 | [Guava](https://github.com/google/guava) | `RangeSet`, `Multiset`, `Table`, `LongMath`, permutaciones y combinaciones |
 | [JGraphT](https://jgrapht.org/) | Grafos: Dijkstra, A*, orden topológico, componentes conexas, flujo máximo, cliques |
+| [JUnit 5](https://junit.org/junit5/) | Pruebas unitarias (solo en pruebas) |
+| [jqwik](https://jqwik.net/) | Pruebas basadas en propiedades: casos aleatorios contra fuerza bruta (solo en pruebas) |
 
 ## Cómo usar
 
@@ -68,6 +71,8 @@ soluciones/
 ```bash
 mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025 1"
 ```
+
+Muestra el resultado de cada parte y el tiempo que tardó.
 
 ### Correr los tests
 
@@ -78,10 +83,12 @@ mvn test
 ### Crear los archivos para un nuevo día
 
 ```bash
-./nuevo-dia.sh 2025 2
+./nuevo-dia.sh 2025 4 "Título del día"
 ```
 
-Esto genera automáticamente la clase de solución, la clase de prueba y el archivo de input vacío.
+Genera la clase de solución, la clase de prueba (con los tests de ejemplo marcados `@Disabled` hasta completarlos), la documentación en `soluciones/`, la fila en la tabla de este README y la carpeta del input. No sobrescribe archivos que ya existan.
+
+Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para protegerlas en futuros refactors.
 
 ---
 

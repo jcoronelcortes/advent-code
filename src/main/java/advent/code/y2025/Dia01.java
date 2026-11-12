@@ -1,7 +1,7 @@
 package advent.code.y2025;
 
+import advent.code.Matematicas;
 import advent.code.Resolvedor;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.List;
 
@@ -21,6 +21,45 @@ public class Dia01 implements Resolvedor {
     private static final int TAMANIO_DIAL = 100;
 
     /**
+     * Una instrucción del input.
+     *
+     * @param direccion 'L' (izquierda, hacia números menores) o 'R' (derecha)
+     * @param distancia cantidad de clicks
+     */
+    record Rotacion(char direccion, int distancia) {
+
+        /**
+         * Convierte una línea como {@code "L68"} en una rotación.
+         *
+         * @param linea instrucción
+         * @return la rotación
+         * @throws IllegalArgumentException si la línea no tiene el formato {@code [LR]\d+}
+         */
+        static Rotacion parsear(String linea) {
+            String texto = linea.trim();
+            if (!texto.matches("[LR]\\d+")) {
+                throw new IllegalArgumentException("Rotación inválida: '" + linea + "'");
+            }
+            return new Rotacion(texto.charAt(0), Integer.parseInt(texto.substring(1)));
+        }
+
+        /** @return desplazamiento con signo: positivo a la derecha, negativo a la izquierda */
+        int delta() {
+            return direccion == 'R' ? distancia : -distancia;
+        }
+
+        /**
+         * Aplica la rotación sobre el dial circular.
+         *
+         * @param posicion posición actual
+         * @return nueva posición en {@code [0, TAMANIO_DIAL)}
+         */
+        int aplicar(int posicion) {
+            return (int) Matematicas.modulo(posicion + delta(), TAMANIO_DIAL);
+        }
+    }
+
+    /**
      * Parte 1: cuenta cuántas veces el dial <em>termina</em> en 0
      * después de cada rotación.
      *
@@ -32,16 +71,8 @@ public class Dia01 implements Resolvedor {
         int posicion = POSICION_INICIAL;
         int contador = 0;
 
-        for (String linea : lineas) {
-            linea = linea.trim();
-            if (!linea.matches("[LR]\\d+")) continue;
-
-            char direccion = linea.charAt(0);
-            int distancia = NumberUtils.toInt(linea.substring(1));
-
-            int delta = (direccion == 'R') ? distancia : -distancia;
-            posicion = ((posicion + delta) % TAMANIO_DIAL + TAMANIO_DIAL) % TAMANIO_DIAL;
-
+        for (Rotacion rotacion : leerRotaciones(lineas)) {
+            posicion = rotacion.aplicar(posicion);
             if (posicion == 0) contador++;
         }
 
@@ -64,20 +95,25 @@ public class Dia01 implements Resolvedor {
         int posicion = POSICION_INICIAL;
         long contador = 0;
 
-        for (String linea : lineas) {
-            linea = linea.trim();
-            if (!linea.matches("[LR]\\d+")) continue;
-
-            char direccion = linea.charAt(0);
-            int distancia = NumberUtils.toInt(linea.substring(1));
-
-            contador += contarPasosPorCero(posicion, direccion, distancia);
-
-            int delta = (direccion == 'R') ? distancia : -distancia;
-            posicion = ((posicion + delta) % TAMANIO_DIAL + TAMANIO_DIAL) % TAMANIO_DIAL;
+        for (Rotacion rotacion : leerRotaciones(lineas)) {
+            contador += contarPasosPorCero(posicion, rotacion.direccion(), rotacion.distancia());
+            posicion = rotacion.aplicar(posicion);
         }
 
         return String.valueOf(contador);
+    }
+
+    /**
+     * Convierte el input en rotaciones, ignorando las líneas en blanco.
+     *
+     * @param lineas líneas del input
+     * @return rotaciones en orden
+     */
+    static List<Rotacion> leerRotaciones(List<String> lineas) {
+        return lineas.stream()
+                .filter(linea -> !linea.isBlank())
+                .map(Rotacion::parsear)
+                .toList();
     }
 
     /**

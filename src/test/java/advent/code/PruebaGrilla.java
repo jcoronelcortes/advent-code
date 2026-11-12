@@ -179,7 +179,7 @@ class PruebaGrilla {
 
         // Abriendo (2,0): S → (1,0) → (2,0) → (3,0) → (3,1) → E = 5 pasos
         grilla.establecer(new Punto(2, 0), '.');
-        assertEquals(Optional.of(5), BFS.buscar(inicio, meta::equals, p -> grilla.vecinos(p, c -> c != '#')));
+        assertEquals(Optional.of(5L), BFS.buscar(inicio, meta::equals, p -> grilla.vecinos(p, c -> c != '#')));
     }
 
     // -------------------------------------------------------------------------

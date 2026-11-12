@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Pruebas para la solución del Día 1 — Año 2025.
@@ -77,6 +78,38 @@ class Dia01Prueba {
     @DisplayName("Parte 2: lista vacía debe dar 0")
     void parte2_listaVacia() {
         assertEquals("0", dia01.parte2(List.of()));
+    }
+
+    // -------------------------------------------------------------------------
+    // Rotacion
+    // -------------------------------------------------------------------------
+
+    @Test
+    @DisplayName("Rotacion.parsear: dirección y distancia")
+    void rotacion_parsear() {
+        assertEquals(new Dia01.Rotacion('L', 68), Dia01.Rotacion.parsear("L68"));
+        assertEquals(new Dia01.Rotacion('R', 1000), Dia01.Rotacion.parsear(" R1000 "));
+    }
+
+    @Test
+    @DisplayName("Rotacion.parsear: rechaza líneas inválidas")
+    void rotacion_parsearInvalida() {
+        assertThrows(IllegalArgumentException.class, () -> Dia01.Rotacion.parsear("X10"));
+        assertThrows(IllegalArgumentException.class, () -> Dia01.Rotacion.parsear("L"));
+    }
+
+    @Test
+    @DisplayName("Rotacion.aplicar: el dial es circular en ambos sentidos")
+    void rotacion_aplicar() {
+        assertEquals(82, new Dia01.Rotacion('L', 68).aplicar(50));   // 50 - 68 → 82
+        assertEquals(0, new Dia01.Rotacion('R', 48).aplicar(52));
+        assertEquals(50, new Dia01.Rotacion('R', 1000).aplicar(50));
+    }
+
+    @Test
+    @DisplayName("leerRotaciones: ignora líneas en blanco")
+    void leerRotaciones_lineasEnBlanco() {
+        assertEquals(2, Dia01.leerRotaciones(List.of("L1", "", "R2", "  ")).size());
     }
 
     // -------------------------------------------------------------------------

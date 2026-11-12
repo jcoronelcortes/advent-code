@@ -1,16 +1,19 @@
 package advent.code;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Utilidades comunes para resolver problemas de Advent of Code.
+ * Utilidades de parseo comunes para Advent of Code.
+ *
+ * <p>Para grillas de caracteres usar {@link Grilla}; para rangos
+ * {@code inicio-fin}, {@link Rango}.</p>
  */
-public class Utiles {
+public final class Utiles {
+
+    private Utiles() {}
 
     private static final Pattern PATRON_ENTERO = Pattern.compile("-?\\d+");
 
@@ -22,14 +25,11 @@ public class Utiles {
      *
      * @param texto cadena de entrada
      * @return lista de enteros encontrados en orden de aparición
+     * @throws ArithmeticException si algún número no cabe en un {@code int}
+     *                             (usar {@link #leerNumerosLargos(String)})
      */
     public static List<Integer> leerNumeros(String texto) {
-        List<Integer> numeros = new ArrayList<>();
-        Matcher matcher = PATRON_ENTERO.matcher(texto);
-        while (matcher.find()) {
-            numeros.add(NumberUtils.toInt(matcher.group()));
-        }
-        return numeros;
+        return leerNumerosLargos(texto).stream().map(Math::toIntExact).toList();
     }
 
     /**
@@ -47,47 +47,33 @@ public class Utiles {
     }
 
     /**
-     * Convierte una lista de líneas en una grilla de caracteres.
+     * Igual que {@link #leerNumeros(String)}, pero con {@code long}: los inputs
+     * de AoC suelen traer números de más de 10 dígitos (ej. 2025 días 2 y 3).
      *
-     * @param lineas lista de líneas del input
-     * @return matriz de caracteres {@code [fila][columna]}
+     * @param texto cadena de entrada
+     * @return lista de números encontrados en orden de aparición
+     * @throws NumberFormatException si algún número no cabe en un {@code long}
      */
-    public static char[][] leerGrilla(List<String> lineas) {
-        int filas = lineas.size();
-        int columnas = lineas.isEmpty() ? 0 : lineas.get(0).length();
-        char[][] grilla = new char[filas][columnas];
-        for (int fila = 0; fila < filas; fila++) {
-            grilla[fila] = lineas.get(fila).toCharArray();
+    public static List<Long> leerNumerosLargos(String texto) {
+        List<Long> numeros = new ArrayList<>();
+        Matcher matcher = PATRON_ENTERO.matcher(texto);
+        while (matcher.find()) {
+            numeros.add(Long.parseLong(matcher.group()));
         }
-        return grilla;
+        return numeros;
     }
 
     /**
-     * Transpone una grilla de caracteres (filas ↔ columnas).
+     * Extrae todos los números ({@code long}) de múltiples líneas.
      *
-     * @param grilla matriz original {@code [fila][columna]}
-     * @return nueva matriz transpuesta {@code [columna][fila]}
+     * @param lineas lista de líneas
+     * @return lista de números de todas las líneas en orden
      */
-    public static char[][] transponerGrilla(char[][] grilla) {
-        int filas = grilla.length;
-        int columnas = grilla[0].length;
-        char[][] transpuesta = new char[columnas][filas];
-        for (int fila = 0; fila < filas; fila++) {
-            for (int col = 0; col < columnas; col++) {
-                transpuesta[col][fila] = grilla[fila][col];
-            }
+    public static List<Long> leerNumerosLargos(List<String> lineas) {
+        List<Long> numeros = new ArrayList<>();
+        for (String linea : lineas) {
+            numeros.addAll(leerNumerosLargos(linea));
         }
-        return transpuesta;
-    }
-
-    /**
-     * Obtiene el carácter en la posición indicada por un {@link Punto}.
-     *
-     * @param grilla matriz de caracteres
-     * @param punto  posición {@code (x=columna, y=fila)}
-     * @return carácter en esa posición
-     */
-    public static char obtenerCaracter(char[][] grilla, Punto punto) {
-        return grilla[punto.y][punto.x];
+        return numeros;
     }
 }

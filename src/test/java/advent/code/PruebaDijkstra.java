@@ -59,7 +59,7 @@ class PruebaDijkstra {
     @Test
     @DisplayName("buscarCamino: devuelve los nodos del camino en orden")
     void buscarCamino_nodos() {
-        Dijkstra.Camino<String> camino = Dijkstra.buscarCamino("A", "C"::equals, VECINOS_GRAFO).orElseThrow();
+        Camino<String> camino = Dijkstra.buscarCamino("A", "C"::equals, VECINOS_GRAFO).orElseThrow();
         assertEquals(List.of("A", "B", "E", "C"), camino.nodos());
         assertEquals(3, camino.costo());
         assertEquals("C", camino.meta());
@@ -68,7 +68,7 @@ class PruebaDijkstra {
     @Test
     @DisplayName("buscarCamino: con varios inicios toma el más cercano")
     void buscarCamino_variosInicios() {
-        Dijkstra.Camino<String> camino = Dijkstra.buscarCamino(
+        Camino<String> camino = Dijkstra.buscarCamino(
                 List.of("A", "F"), "D"::equals, VECINOS_GRAFO, nodo -> 0).orElseThrow();
         assertEquals(List.of("F", "D"), camino.nodos());
         assertEquals(1, camino.costo());
@@ -108,11 +108,11 @@ class PruebaDijkstra {
 
         Optional<Long> costo = Dijkstra.costoMinimo(inicio, meta::equals,
                 Dijkstra.vecinosEnGrilla(GRILLA_SIMPLE, c -> c != '#'));
-        Optional<Integer> pasos = BFS.buscar(inicio, meta::equals,
+        Optional<Long> pasos = BFS.buscar(inicio, meta::equals,
                 p -> GRILLA_SIMPLE.vecinos(p, c -> c != '#'));
 
         assertEquals(Optional.of(8L), costo);
-        assertEquals(Optional.of(8), pasos);
+        assertEquals(Optional.of(8L), pasos);
     }
 
     @Test
@@ -121,7 +121,7 @@ class PruebaDijkstra {
         Punto inicio = GRILLA_SIMPLE.buscar('S').orElseThrow();
         Punto meta = GRILLA_SIMPLE.buscar('E').orElseThrow();
 
-        Dijkstra.Camino<Punto> camino = Dijkstra.buscarCamino(
+        Camino<Punto> camino = Dijkstra.buscarCamino(
                 List.of(inicio), meta::equals,
                 Dijkstra.vecinosEnGrilla(GRILLA_SIMPLE, c -> c != '#'),
                 p -> p.distanciaManhattan(meta)).orElseThrow();

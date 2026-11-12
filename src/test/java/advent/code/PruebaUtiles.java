@@ -30,33 +30,22 @@ class PruebaUtiles {
     }
 
     @Test
-    @DisplayName("leerGrilla convierte líneas a matriz de caracteres")
-    void leerGrilla() {
-        char[][] grilla = Utiles.leerGrilla(List.of("ABC", "DEF"));
-        assertEquals(2, grilla.length);
-        assertEquals(3, grilla[0].length);
-        assertEquals('A', grilla[0][0]);
-        assertEquals('F', grilla[1][2]);
+    @DisplayName("leerNumeros lanza error si un número no cabe en int")
+    void leerNumeros_desborde() {
+        assertThrows(ArithmeticException.class, () -> Utiles.leerNumeros("9898998927"));
     }
 
     @Test
-    @DisplayName("transponerGrilla intercambia filas y columnas")
-    void transponerGrilla() {
-        char[][] original = Utiles.leerGrilla(List.of("ABC", "DEF"));
-        char[][] transpuesta = Utiles.transponerGrilla(original);
-        assertEquals(3, transpuesta.length);
-        assertEquals(2, transpuesta[0].length);
-        assertEquals('A', transpuesta[0][0]);
-        assertEquals('D', transpuesta[0][1]);
-        assertEquals('B', transpuesta[1][0]);
+    @DisplayName("leerNumerosLargos soporta números de más de 10 dígitos")
+    void leerNumerosLargos() {
+        assertEquals(List.of(6868562486L, -6868811237L),
+                Utiles.leerNumerosLargos("6868562486 a -6868811237"));
     }
 
     @Test
-    @DisplayName("obtenerCaracter lee correctamente por Punto")
-    void obtenerCaracter() {
-        char[][] grilla = Utiles.leerGrilla(List.of("ABC", "DEF"));
-        assertEquals('A', Utiles.obtenerCaracter(grilla, new Punto(0, 0)));
-        assertEquals('C', Utiles.obtenerCaracter(grilla, new Punto(2, 0)));
-        assertEquals('D', Utiles.obtenerCaracter(grilla, new Punto(0, 1)));
+    @DisplayName("leerNumerosLargos une los números de varias líneas")
+    void leerNumerosLargos_lineas() {
+        assertEquals(List.of(1L, 2L, 30000000000L),
+                Utiles.leerNumerosLargos(List.of("1 2", "", "x=30000000000")));
     }
 }

@@ -53,21 +53,6 @@ public final class Dijkstra {
      */
     public record Arista<N>(N destino, long costo) {}
 
-    /**
-     * Camino de costo mínimo encontrado.
-     *
-     * @param nodos nodos del camino, desde el inicio hasta la meta (ambos incluidos)
-     * @param costo costo total
-     * @param <N>   tipo del nodo
-     */
-    public record Camino<N>(List<N> nodos, long costo) {
-
-        /** @return el nodo meta (último del camino) */
-        public N meta() {
-            return nodos.getLast();
-        }
-    }
-
     // -------------------------------------------------------------------------
     // API pública
     // -------------------------------------------------------------------------
@@ -82,7 +67,7 @@ public final class Dijkstra {
      * @return costo mínimo, o vacío si la meta es inalcanzable
      */
     public static <N> Optional<Long> costoMinimo(
-            N inicio, Predicate<N> esMeta, Function<N, Iterable<Arista<N>>> vecinos) {
+            N inicio, Predicate<N> esMeta, Function<N, ? extends Iterable<Arista<N>>> vecinos) {
         return buscarCamino(List.of(inicio), esMeta, vecinos, nodo -> 0).map(Camino::costo);
     }
 
@@ -97,7 +82,7 @@ public final class Dijkstra {
      * @return el camino, o vacío si la meta es inalcanzable
      */
     public static <N> Optional<Camino<N>> buscarCamino(
-            N inicio, Predicate<N> esMeta, Function<N, Iterable<Arista<N>>> vecinos) {
+            N inicio, Predicate<N> esMeta, Function<N, ? extends Iterable<Arista<N>>> vecinos) {
         return buscarCamino(List.of(inicio), esMeta, vecinos, nodo -> 0);
     }
 
@@ -120,7 +105,7 @@ public final class Dijkstra {
     public static <N> Optional<Camino<N>> buscarCamino(
             Collection<N> inicios,
             Predicate<N> esMeta,
-            Function<N, Iterable<Arista<N>>> vecinos,
+            Function<N, ? extends Iterable<Arista<N>>> vecinos,
             ToLongFunction<N> heuristica) {
 
         Map<N, Long> costos = new HashMap<>();
@@ -163,7 +148,7 @@ public final class Dijkstra {
      * @param <N>     tipo del nodo
      * @return mapa nodo → costo mínimo desde el inicio
      */
-    public static <N> Map<N, Long> explorar(N inicio, Function<N, Iterable<Arista<N>>> vecinos) {
+    public static <N> Map<N, Long> explorar(N inicio, Function<N, ? extends Iterable<Arista<N>>> vecinos) {
         Map<N, Long> costos = new HashMap<>();
         PriorityQueue<Entrada<N>> cola = new PriorityQueue<>();
         costos.put(inicio, 0L);
@@ -200,7 +185,7 @@ public final class Dijkstra {
      * @return nodos en caminos mínimos (incluye inicio y metas), o vacío si la meta es inalcanzable
      */
     public static <N> Set<N> nodosEnCaminosMinimos(
-            N inicio, Predicate<N> esMeta, Function<N, Iterable<Arista<N>>> vecinos) {
+            N inicio, Predicate<N> esMeta, Function<N, ? extends Iterable<Arista<N>>> vecinos) {
 
         Map<N, Long> costos = new HashMap<>();
         Map<N, List<N>> anteriores = new HashMap<>();
@@ -255,7 +240,7 @@ public final class Dijkstra {
      * @param esTransitable condición sobre el carácter (ej. {@code c -> c != '#'})
      * @return función de vecinos lista para usar en los métodos de esta clase
      */
-    public static Function<Punto, Iterable<Arista<Punto>>> vecinosEnGrilla(
+    public static Function<Punto, List<Arista<Punto>>> vecinosEnGrilla(
             Grilla grilla, Predicate<Character> esTransitable) {
         return punto -> grilla.vecinos(punto, esTransitable).stream()
                 .map(vecino -> new Arista<>(vecino, 1))

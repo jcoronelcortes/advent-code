@@ -1,5 +1,11 @@
 package advent.code.y2025;
 
+import net.jqwik.api.ForAll;
+import net.jqwik.api.Label;
+import net.jqwik.api.Property;
+import net.jqwik.api.constraints.CharRange;
+import net.jqwik.api.constraints.IntRange;
+import net.jqwik.api.constraints.StringLength;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,7 +13,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -128,35 +133,24 @@ class Dia03Prueba {
         assertThrows(IllegalArgumentException.class, () -> Dia03.maximoVoltaje("12", 0));
     }
 
-    @Test
-    @DisplayName("maximoVoltaje: con 12 baterías coincide con programación dinámica en bancos de 100 dígitos")
-    void maximoVoltaje_coincideConProgramacionDinamica() {
-        Random azar = new Random(12);
-        for (int prueba = 0; prueba < 300; prueba++) {
-            StringBuilder banco = new StringBuilder();
-            for (int i = 0; i < 100; i++) banco.append((char) ('1' + azar.nextInt(9)));
+    // -------------------------------------------------------------------------
+    // Propiedades (jqwik): el voraz contra métodos independientes en bancos aleatorios.
+    // Si alguna falla, jqwik reduce el banco al caso mínimo que la rompe.
+    // -------------------------------------------------------------------------
 
-            assertEquals(programacionDinamica(banco.toString(), 12),
-                    Dia03.maximoVoltaje(banco.toString(), 12),
-                    "banco " + banco);
-        }
+    @Property(tries = 500)
+    @Label("maximoVoltaje: coincide con la fuerza bruta (1 a 4 baterías)")
+    void maximoVoltaje_coincideConFuerzaBruta(
+            @ForAll @StringLength(min = 4, max = 15) @CharRange(from = '1', to = '9') String banco,
+            @ForAll @IntRange(min = 1, max = 4) int cantidad) {
+        assertEquals(fuerzaBruta(banco, cantidad, 0), Dia03.maximoVoltaje(banco, cantidad));
     }
 
-    @Test
-    @DisplayName("maximoVoltaje: coincide con la fuerza bruta en bancos aleatorios")
-    void maximoVoltaje_coincideConFuerzaBruta() {
-        Random azar = new Random(2025);
-        for (int prueba = 0; prueba < 500; prueba++) {
-            StringBuilder banco = new StringBuilder();
-            int largo = 2 + azar.nextInt(14);
-            for (int i = 0; i < largo; i++) banco.append((char) ('1' + azar.nextInt(9)));
-
-            for (int cantidad = 1; cantidad <= Math.min(4, largo); cantidad++) {
-                assertEquals(fuerzaBruta(banco.toString(), cantidad, 0),
-                        Dia03.maximoVoltaje(banco.toString(), cantidad),
-                        "banco " + banco + " con " + cantidad + " baterías");
-            }
-        }
+    @Property(tries = 300)
+    @Label("maximoVoltaje: con 12 baterías coincide con programación dinámica en bancos de 100 dígitos")
+    void maximoVoltaje_coincideConProgramacionDinamica(
+            @ForAll @StringLength(min = 100, max = 100) @CharRange(from = '1', to = '9') String banco) {
+        assertEquals(programacionDinamica(banco, 12), Dia03.maximoVoltaje(banco, 12));
     }
 
     /**

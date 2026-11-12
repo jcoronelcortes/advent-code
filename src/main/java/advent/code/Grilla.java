@@ -22,7 +22,7 @@ import java.util.function.Predicate;
  * <pre>{@code
  * Grilla grilla = Grilla.desdeLineas(lineas);
  * Punto inicio = grilla.buscar('S').orElseThrow();
- * Optional<Integer> pasos = BFS.buscar(inicio,
+ * Optional<Long> pasos = BFS.buscar(inicio,
  *         p -> grilla.obtener(p) == 'E',
  *         p -> grilla.vecinos(p, c -> c != '#'));
  * }</pre>
@@ -106,7 +106,7 @@ public final class Grilla {
      */
     public char obtener(Punto punto) {
         if (!estaDentro(punto)) throw new IndexOutOfBoundsException("Fuera de la grilla: " + punto);
-        return celdas[punto.y][punto.x];
+        return celdas[punto.y()][punto.x()];
     }
 
     /**
@@ -118,7 +118,7 @@ public final class Grilla {
      * @return el carácter o {@code defecto}
      */
     public char obtener(Punto punto, char defecto) {
-        return estaDentro(punto) ? celdas[punto.y][punto.x] : defecto;
+        return estaDentro(punto) ? celdas[punto.y()][punto.x()] : defecto;
     }
 
     /**
@@ -130,7 +130,7 @@ public final class Grilla {
      */
     public void establecer(Punto punto, char valor) {
         if (!estaDentro(punto)) throw new IndexOutOfBoundsException("Fuera de la grilla: " + punto);
-        celdas[punto.y][punto.x] = valor;
+        celdas[punto.y()][punto.x()] = valor;
     }
 
     /**

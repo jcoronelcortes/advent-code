@@ -30,11 +30,29 @@ public class EntradaSalida {
      * @throws IOException si el archivo no existe
      */
     public static List<String> leerEntrada(int anio, int dia) throws IOException {
-        String ruta = String.format("/inputs/y%d/day%02d.txt", anio, dia);
-        InputStream flujo = EntradaSalida.class.getResourceAsStream(ruta);
-        if (flujo == null) {
-            throw new IOException("Archivo de entrada no encontrado: " + ruta);
+        String ruta = rutaEntrada(anio, dia);
+        try (InputStream flujo = EntradaSalida.class.getResourceAsStream(ruta)) {
+            if (flujo == null) {
+                throw new IOException("Archivo de entrada no encontrado: " + ruta
+                        + " (los inputs no se suben al repositorio: hay que pegarlos localmente)");
+            }
+            return IOUtils.readLines(flujo, StandardCharsets.UTF_8);
         }
-        return IOUtils.readLines(flujo, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Indica si existe el archivo de entrada de un día. Los inputs están
+     * excluidos del repositorio, así que pueden faltar (por ejemplo, en CI).
+     *
+     * @param anio año del desafío (ej. 2025)
+     * @param dia  número de día (ej. 1)
+     * @return {@code true} si el archivo existe
+     */
+    public static boolean existeEntrada(int anio, int dia) {
+        return EntradaSalida.class.getResource(rutaEntrada(anio, dia)) != null;
+    }
+
+    private static String rutaEntrada(int anio, int dia) {
+        return String.format("/inputs/y%d/day%02d.txt", anio, dia);
     }
 }

@@ -37,3 +37,11 @@ build/
 
 ### Mac OS ###
 .DS_Store
+### Advent of Code ###
+# El creador de AoC pide no publicar los inputs ni los enunciados:
+# https://adventofcode.com/about
+src/main/resources/inputs/
+enunciados/
+
+### jqwik ###
+.jqwik-database

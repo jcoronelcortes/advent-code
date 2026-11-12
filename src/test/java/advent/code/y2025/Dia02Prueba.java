@@ -1,6 +1,11 @@
 package advent.code.y2025;
 
 import advent.code.Rango;
+import net.jqwik.api.ForAll;
+import net.jqwik.api.Label;
+import net.jqwik.api.Property;
+import net.jqwik.api.constraints.IntRange;
+import net.jqwik.api.constraints.LongRange;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -170,6 +175,37 @@ class Dia02Prueba {
     @CsvSource({"101", "5", "1234", "12121", "1698525"})
     void esRepetido_falso(long id) {
         assertFalse(Dia02.esRepetido(id));
+    }
+
+    // -------------------------------------------------------------------------
+    // Propiedades (jqwik): la fórmula contra fuerza bruta en rangos aleatorios
+    // de hasta 10 dígitos, como los del input real
+    // -------------------------------------------------------------------------
+
+    @Property(tries = 300)
+    @Label("sumarInvalidosEnRango: coincide con la fuerza bruta en rangos aleatorios")
+    void sumarInvalidos_propiedad(
+            @ForAll @LongRange(min = 1, max = 9_999_999_999L) long inicio,
+            @ForAll @IntRange(min = 0, max = 5_000) int ancho) {
+        long fin = inicio + ancho;
+        long esperado = 0;
+        for (long id = inicio; id <= fin; id++) {
+            if (Dia02.esInvalido(id)) esperado += id;
+        }
+        assertEquals(esperado, Dia02.sumarInvalidosEnRango(inicio, fin));
+    }
+
+    @Property(tries = 300)
+    @Label("sumarRepetidosEnRango: coincide con la fuerza bruta en rangos aleatorios")
+    void sumarRepetidos_propiedad(
+            @ForAll @LongRange(min = 1, max = 9_999_999_999L) long inicio,
+            @ForAll @IntRange(min = 0, max = 5_000) int ancho) {
+        long fin = inicio + ancho;
+        long esperado = 0;
+        for (long id = inicio; id <= fin; id++) {
+            if (Dia02.esRepetido(id)) esperado += id;
+        }
+        assertEquals(esperado, Dia02.sumarRepetidosEnRango(inicio, fin));
     }
 
     // -------------------------------------------------------------------------

@@ -38,37 +38,48 @@ Resultado del ejemplo: **3**
 
 #### Paso 1 — Parsear cada instrucción
 
-Cada línea tiene la forma `[LR]\d+`. Usamos una expresión regular para validar y luego separamos la dirección del número:
+Cada línea tiene la forma `[LR]\d+`. La convertimos una sola vez en un `record Rotacion`, que valida el formato con una expresión regular y separa la dirección del número. Ambas partes usan las mismas rotaciones:
 
 ```java
-// Dia01.java — parte1(), líneas 36-40
-if (!linea.matches("[LR]\\d+")) continue;
-
-char direccion = linea.charAt(0);
-int distancia = NumberUtils.toInt(linea.substring(1));
+// Dia01.java — Rotacion.parsear()
+static Rotacion parsear(String linea) {
+    String texto = linea.trim();
+    if (!texto.matches("[LR]\\d+")) {
+        throw new IllegalArgumentException("Rotación inválida: '" + linea + "'");
+    }
+    return new Rotacion(texto.charAt(0), Integer.parseInt(texto.substring(1)));
+}
 ```
 
-> `NumberUtils.toInt` (Apache Commons Lang) reemplaza `Integer.parseInt` con manejo seguro de errores.
+> Una línea inválida lanza un error en vez de ignorarse en silencio: si el input viene mal pegado, es mejor enterarse. Las líneas en blanco sí se ignoran (`leerRotaciones`).
 
 #### Paso 2 — Calcular la nueva posición
 
-El dial es circular con 100 posiciones. Usamos aritmética modular para manejar los extremos (0 → 99 y 99 → 0). El truco del `+ TAMANIO_DIAL) % TAMANIO_DIAL` es necesario porque en Java el operador `%` puede devolver valores negativos:
+El dial es circular con 100 posiciones. Usamos aritmética modular para manejar los extremos (0 → 99 y 99 → 0). En Java el operador `%` puede devolver valores negativos (`-18 % 100 = -18`), así que usamos `Matematicas.modulo`, que siempre devuelve un valor en `[0, 100)`:
 
 ```java
-// Dia01.java — parte1(), líneas 42-43
-int delta = (direccion == 'R') ? distancia : -distancia;
-posicion = ((posicion + delta) % TAMANIO_DIAL + TAMANIO_DIAL) % TAMANIO_DIAL;
+// Dia01.java — Rotacion
+int delta() {
+    return direccion == 'R' ? distancia : -distancia;
+}
+
+int aplicar(int posicion) {
+    return (int) Matematicas.modulo(posicion + delta(), TAMANIO_DIAL);
+}
 ```
 
-Ejemplo: desde 50 con L68 → `(50 - 68 + 100) % 100 = 82` ✓
+Ejemplo: desde 50 con L68 → `modulo(50 - 68, 100) = modulo(-18, 100) = 82` ✓
 
 #### Paso 3 — Contar los ceros
 
 Después de cada rotación, verificamos si el dial quedó en 0:
 
 ```java
-// Dia01.java — parte1(), líneas 45
-if (posicion == 0) contador++;
+// Dia01.java — parte1()
+for (Rotacion rotacion : leerRotaciones(lineas)) {
+    posicion = rotacion.aplicar(posicion);
+    if (posicion == 0) contador++;
+}
 ```
 
 **Resultado con el input real: 1043**
@@ -117,7 +128,7 @@ Para una rotación de distancia `d` desde posición `p`, podemos calcular direct
 - Girando a la **derecha (R)**: el primer click en 0 ocurre en el paso `100 - p` (cuando llegamos desde 99 hasta 0), luego cada 100 pasos.
 
 ```java
-// Dia01.java — contarPasosPorCero(), líneas 95-104
+// Dia01.java — contarPasosPorCero()
 static long contarPasosPorCero(int posicion, char direccion, int distancia) {
     if (direccion == 'L') {
         if (posicion == 0) return distancia / TAMANIO_DIAL;
@@ -144,11 +155,11 @@ static long contarPasosPorCero(int posicion, char direccion, int distancia) {
 #### Integración en parte2
 
 ```java
-// Dia01.java — parte2(), líneas 63-81
-contador += contarPasosPorCero(posicion, direccion, distancia);
-
-int delta = (direccion == 'R') ? distancia : -distancia;
-posicion = ((posicion + delta) % TAMANIO_DIAL + TAMANIO_DIAL) % TAMANIO_DIAL;
+// Dia01.java — parte2()
+for (Rotacion rotacion : leerRotaciones(lineas)) {
+    contador += contarPasosPorCero(posicion, rotacion.direccion(), rotacion.distancia());
+    posicion = rotacion.aplicar(posicion);
+}
 ```
 
 > Importante: primero contamos los pasos por cero con la posición **antes** de moverse, y luego actualizamos la posición.

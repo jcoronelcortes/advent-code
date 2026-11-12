@@ -2,20 +2,18 @@ package advent.code;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Punto inmutable en un plano 2D con operaciones comunes para AoC.
+ *
+ * <p>En grillas, {@code x} es la columna e {@code y} la fila (el origen está
+ * arriba a la izquierda). Al ser un {@code record}, {@code equals},
+ * {@code hashCode} y los accesos {@code x()} / {@code y()} los genera Java.</p>
+ *
+ * @param x coordenada horizontal (columna)
+ * @param y coordenada vertical (fila)
  */
-public final class Punto {
-
-    public final int x;
-    public final int y;
-
-    public Punto(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+public record Punto(int x, int y) {
 
     /** Mueve el punto una posición en la dirección indicada. */
     public Punto mover(Direccion direccion) {
@@ -65,18 +63,6 @@ public final class Punto {
     /** Verifica si el punto está dentro de los límites de una grilla. */
     public boolean dentroDeGrilla(int filas, int columnas) {
         return x >= 0 && x < columnas && y >= 0 && y < filas;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Punto punto)) return false;
-        return x == punto.x && y == punto.y;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
     }
 
     @Override
