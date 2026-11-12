@@ -271,6 +271,39 @@ public final class Grilla {
         return punto.vecinosDiagonales().stream().filter(this::estaDentro).toList();
     }
 
+    /**
+     * Cuenta cuántos de los 8 vecinos (incluye diagonales) tienen cierto
+     * carácter. Las posiciones fuera de la grilla no cuentan. Típico de
+     * autómatas celulares (ej. 2025 día 4: rollos con menos de 4 rollos vecinos).
+     *
+     * @param punto    posición central
+     * @param caracter carácter a contar
+     * @return cantidad de vecinos con ese carácter (0 a 8)
+     */
+    public int contarVecinos(Punto punto, char caracter) {
+        int cantidad = 0;
+        for (Punto vecino : punto.vecinosDiagonales()) {
+            if (estaDentro(vecino) && obtener(vecino) == caracter) cantidad++;
+        }
+        return cantidad;
+    }
+
+    /**
+     * Cuenta cuántos de los 4 vecinos cardinales tienen cierto carácter.
+     * Las posiciones fuera de la grilla no cuentan.
+     *
+     * @param punto    posición central
+     * @param caracter carácter a contar
+     * @return cantidad de vecinos con ese carácter (0 a 4)
+     */
+    public int contarVecinosCardinales(Punto punto, char caracter) {
+        int cantidad = 0;
+        for (Punto vecino : punto.vecinos()) {
+            if (estaDentro(vecino) && obtener(vecino) == caracter) cantidad++;
+        }
+        return cantidad;
+    }
+
     // -------------------------------------------------------------------------
     // Transformaciones (devuelven una grilla nueva)
     // -------------------------------------------------------------------------

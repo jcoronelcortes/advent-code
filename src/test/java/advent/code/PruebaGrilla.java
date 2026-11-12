@@ -221,4 +221,20 @@ class PruebaGrilla {
         assertTrue(vistas.add(grilla.copiar()));
         assertFalse(vistas.add(Grilla.desdeLineas(LINEAS)));
     }
+
+    @Test
+    @DisplayName("contarVecinos y contarVecinosCardinales: cuentan solo dentro de la grilla")
+    void contarVecinos() {
+        // @@@
+        // @.@
+        // @@.
+        Grilla bloque = Grilla.desdeLineas(List.of("@@@", "@.@", "@@."));
+        Punto centro = new Punto(1, 1);
+        assertEquals(7, bloque.contarVecinos(centro, '@'));             // 8 vecinos, solo la esquina (2,2) es '.'
+        assertEquals(1, bloque.contarVecinos(centro, '.'));
+        assertEquals(4, bloque.contarVecinosCardinales(centro, '@'));
+        assertEquals(2, bloque.contarVecinos(new Punto(0, 0), '@'));    // esquina: 3 vecinos, el centro es '.'
+        assertEquals(2, bloque.contarVecinosCardinales(new Punto(2, 2), '@'));  // (2,1) y (1,2)
+        assertEquals(0, bloque.contarVecinos(new Punto(0, 0), '#'));
+    }
 }

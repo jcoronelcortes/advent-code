@@ -165,7 +165,8 @@ public record Rango(long inicio, long fin) implements Comparable<Rango> {
 
     /**
      * Cantidad total de enteros cubiertos por una colección de rangos,
-     * contando una sola vez los valores en zonas solapadas.
+     * contando una sola vez los valores en zonas solapadas. Para además
+     * consultar si un valor pertenece, usar {@link ConjuntoRangos}.
      *
      * @param rangos rangos en cualquier orden
      * @return cantidad de valores distintos cubiertos

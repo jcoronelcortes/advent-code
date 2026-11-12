@@ -20,13 +20,15 @@ src/
       EntradaSalida.java      # Lectura de archivos de input
       Punto.java              # Coordenadas 2D (record)
       Direccion.java          # Enum de direcciones cardinales
-      Utiles.java             # Extracción de números (int y long) de texto
+      Utiles.java             # Números (int y long) de texto, líneas no vacías, secciones
       Matematicas.java        # MCD/MCM, aritmética modular, resto chino, Möbius, dígitos
       Rango.java              # Intervalos [inicio, fin]: intersección, resta, unión
-      Grilla.java             # Grilla de caracteres: búsqueda, vecinos, rotaciones
+      ConjuntoRangos.java     # Unión de rangos: pertenencia (búsqueda binaria) y cantidad
+      Grilla.java             # Grilla de caracteres: búsqueda, vecinos, conteo de vecinos, rotaciones
       BFS.java                # Búsqueda en anchura genérica
       Dijkstra.java           # Camino de costo mínimo genérico (y A*)
       Camino.java             # Resultado de BFS y Dijkstra: nodos + costo
+      Memoizador.java         # Función recursiva con caché (programación dinámica)
       y2025/
         Dia01.java ... Dia05.java
     resources/
@@ -36,12 +38,13 @@ src/
     java/advent/code/
       RespuestasPrueba.java   # Regresión: cada día sigue dando la respuesta aceptada
       PruebaPunto.java, PruebaDireccion.java, PruebaUtiles.java, PruebaMatematicas.java,
-      PruebaRango.java, PruebaGrilla.java, PruebaBFS.java, PruebaDijkstra.java
+      PruebaRango.java, PruebaConjuntoRangos.java, PruebaGrilla.java, PruebaBFS.java,
+      PruebaDijkstra.java, PruebaMemoizador.java
       y2025/
         Dia01Prueba.java ... Dia05Prueba.java
 soluciones/
   2025/
-    dia01.md ... dia03.md     # Documentación detallada de cada día
+    dia01.md ... dia05.md     # Documentación detallada de cada día
 enunciados/                   # Enunciados copiados del sitio (NO se suben al repositorio)
 nuevo-dia.sh                  # Genera los archivos de un día nuevo
 ```
@@ -87,6 +90,14 @@ mvn test
 ```
 
 Genera la clase de solución, la clase de prueba (con los tests de ejemplo marcados `@Disabled` hasta completarlos), la documentación en `soluciones/`, la fila en la tabla de este README y la carpeta del input. No sobrescribe archivos que ya existan.
+
+**Descarga automática del input (opcional):** si está definida la variable de entorno `AOC_SESSION` con el valor de la cookie `session` de adventofcode.com, el script descarga el input una sola vez (si el archivo ya tiene contenido no lo vuelve a pedir). La cookie se define en el shell, nunca en el repositorio:
+
+```bash
+export AOC_SESSION=...   # por ejemplo en ~/.zshrc
+```
+
+Se puede personalizar el User-Agent con `AOC_USER_AGENT`.
 
 Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para protegerlas en futuros refactors.
 

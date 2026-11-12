@@ -9,13 +9,65 @@ import java.util.regex.Pattern;
  * Utilidades de parseo comunes para Advent of Code.
  *
  * <p>Para grillas de caracteres usar {@link Grilla}; para rangos
- * {@code inicio-fin}, {@link Rango}.</p>
+ * {@code inicio-fin}, {@link Rango} y {@link ConjuntoRangos}.</p>
  */
 public final class Utiles {
 
     private Utiles() {}
 
     private static final Pattern PATRON_ENTERO = Pattern.compile("-?\\d+");
+
+    // -------------------------------------------------------------------------
+    // Líneas y secciones
+    // -------------------------------------------------------------------------
+
+    /**
+     * Quita los espacios de los extremos de cada línea y descarta las que
+     * quedan vacías (es común que el input termine con una línea en blanco).
+     *
+     * @param lineas líneas del input
+     * @return líneas no vacías, sin espacios en los extremos, en el mismo orden
+     */
+    public static List<String> lineasNoVacias(List<String> lineas) {
+        return lineas.stream()
+                .map(String::strip)
+                .filter(linea -> !linea.isEmpty())
+                .toList();
+    }
+
+    /**
+     * Separa el input en secciones delimitadas por líneas en blanco, un
+     * formato muy común en AoC (ej. 2025 día 5: rangos, línea en blanco, IDs).
+     *
+     * <p>Varias líneas en blanco seguidas, o al principio o al final, no
+     * generan secciones vacías. Las líneas de cada sección se devuelven sin
+     * espacios en los extremos.</p>
+     *
+     * <p>Ejemplo: {@code ["3-5", "10-14", "", "1", "5"]} →
+     * {@code [["3-5", "10-14"], ["1", "5"]]}</p>
+     *
+     * @param lineas líneas del input
+     * @return secciones no vacías, en orden
+     */
+    public static List<List<String>> secciones(List<String> lineas) {
+        List<List<String>> secciones = new ArrayList<>();
+        List<String> actual = new ArrayList<>();
+        for (String linea : lineas) {
+            String texto = linea.strip();
+            if (texto.isEmpty()) {
+                if (!actual.isEmpty()) secciones.add(List.copyOf(actual));
+                actual.clear();
+            } else {
+                actual.add(texto);
+            }
+        }
+        if (!actual.isEmpty()) secciones.add(List.copyOf(actual));
+        return secciones;
+    }
+
+    // -------------------------------------------------------------------------
+    // Números
+    // -------------------------------------------------------------------------
 
     /**
      * Extrae todos los números enteros (incluyendo negativos) de una cadena.

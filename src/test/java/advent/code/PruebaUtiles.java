@@ -48,4 +48,27 @@ class PruebaUtiles {
         assertEquals(List.of(1L, 2L, 30000000000L),
                 Utiles.leerNumerosLargos(List.of("1 2", "", "x=30000000000")));
     }
+
+    @Test
+    @DisplayName("lineasNoVacias: quita espacios de los extremos y descarta líneas en blanco")
+    void lineasNoVacias() {
+        assertEquals(List.of("a", "b c"), Utiles.lineasNoVacias(List.of("", "  a ", "   ", "b c", "")));
+        assertEquals(List.of(), Utiles.lineasNoVacias(List.of("", " ")));
+    }
+
+    @Test
+    @DisplayName("secciones: corta en las líneas en blanco")
+    void secciones() {
+        assertEquals(List.of(List.of("3-5", "10-14"), List.of("1", "5")),
+                Utiles.secciones(List.of("3-5", "10-14", "", "1", "5")));
+    }
+
+    @Test
+    @DisplayName("secciones: varias líneas en blanco seguidas, al inicio o al final no crean secciones vacías")
+    void secciones_lineasEnBlancoExtra() {
+        assertEquals(List.of(List.of("a"), List.of("b", "c"), List.of("d")),
+                Utiles.secciones(List.of("", "a", "", "", " ", "b", " c ", "", "d", "", "")));
+        assertEquals(List.of(), Utiles.secciones(List.of("", "")));
+        assertEquals(List.of(List.of("solo")), Utiles.secciones(List.of("solo")));
+    }
 }

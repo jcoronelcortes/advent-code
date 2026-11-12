@@ -4,6 +4,9 @@
 # Uso:     ./nuevo-dia.sh <anio> <dia> ["Título del día"]
 # Ejemplo: ./nuevo-dia.sh 2025 4 "Departamento de Impresión"
 #
+# Si está definida la variable AOC_SESSION (cookie de sesión de AoC),
+# también descarga el input.
+#
 # Crea (sin sobrescribir los que ya existan):
 #   - src/main/java/advent/code/y<anio>/DiaNN.java         clase de la solución
 #   - src/test/java/advent/code/y<anio>/DiaNNPrueba.java   pruebas con el ejemplo del enunciado
@@ -225,11 +228,37 @@ fi
 # -----------------------------------------------------------------------------
 # Input y enunciado (no se suben al repositorio)
 # -----------------------------------------------------------------------------
-touch "$INPUT"
+# Si existe la variable AOC_SESSION (valor de la cookie "session" de
+# adventofcode.com) y el input todavía no está, se descarga una sola vez.
+# La cookie nunca se guarda en el repositorio: se define en el shell, por
+# ejemplo en ~/.zshrc:  export AOC_SESSION=...
+# AoC pide identificar al cliente con un User-Agent; se puede personalizar
+# con AOC_USER_AGENT (por ejemplo, agregando un contacto).
+if [ -s "$INPUT" ]; then
+    echo "  (ya existe, no se descarga) $INPUT"
+elif [ -n "${AOC_SESSION:-}" ]; then
+    URL="https://adventofcode.com/${ANIO}/day/${DIA_NUM}/input"
+    AGENTE=${AOC_USER_AGENT:-"advent-code nuevo-dia.sh (curl)"}
+    TEMPORAL=$(mktemp)
+    if curl --fail --silent --show-error \
+            --cookie "session=${AOC_SESSION}" \
+            --user-agent "$AGENTE" \
+            --output "$TEMPORAL" "$URL"; then
+        mv "$TEMPORAL" "$INPUT"
+        echo "  descargado: $INPUT ($(wc -l < "$INPUT" | tr -d ' ') líneas)"
+    else
+        rm -f "$TEMPORAL"
+        touch "$INPUT"
+        echo "  no se pudo descargar el input (¿el día ya se publicó? ¿la cookie sigue vigente?)"
+    fi
+else
+    touch "$INPUT"
+    echo "  (sin AOC_SESSION: el input hay que pegarlo a mano)"
+fi
 
 echo
 echo "Siguientes pasos:"
-echo "  1. Pegar el input en             $INPUT"
+echo "  1. Revisar o pegar el input en   $INPUT"
 echo "  2. (Opcional) pegar el enunciado en ${ENUNCIADOS}/dia${DIA_FMT}_parte1.txt"
 echo "  3. Completar el ejemplo en       $PRUEBA (y quitar @Disabled)"
 echo "  4. Al tener las respuestas, agregarlas a src/test/java/advent/code/RespuestasPrueba.java"

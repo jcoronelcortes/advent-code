@@ -2,6 +2,7 @@ package advent.code.y2025;
 
 import advent.code.Matematicas;
 import advent.code.Resolvedor;
+import advent.code.Utiles;
 
 import java.util.List;
 
@@ -110,8 +111,7 @@ public class Dia01 implements Resolvedor {
      * @return rotaciones en orden
      */
     static List<Rotacion> leerRotaciones(List<String> lineas) {
-        return lineas.stream()
-                .filter(linea -> !linea.isBlank())
+        return Utiles.lineasNoVacias(lineas).stream()
                 .map(Rotacion::parsear)
                 .toList();
     }

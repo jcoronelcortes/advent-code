@@ -53,7 +53,7 @@ Resultado del ejemplo: **13**
 Es una simulación directa: para cada `@` se cuentan los `@` entre sus 8 vecinos y se cuenta el rollo si son menos de 4. Se reutiliza la utilidad `Grilla`:
 
 - `buscarTodos('@')` entrega las posiciones de todos los rollos.
-- `vecinosDiagonales(punto)` entrega los 8 vecinos **ya filtrados** a los que están dentro de la grilla, así que los bordes y esquinas no requieren casos especiales: una posición fuera de la grilla simplemente no cuenta como rollo.
+- `contarVecinos(punto, '@')` cuenta los rollos entre los 8 vecinos que están **dentro** de la grilla, así que los bordes y esquinas no requieren casos especiales: una posición fuera de la grilla simplemente no cuenta como rollo.
 
 ```java
 // Dia04.java
@@ -63,10 +63,8 @@ static List<Punto> accesibles(Grilla grilla) {
             .toList();
 }
 
-static long rollosVecinos(Grilla grilla, Punto punto) {
-    return grilla.vecinosDiagonales(punto).stream()
-            .filter(vecino -> grilla.obtener(vecino) == ROLLO)
-            .count();
+static int rollosVecinos(Grilla grilla, Punto punto) {
+    return grilla.contarVecinos(punto, ROLLO);
 }
 ```
 
@@ -148,7 +146,7 @@ Cada rollo se retira una sola vez y provoca a lo sumo 8 revisiones de 8 vecinos,
 | | Parte 1 | Parte 2 |
 |---|---|---|
 | **Pregunta** | Rollos con menos de 4 rollos vecinos (8 direcciones) | Total de rollos retirados repitiendo el proceso |
-| **Enfoque** | Recorrer la grilla contando vecinos con `Grilla.vecinosDiagonales` | Cola de trabajo: al retirar un rollo solo se revisan sus vecinos |
+| **Enfoque** | Recorrer la grilla contando vecinos con `Grilla.contarVecinos` | Cola de trabajo: al retirar un rollo solo se revisan sus vecinos |
 | **Complejidad** | O(filas · columnas) | O(filas · columnas) |
 | **Resultado** | 1551 | 9784 |
 

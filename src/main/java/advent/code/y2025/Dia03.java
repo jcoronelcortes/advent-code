@@ -1,6 +1,7 @@
 package advent.code.y2025;
 
 import advent.code.Resolvedor;
+import advent.code.Utiles;
 
 import java.util.List;
 
@@ -52,9 +53,7 @@ public class Dia03 implements Resolvedor {
      */
     static long sumarMaximos(List<String> lineas, int cantidad) {
         long total = 0;
-        for (String linea : lineas) {
-            String banco = linea.trim();
-            if (banco.isEmpty()) continue;
+        for (String banco : Utiles.lineasNoVacias(lineas)) {
             total += maximoVoltaje(banco, cantidad);
         }
         return total;

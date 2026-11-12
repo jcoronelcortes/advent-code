@@ -1,9 +1,10 @@
 package advent.code.y2025;
 
+import advent.code.ConjuntoRangos;
 import advent.code.Rango;
 import advent.code.Resolvedor;
+import advent.code.Utiles;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,9 +27,9 @@ public class Dia05 implements Resolvedor {
     @Override
     public String parte1(List<String> lineas) {
         BaseDeDatos base = BaseDeDatos.parsear(lineas);
-        List<Rango> frescos = Rango.unir(base.rangos());
+        ConjuntoRangos frescos = new ConjuntoRangos(base.rangos());
         long cantidad = base.disponibles().stream()
-                .filter(id -> esFresco(frescos, id))
+                .filter(frescos::contiene)
                 .count();
         return String.valueOf(cantidad);
     }
@@ -40,7 +41,7 @@ public class Dia05 implements Resolvedor {
      *
      * <p>Los rangos son enormes (hasta ~10¹⁴ valores), así que no se pueden
      * enumerar los IDs: se unen los rangos solapados y se suman sus largos
-     * ({@link Rango#contarCubiertos}).</p>
+     * ({@link ConjuntoRangos#cantidad}).</p>
      *
      * @param lineas rangos, línea en blanco e IDs disponibles
      * @return cantidad de IDs frescos distintos
@@ -48,34 +49,7 @@ public class Dia05 implements Resolvedor {
     @Override
     public String parte2(List<String> lineas) {
         BaseDeDatos base = BaseDeDatos.parsear(lineas);
-        return String.valueOf(Rango.contarCubiertos(base.rangos()));
-    }
-
-    /**
-     * Indica si un ID cae en alguno de los rangos.
-     *
-     * <p>Como los rangos vienen de {@link Rango#unir} (disjuntos y ordenados
-     * por inicio), basta una búsqueda binaria: se busca el último rango que
-     * empieza en o antes del ID y se revisa si el ID no se pasa de su fin.</p>
-     *
-     * @param unidos rangos disjuntos ordenados por inicio
-     * @param id     ID del ingrediente
-     * @return {@code true} si el ingrediente es fresco
-     */
-    static boolean esFresco(List<Rango> unidos, long id) {
-        int bajo = 0;
-        int alto = unidos.size() - 1;
-        int candidato = -1;             // último rango con inicio <= id
-        while (bajo <= alto) {
-            int medio = (bajo + alto) >>> 1;
-            if (unidos.get(medio).inicio() <= id) {
-                candidato = medio;
-                bajo = medio + 1;
-            } else {
-                alto = medio - 1;
-            }
-        }
-        return candidato >= 0 && unidos.get(candidato).contiene(id);
+        return String.valueOf(new ConjuntoRangos(base.rangos()).cantidad());
     }
 
     /**
@@ -87,27 +61,19 @@ public class Dia05 implements Resolvedor {
     record BaseDeDatos(List<Rango> rangos, List<Long> disponibles) {
 
         /**
-         * Separa el input en sus dos secciones usando la primera línea en blanco.
+         * Separa el input en sus dos secciones usando la línea en blanco. La
+         * sección de IDs puede faltar (la parte 2 no la usa).
          *
          * @param lineas líneas del input
          * @return la base de datos
          */
         static BaseDeDatos parsear(List<String> lineas) {
-            List<Rango> rangos = new ArrayList<>();
-            List<Long> disponibles = new ArrayList<>();
-            boolean enRangos = true;
-            for (String linea : lineas) {
-                String texto = linea.trim();
-                if (texto.isEmpty()) {
-                    if (!rangos.isEmpty()) enRangos = false;
-                    continue;
-                }
-                if (enRangos) {
-                    rangos.add(Rango.parsear(texto));
-                } else {
-                    disponibles.add(Long.parseLong(texto));
-                }
-            }
+            List<List<String>> secciones = Utiles.secciones(lineas);
+            if (secciones.isEmpty()) return new BaseDeDatos(List.of(), List.of());
+            List<Rango> rangos = secciones.getFirst().stream().map(Rango::parsear).toList();
+            List<Long> disponibles = secciones.size() > 1
+                    ? secciones.get(1).stream().map(Long::parseLong).toList()
+                    : List.of();
             return new BaseDeDatos(rangos, disponibles);
         }
     }

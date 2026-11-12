@@ -1,7 +1,9 @@
 package advent.code.y2025;
 
+import advent.code.ConjuntoRangos;
 import advent.code.Rango;
 import net.jqwik.api.ForAll;
+import net.jqwik.api.Label;
 import net.jqwik.api.Property;
 import net.jqwik.api.constraints.IntRange;
 import net.jqwik.api.constraints.Size;
@@ -59,40 +61,21 @@ class Dia05Prueba {
     @Test
     @DisplayName("Parte 1: cada ID del ejemplo se clasifica como dice el enunciado")
     void parte1_clasificacionDelEjemplo() {
-        List<Rango> unidos = Rango.unir(Dia05.BaseDeDatos.parsear(EJEMPLO).rangos());
-        assertFalse(Dia05.esFresco(unidos, 1));
-        assertTrue(Dia05.esFresco(unidos, 5));
-        assertFalse(Dia05.esFresco(unidos, 8));
-        assertTrue(Dia05.esFresco(unidos, 11));
-        assertTrue(Dia05.esFresco(unidos, 17));   // está en 16-20 y en 12-18
-        assertFalse(Dia05.esFresco(unidos, 32));
+        ConjuntoRangos frescos = new ConjuntoRangos(Dia05.BaseDeDatos.parsear(EJEMPLO).rangos());
+        assertFalse(frescos.contiene(1));
+        assertTrue(frescos.contiene(5));
+        assertFalse(frescos.contiene(8));
+        assertTrue(frescos.contiene(11));
+        assertTrue(frescos.contiene(17));   // está en 16-20 y en 12-18
+        assertFalse(frescos.contiene(32));
     }
 
     @Test
-    @DisplayName("Parte 1: los extremos de los rangos son inclusivos")
-    void parte1_extremosInclusivos() {
-        List<Rango> unidos = Rango.unir(List.of(new Rango(3, 5), new Rango(10, 14)));
-        assertFalse(Dia05.esFresco(unidos, 2));
-        assertTrue(Dia05.esFresco(unidos, 3));
-        assertTrue(Dia05.esFresco(unidos, 5));
-        assertFalse(Dia05.esFresco(unidos, 6));
-        assertFalse(Dia05.esFresco(unidos, 9));
-        assertTrue(Dia05.esFresco(unidos, 14));
-        assertFalse(Dia05.esFresco(unidos, 15));
-    }
-
-    @Property
-    @DisplayName("Parte 1: la búsqueda binaria coincide con revisar todos los rangos")
-    void parte1_busquedaBinariaCoincideConFuerzaBruta(
-            @ForAll @Size(max = 10) List<@IntRange(min = 0, max = 50) Integer> inicios,
-            @ForAll @Size(max = 10) List<@IntRange(min = 0, max = 10) Integer> largos,
-            @ForAll @IntRange(min = -5, max = 70) int id) {
-        List<Rango> rangos = new ArrayList<>();
-        for (int i = 0; i < Math.min(inicios.size(), largos.size()); i++) {
-            rangos.add(new Rango(inicios.get(i), inicios.get(i) + largos.get(i)));
-        }
-        boolean esperado = rangos.stream().anyMatch(r -> r.contiene(id));
-        assertEquals(esperado, Dia05.esFresco(Rango.unir(rangos), id));
+    @DisplayName("Parte 1: separa rangos e IDs en la línea en blanco")
+    void parte1_parseo() {
+        Dia05.BaseDeDatos base = Dia05.BaseDeDatos.parsear(EJEMPLO);
+        assertEquals(List.of(new Rango(3, 5), new Rango(10, 14), new Rango(16, 20), new Rango(12, 18)), base.rangos());
+        assertEquals(List.of(1L, 5L, 8L, 11L, 17L, 32L), base.disponibles());
     }
 
     // -------------------------------------------------------------------------
@@ -115,7 +98,7 @@ class Dia05Prueba {
     }
 
     @Property
-    @DisplayName("Parte 2: coincide con enumerar los IDs en un conjunto")
+    @Label("Parte 2: coincide con enumerar los IDs en un conjunto")
     void parte2_coincideConFuerzaBruta(
             @ForAll @Size(max = 10) List<@IntRange(min = 0, max = 50) Integer> inicios,
             @ForAll @Size(max = 10) List<@IntRange(min = 0, max = 10) Integer> largos) {
@@ -128,6 +111,7 @@ class Dia05Prueba {
             for (int id = inicio; id <= fin; id++) ids.add(id);
         }
         lineas.add("");
-        assertEquals(String.valueOf(ids.size()), dia05.parte2(lineas));
+        // jqwik no ejecuta el @BeforeEach de JUnit: se crea la instancia aquí
+        assertEquals(String.valueOf(ids.size()), new Dia05().parte2(lineas));
     }
 }

@@ -17,7 +17,7 @@ public record Punto(int x, int y) {
 
     /** Mueve el punto una posición en la dirección indicada. */
     public Punto mover(Direccion direccion) {
-        return new Punto(x + direccion.getDx(), y + direccion.getDy());
+        return new Punto(x + direccion.dx(), y + direccion.dy());
     }
 
     /** Suma otro punto (útil para aplicar deltas). */

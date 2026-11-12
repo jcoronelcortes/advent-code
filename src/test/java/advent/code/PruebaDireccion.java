@@ -46,11 +46,11 @@ class PruebaDireccion {
     }
 
     @Test
-    @DisplayName("toPunto retorna el delta correcto")
-    void toPunto() {
-        assertEquals(new Punto( 0, -1), ARRIBA.toPunto());
-        assertEquals(new Punto( 0,  1), ABAJO.toPunto());
-        assertEquals(new Punto(-1,  0), IZQUIERDA.toPunto());
-        assertEquals(new Punto( 1,  0), DERECHA.toPunto());
+    @DisplayName("comoPunto retorna el delta correcto")
+    void comoPunto() {
+        assertEquals(new Punto( 0, -1), ARRIBA.comoPunto());
+        assertEquals(new Punto( 0,  1), ABAJO.comoPunto());
+        assertEquals(new Punto(-1,  0), IZQUIERDA.comoPunto());
+        assertEquals(new Punto( 1,  0), DERECHA.comoPunto());
     }
 }

@@ -35,17 +35,20 @@ mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025 1"
 
 Revisar antes de escribir código nuevo:
 
-- `Utiles` — `leerNumeros` (int) y `leerNumerosLargos` (long) desde texto
+- `Utiles` — `leerNumeros` (int) y `leerNumerosLargos` (long) desde texto; `lineasNoVacias` y `secciones` (bloques separados por línea en blanco)
 - `Matematicas` — mcd/mcm, `modulo` no negativo, potencia e inverso modular, resto chino, `sumaAritmetica`, dígitos, primos, Möbius
 - `Rango` — intervalo cerrado `[inicio, fin]`: parseo `"a-b"`, intersección, resta, unión de solapados
+- `ConjuntoRangos` — unión de rangos: `contiene` (búsqueda binaria) y `cantidad`, sin enumerar valores
 - `Punto` (record, `x` = columna, `y` = fila) y `Direccion` (enum con giros)
-- `Grilla` — grilla de caracteres: búsqueda, vecinos con filtro, rotaciones, copia
+- `Grilla` — grilla de caracteres: búsqueda, vecinos con filtro, `contarVecinos`, rotaciones, copia; `desdeLineas` ignora líneas en blanco al final
 - `BFS` y `Dijkstra` — búsquedas genéricas con la misma forma de uso; ambas devuelven costos `long` y `Camino<N>`. `Dijkstra` admite heurística (A*) y `nodosEnCaminosMinimos`
-- Librerías: Commons Lang3/IO/Math3, Guava, JGraphT; jqwik para pruebas basadas en propiedades
+- `Memoizador` — función recursiva con caché para programación dinámica (evita el `ConcurrentModificationException` de `computeIfAbsent` recursivo)
+- Librerías: Commons Lang3/IO/Math3, Guava (`RangeSet`, `Multiset`, `Table`), JGraphT; jqwik para pruebas basadas en propiedades
+- Java 25: `Gatherers.windowSliding`/`windowFixed` para recorrer ventanas consecutivas en streams
 
 ### Agregar un nuevo día
 
-1. Ejecutar `./nuevo-dia.sh {anio} {dia} "Título"`: genera clase, prueba, documentación y fila del README
+1. Ejecutar `./nuevo-dia.sh {anio} {dia} "Título"`: genera clase, prueba, documentación y fila del README (y descarga el input si está definida `AOC_SESSION`)
 2. Pegar el input en `src/main/resources/inputs/y{anio}/dia{DD}.txt` (y opcionalmente el enunciado en `enunciados/{anio}/`)
 3. Completar el ejemplo del enunciado en `Dia{DD}Prueba.java` y quitar `@Disabled`
 4. Resolver, verificar la respuesta con un método independiente (fuerza bruta) y documentar en `soluciones/{anio}/dia{DD}.md`
@@ -57,4 +60,5 @@ Revisar antes de escribir código nuevo:
 - Todo el código debe estar escrito en español (clases, métodos, variables)
 - Toda la documentación del repositorio debe estar en español
 - Las clases de prueba deben terminar en `Prueba` (ej. `Dia01Prueba`); las de utilidades empiezan con `Prueba` (ej. `PruebaGrilla`)
+- En pruebas jqwik (`@Property`) usar `@Label`, no `@DisplayName`: jqwik omite en silencio las propiedades con `@DisplayName`. Tampoco ejecuta `@BeforeEach` de JUnit, así que la instancia se crea dentro de la propiedad
 - No subir inputs ni enunciados de Advent of Code al repositorio

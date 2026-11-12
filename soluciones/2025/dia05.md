@@ -54,7 +54,7 @@ Para cada ID, revisar si está en algún rango. Con 183 rangos y 1000 IDs son ~1
 
 #### Unir los rangos y buscar con búsqueda binaria
 
-1. **Unir los rangos solapados** con la utilidad `Rango.unir`, que los ordena por inicio y fusiona los que se solapan o son contiguos. En el ejemplo, `10-14`, `12-18` y `16-20` quedan como un único `10-20`:
+1. **Unir los rangos solapados.** La utilidad `ConjuntoRangos` lo hace al construirse (con `Rango.unir`): ordena los rangos por inicio y fusiona los que se solapan o son contiguos. En el ejemplo, `10-14`, `12-18` y `16-20` quedan como un único `10-20`:
 
    ```
    3-5, 10-14, 16-20, 12-18   →   3-5, 10-20
@@ -65,29 +65,40 @@ Para cada ID, revisar si está en algún rango. Con 183 rangos y 1000 IDs son ~1
 2. **Búsqueda binaria.** Como los rangos unidos están ordenados y no se solapan, el único que puede contener a un ID es el **último rango que empieza antes o en ese ID**. Se encuentra con búsqueda binaria y luego basta revisar si el ID no se pasa de su fin.
 
 ```java
-// Dia05.java — esFresco()
+// ConjuntoRangos.java — contiene()
 int bajo = 0;
 int alto = unidos.size() - 1;
-int candidato = -1;             // último rango con inicio <= id
+int candidato = -1;             // último rango con inicio <= valor
 while (bajo <= alto) {
     int medio = (bajo + alto) >>> 1;
-    if (unidos.get(medio).inicio() <= id) {
+    if (rangos.get(medio).inicio() <= valor) {
         candidato = medio;
         bajo = medio + 1;
     } else {
         alto = medio - 1;
     }
 }
-return candidato >= 0 && unidos.get(candidato).contiene(id);
+return candidato >= 0 && rangos.get(candidato).contiene(valor);
 ```
 
-El parseo separa las dos secciones con la línea en blanco (record `BaseDeDatos`) y reutiliza `Rango.parsear` para las líneas `a-b`.
+Con eso la parte 1 queda en pocas líneas:
+
+```java
+// Dia05.java — parte1()
+BaseDeDatos base = BaseDeDatos.parsear(lineas);
+ConjuntoRangos frescos = new ConjuntoRangos(base.rangos());
+long cantidad = base.disponibles().stream()
+        .filter(frescos::contiene)
+        .count();
+```
+
+El parseo separa las dos secciones con `Utiles.secciones` (record `BaseDeDatos`) y reutiliza `Rango.parsear` para las líneas `a-b`.
 
 #### Verificación
 
 - Prueba con el ejemplo (3) y con la clasificación de cada ID según la tabla del enunciado.
-- Prueba de los extremos: los rangos son inclusivos en ambos lados.
-- Prueba basada en propiedades (jqwik): con rangos e IDs aleatorios, la búsqueda binaria sobre los rangos unidos coincide siempre con revisar todos los rangos originales uno por uno.
+- Prueba del parseo de las dos secciones.
+- En `PruebaConjuntoRangos`: extremos inclusivos y una prueba basada en propiedades (jqwik) que, con rangos y valores aleatorios, compara `contiene` y `cantidad` con enumerar todos los valores en un `Set`.
 - Con el input real, un script independiente en Python que revisa cada ID contra todos los rangos obtiene el mismo resultado.
 
 **Resultado con el input real: 635**
@@ -120,12 +131,12 @@ Si los rangos no se solaparan, la respuesta sería simplemente la suma de sus la
 3-5, 10-14, 16-20, 12-18   →   3-5, 10-20   →   3 + 11 = 14
 ```
 
-La utilidad `Rango.contarCubiertos` hace exactamente eso, así que la parte 2 queda en una línea:
+`ConjuntoRangos.cantidad()` hace exactamente eso, así que la parte 2 queda en una línea:
 
 ```java
 // Dia05.java — parte2()
 BaseDeDatos base = BaseDeDatos.parsear(lineas);
-return String.valueOf(Rango.contarCubiertos(base.rangos()));
+return String.valueOf(new ConjuntoRangos(base.rangos()).cantidad());
 ```
 
 La respuesta (~3,7·10¹⁴) cabe de sobra en un `long`.
@@ -146,7 +157,7 @@ La respuesta (~3,7·10¹⁴) cabe de sobra en un `long`.
 | | Parte 1 | Parte 2 |
 |---|---|---|
 | **Pregunta** | IDs disponibles que caen en algún rango | IDs distintos cubiertos por los rangos |
-| **Enfoque** | Unir rangos (`Rango.unir`) + búsqueda binaria por ID | Unir rangos y sumar sus largos (`Rango.contarCubiertos`) |
+| **Enfoque** | `ConjuntoRangos`: unir rangos + búsqueda binaria por ID | `ConjuntoRangos.cantidad()`: unir rangos y sumar sus largos |
 | **Complejidad** | O(R log R + N log R), con R rangos y N IDs | O(R log R) |
 | **Resultado** | 635 | 369761800782619 |
 

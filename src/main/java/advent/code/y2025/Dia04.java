@@ -34,7 +34,7 @@ public class Dia04 implements Resolvedor {
      */
     @Override
     public String parte1(List<String> lineas) {
-        Grilla grilla = Grilla.desdeLineas(lineas.stream().filter(l -> !l.isBlank()).toList());
+        Grilla grilla = Grilla.desdeLineas(lineas);
         return String.valueOf(accesibles(grilla).size());
     }
 
@@ -47,7 +47,7 @@ public class Dia04 implements Resolvedor {
      */
     @Override
     public String parte2(List<String> lineas) {
-        Grilla grilla = Grilla.desdeLineas(lineas.stream().filter(l -> !l.isBlank()).toList());
+        Grilla grilla = Grilla.desdeLineas(lineas);
         return String.valueOf(retirarTodos(grilla));
     }
 
@@ -102,9 +102,7 @@ public class Dia04 implements Resolvedor {
      * @param punto  posición central
      * @return cantidad de rollos vecinos (0 a 8)
      */
-    static long rollosVecinos(Grilla grilla, Punto punto) {
-        return grilla.vecinosDiagonales(punto).stream()
-                .filter(vecino -> grilla.obtener(vecino) == ROLLO)
-                .count();
+    static int rollosVecinos(Grilla grilla, Punto punto) {
+        return grilla.contarVecinos(punto, ROLLO);
     }
 }

@@ -22,11 +22,14 @@ public enum Direccion {
         this.dy = dy;
     }
 
-    public int getDx() { return dx; }
-    public int getDy() { return dy; }
+    /** @return desplazamiento en el eje X (columna) */
+    public int dx() { return dx; }
+
+    /** @return desplazamiento en el eje Y (fila) */
+    public int dy() { return dy; }
 
     /** Retorna el vector de esta dirección como un {@link Punto}. */
-    public Punto toPunto() { return new Punto(dx, dy); }
+    public Punto comoPunto() { return new Punto(dx, dy); }
 
     /** Rota 90° hacia la izquierda. */
     public Direccion giroIzquierda() {
