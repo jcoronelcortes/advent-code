@@ -1,5 +1,6 @@
 package advent.code.y2025;
 
+import advent.code.Rango;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -171,13 +172,6 @@ class Dia02Prueba {
         assertFalse(Dia02.esRepetido(id));
     }
 
-    @ParameterizedTest(name = "μ({0}) = {1}")
-    @DisplayName("mobius: valores conocidos")
-    @CsvSource({"1, 1", "2, -1", "3, -1", "4, 0", "5, -1", "6, 1", "8, 0", "10, 1", "30, -1"})
-    void mobius_valoresConocidos(int n, int esperado) {
-        assertEquals(esperado, Dia02.mobius(n));
-    }
-
     // -------------------------------------------------------------------------
     // leerRangos
     // -------------------------------------------------------------------------
@@ -185,9 +179,9 @@ class Dia02Prueba {
     @Test
     @DisplayName("leerRangos: el ejemplo tiene 11 rangos")
     void leerRangos_ejemplo() {
-        List<Dia02.Rango> rangos = Dia02.leerRangos(RANGOS_EJEMPLO);
+        List<Rango> rangos = Dia02.leerRangos(RANGOS_EJEMPLO);
         assertEquals(11, rangos.size());
-        assertEquals(new Dia02.Rango(11, 22), rangos.getFirst());
-        assertEquals(new Dia02.Rango(2121212118L, 2121212124L), rangos.getLast());
+        assertEquals(new Rango(11, 22), rangos.getFirst());
+        assertEquals(new Rango(2121212118L, 2121212124L), rangos.getLast());
     }
 }

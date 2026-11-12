@@ -44,16 +44,13 @@ Resultado del ejemplo: **1227775554**
 
 #### Paso 1 — Parsear los rangos
 
-El input real viene en una sola línea, pero el ejemplo del enunciado aparece "envuelto" en varias líneas terminadas en coma. Para soportar ambos casos, unimos todas las líneas antes de separar por comas, y validamos cada parte con una expresión regular:
+El input real viene en una sola línea, pero el ejemplo del enunciado aparece "envuelto" en varias líneas terminadas en coma. Para soportar ambos casos, unimos todas las líneas antes de separar por comas, y convertimos cada parte con la utilidad compartida `Rango.parsear` (`src/main/java/advent/code/Rango.java`):
 
 ```java
 // Dia02.java — leerRangos()
 for (String parte : String.join("", lineas).split(",")) {
-    parte = parte.trim();
-    if (!parte.matches("\\d+-\\d+")) continue;
-
-    String[] extremos = parte.split("-");
-    rangos.add(new Rango(NumberUtils.toLong(extremos[0]), NumberUtils.toLong(extremos[1])));
+    if (parte.isBlank()) continue;
+    rangos.add(Rango.parsear(parte));
 }
 ```
 
@@ -117,10 +114,10 @@ long xMaximo = Math.min(potenciaBloque - 1, fin / multiplicador);
 
 if (xMinimo > xMaximo) return 0;
 
-long cantidad = xMaximo - xMinimo + 1;
-long sumaX = (xMinimo + xMaximo) * cantidad / 2;
-return Math.multiplyExact(sumaX, multiplicador);
+return Math.multiplyExact(sumaAritmetica(xMinimo, xMaximo), multiplicador);
 ```
+
+> `potenciaDeDiez`, `dividirHaciaArriba`, `sumaAritmetica` y `cantidadDigitos` vienen de la clase compartida `Matematicas` (`src/main/java/advent/code/Matematicas.java`).
 
 > Solo se prueban los largos entre los dígitos de `inicio` y los de `fin`, así cada rango hace muy pocas iteraciones.
 
@@ -228,10 +225,10 @@ for (int largo = cantidadDigitos(inicio); largo <= cantidadDigitos(fin); largo++
     for (int repeticiones = 2; repeticiones <= largo; repeticiones++) {
         if (largo % repeticiones != 0) continue;
 
-        int mobius = mobius(repeticiones);
-        if (mobius == 0) continue;
+        int signo = mobius(repeticiones);    // Matematicas.mobius
+        if (signo == 0) continue;
 
-        suma -= mobius * sumarConBloque(inicio, fin, largo, largo / repeticiones);
+        suma -= signo * sumarConBloque(inicio, fin, largo, largo / repeticiones);
     }
 }
 ```

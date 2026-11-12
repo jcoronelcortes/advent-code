@@ -35,6 +35,20 @@
             <version>3.6.1</version>
         </dependency>
 
+        <!-- Colecciones y matemática: RangeSet, Multiset, Table, LongMath, permutaciones, etc. -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.4.0-jre</version>
+        </dependency>
+
+        <!-- Algoritmos de grafos: Dijkstra, A*, orden topológico, componentes, flujo máximo, etc. -->
+        <dependency>
+            <groupId>org.jgrapht</groupId>
+            <artifactId>jgrapht-core</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>

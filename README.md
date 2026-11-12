@@ -16,6 +16,8 @@ src/
       Punto.java              # Coordenadas 2D reutilizables
       Direccion.java          # Enum de direcciones cardinales
       Utiles.java             # Parseo de números, grillas y matrices
+      Matematicas.java        # MCD/MCM, aritmética modular, resto chino, Möbius, dígitos
+      Rango.java              # Intervalos [inicio, fin]: intersección, resta, unión
       BFS.java                # Búsqueda en anchura genérica
       y2025/
         Dia01.java            # Solución día 1
@@ -29,6 +31,8 @@ src/
       PruebaPunto.java
       PruebaDireccion.java
       PruebaUtiles.java
+      PruebaMatematicas.java
+      PruebaRango.java
       PruebaBFS.java
       y2025/
         Dia01Prueba.java
@@ -38,6 +42,16 @@ soluciones/
     dia01.md                  # Documentación detallada del día 1
     dia02.md                  # Documentación detallada del día 2
 ```
+
+## Librerías incluidas
+
+| Librería | Uso principal |
+|----------|---------------|
+| [Apache Commons Lang3](https://commons.apache.org/proper/commons-lang/) | Strings, números (`NumberUtils`), pares y ternas |
+| [Apache Commons IO](https://commons.apache.org/proper/commons-io/) | Lectura de archivos |
+| [Apache Commons Math3](https://commons.apache.org/proper/commons-math/) | Combinatoria, primos, álgebra lineal |
+| [Guava](https://github.com/google/guava) | `RangeSet`, `Multiset`, `Table`, `LongMath`, permutaciones y combinaciones |
+| [JGraphT](https://jgrapht.org/) | Grafos: Dijkstra, A*, orden topológico, componentes conexas, flujo máximo, cliques |
 
 ## Cómo usar
 

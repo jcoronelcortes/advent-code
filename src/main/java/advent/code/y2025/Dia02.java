@@ -1,10 +1,16 @@
 package advent.code.y2025;
 
+import advent.code.Rango;
 import advent.code.Resolvedor;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static advent.code.Matematicas.cantidadDigitos;
+import static advent.code.Matematicas.dividirHaciaArriba;
+import static advent.code.Matematicas.mobius;
+import static advent.code.Matematicas.potenciaDeDiez;
+import static advent.code.Matematicas.sumaAritmetica;
 
 /**
  * Año 2025 — Día 2: Tienda de Regalos
@@ -23,17 +29,6 @@ import java.util.List;
  * {@code x · (10^L − 1) / (10^p − 1)}.</p>
  */
 public class Dia02 implements Resolvedor {
-
-    /**
-     * Rango cerrado de IDs {@code [inicio, fin]}.
-     *
-     * @param inicio primer ID del rango (inclusivo)
-     * @param fin    último ID del rango (inclusivo)
-     */
-    record Rango(long inicio, long fin) {}
-
-    /** Máxima cantidad de dígitos soportada (los IDs deben caber en un {@code long}). */
-    private static final int MAX_DIGITOS = 18;
 
     /**
      * Parte 1: suma todos los IDs formados por una secuencia repetida exactamente dos veces.
@@ -76,11 +71,8 @@ public class Dia02 implements Resolvedor {
     static List<Rango> leerRangos(List<String> lineas) {
         List<Rango> rangos = new ArrayList<>();
         for (String parte : String.join("", lineas).split(",")) {
-            parte = parte.trim();
-            if (!parte.matches("\\d+-\\d+")) continue;
-
-            String[] extremos = parte.split("-");
-            rangos.add(new Rango(NumberUtils.toLong(extremos[0]), NumberUtils.toLong(extremos[1])));
+            if (parte.isBlank()) continue;
+            rangos.add(Rango.parsear(parte));
         }
         return rangos;
     }
@@ -128,10 +120,10 @@ public class Dia02 implements Resolvedor {
             for (int repeticiones = 2; repeticiones <= largo; repeticiones++) {
                 if (largo % repeticiones != 0) continue;
 
-                int mobius = mobius(repeticiones);
-                if (mobius == 0) continue;
+                int signo = mobius(repeticiones);
+                if (signo == 0) continue;
 
-                suma -= mobius * sumarConBloque(inicio, fin, largo, largo / repeticiones);
+                suma -= signo * sumarConBloque(inicio, fin, largo, largo / repeticiones);
             }
         }
         return suma;
@@ -164,9 +156,7 @@ public class Dia02 implements Resolvedor {
 
         if (xMinimo > xMaximo) return 0;
 
-        long cantidad = xMaximo - xMinimo + 1;
-        long sumaX = (xMinimo + xMaximo) * cantidad / 2;
-        return Math.multiplyExact(sumaX, multiplicador);
+        return Math.multiplyExact(sumaAritmetica(xMinimo, xMaximo), multiplicador);
     }
 
     /**
@@ -197,43 +187,5 @@ public class Dia02 implements Resolvedor {
     static boolean esRepetido(long id) {
         String texto = String.valueOf(id);
         return (texto + texto).indexOf(texto, 1) < texto.length();
-    }
-
-    /**
-     * Función de Möbius: 0 si {@code n} tiene un factor primo repetido;
-     * si no, {@code (−1)^k} con {@code k} la cantidad de factores primos.
-     *
-     * @param n entero positivo
-     * @return μ(n)
-     */
-    static int mobius(int n) {
-        int resultado = 1;
-        for (int primo = 2; primo * primo <= n; primo++) {
-            if (n % primo != 0) continue;
-            n /= primo;
-            if (n % primo == 0) return 0;
-            resultado = -resultado;
-        }
-        return (n > 1) ? -resultado : resultado;
-    }
-
-    /** Cantidad de dígitos de un número no negativo. */
-    private static int cantidadDigitos(long numero) {
-        return String.valueOf(numero).length();
-    }
-
-    /** Calcula 10^exponente. */
-    private static long potenciaDeDiez(int exponente) {
-        if (exponente > MAX_DIGITOS) {
-            throw new IllegalArgumentException("Demasiados dígitos: " + exponente);
-        }
-        long resultado = 1;
-        for (int i = 0; i < exponente; i++) resultado *= 10;
-        return resultado;
-    }
-
-    /** División entera redondeando hacia arriba (para valores no negativos). */
-    private static long dividirHaciaArriba(long dividendo, long divisor) {
-        return (dividendo + divisor - 1) / divisor;
     }
 }
