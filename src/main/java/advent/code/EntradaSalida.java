@@ -22,7 +22,7 @@ public class EntradaSalida {
     }
 
     /**
-     * Lee el archivo de entrada desde {@code src/main/resources/inputs/y{anio}/day{dia}.txt}.
+     * Lee el archivo de entrada desde {@code src/main/resources/inputs/y{anio}/dia{DD}.txt}.
      *
      * @param anio año del desafío (ej. 2025)
      * @param dia  número de día (ej. 1)
@@ -53,6 +53,6 @@ public class EntradaSalida {
     }
 
     private static String rutaEntrada(int anio, int dia) {
-        return String.format("/inputs/y%d/day%02d.txt", anio, dia);
+        return String.format("/inputs/y%d/dia%02d.txt", anio, dia);
     }
 }

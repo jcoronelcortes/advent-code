@@ -25,7 +25,7 @@ mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025 1"
 - `Principal.java` — dispatcher: recibe año y día como args, carga la clase `advent.code.y{anio}.Dia{DD}` vía reflexión (`cargarResolvedor`), lee el input y ejecuta ambas partes mostrando el tiempo
 - `EntradaSalida.java` — `leerEntrada(anio, dia)` lee desde resources; `existeEntrada(anio, dia)` indica si el input está
 - `src/main/java/advent/code/y{anio}/Dia{DD}.java` — una clase por día, implementa `Resolvedor`
-- `src/main/resources/inputs/y{anio}/day{DD}.txt` — input de cada día (**ignorado por git**)
+- `src/main/resources/inputs/y{anio}/dia{DD}.txt` — input de cada día (**ignorado por git**)
 - `enunciados/{anio}/dia{DD}_parte{N}.txt` — enunciados copiados del sitio (**ignorados por git**)
 - `src/test/java/advent/code/y{anio}/Dia{DD}Prueba.java` — pruebas JUnit 5 por día con los ejemplos del enunciado
 - `src/test/java/advent/code/RespuestasPrueba.java` — regresión con las respuestas aceptadas; se omite si falta el input
@@ -46,7 +46,7 @@ Revisar antes de escribir código nuevo:
 ### Agregar un nuevo día
 
 1. Ejecutar `./nuevo-dia.sh {anio} {dia} "Título"`: genera clase, prueba, documentación y fila del README
-2. Pegar el input en `src/main/resources/inputs/y{anio}/day{DD}.txt` (y opcionalmente el enunciado en `enunciados/{anio}/`)
+2. Pegar el input en `src/main/resources/inputs/y{anio}/dia{DD}.txt` (y opcionalmente el enunciado en `enunciados/{anio}/`)
 3. Completar el ejemplo del enunciado en `Dia{DD}Prueba.java` y quitar `@Disabled`
 4. Resolver, verificar la respuesta con un método independiente (fuerza bruta) y documentar en `soluciones/{anio}/dia{DD}.md`
 5. Agregar las respuestas a `RespuestasPrueba` y a la tabla del README

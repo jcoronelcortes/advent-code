@@ -31,7 +31,7 @@ src/
         Dia01.java ... Dia04.java
     resources/
       inputs/y2025/           # Inputs personales (NO se suben al repositorio)
-        day01.txt ...
+        dia01.txt ...
   test/
     java/advent/code/
       RespuestasPrueba.java   # Regresión: cada día sigue dando la respuesta aceptada
@@ -48,7 +48,7 @@ nuevo-dia.sh                  # Genera los archivos de un día nuevo
 
 ### Inputs y enunciados
 
-El creador de Advent of Code [pide no publicar](https://adventofcode.com/about) los inputs ni los enunciados, así que `src/main/resources/inputs/` y `enunciados/` están en el `.gitignore`. Al clonar el repositorio hay que pegar los inputs propios en `src/main/resources/inputs/y{anio}/day{DD}.txt`.
+El creador de Advent of Code [pide no publicar](https://adventofcode.com/about) los inputs ni los enunciados, así que `src/main/resources/inputs/` y `enunciados/` están en el `.gitignore`. Al clonar el repositorio hay que pegar los inputs propios en `src/main/resources/inputs/y{anio}/dia{DD}.txt`.
 
 Las pruebas no dependen de los inputs: usan los ejemplos de los enunciados. La única excepción es `RespuestasPrueba`, que se **omite** automáticamente cuando falta el input de un día (por ejemplo, en CI).
 

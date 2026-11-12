@@ -28,7 +28,7 @@ DIA_NUM=$((10#$DIA))
 CLASE="src/main/java/advent/code/y${ANIO}/Dia${DIA_FMT}.java"
 PRUEBA="src/test/java/advent/code/y${ANIO}/Dia${DIA_FMT}Prueba.java"
 DOC="soluciones/${ANIO}/dia${DIA_FMT}.md"
-INPUT="src/main/resources/inputs/y${ANIO}/day${DIA_FMT}.txt"
+INPUT="src/main/resources/inputs/y${ANIO}/dia${DIA_FMT}.txt"
 ENUNCIADOS="enunciados/${ANIO}"
 
 mkdir -p "$(dirname "$CLASE")" "$(dirname "$PRUEBA")" "$(dirname "$DOC")" "$(dirname "$INPUT")" "$ENUNCIADOS"
