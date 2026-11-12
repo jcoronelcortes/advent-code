@@ -32,7 +32,7 @@ src/
       Memoizador.java         # Función recursiva con caché (programación dinámica)
       ConjuntosDisjuntos.java # Union-find: unir grupos, mismo grupo, tamaños
       y2025/
-        Dia01.java ... Dia08.java
+        Dia01.java ... Dia09.java
     resources/
       inputs/y2025/           # Inputs personales (NO se suben al repositorio)
         dia01.txt ...
@@ -44,10 +44,10 @@ src/
       PruebaDijkstra.java, PruebaMemoizador.java, PruebaConjuntosDisjuntos.java,
       PruebaPunto3D.java
       y2025/
-        Dia01Prueba.java ... Dia08Prueba.java
+        Dia01Prueba.java ... Dia09Prueba.java
 soluciones/
   2025/
-    dia01.md ... dia08.md     # Documentación detallada de cada día
+    dia01.md ... dia09.md     # Documentación detallada de cada día
 enunciados/                   # Enunciados copiados del sitio (NO se suben al repositorio)
 nuevo-dia.sh                  # Genera los archivos de un día nuevo
 ```
@@ -128,3 +128,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [06](src/main/java/advent/code/y2025/Dia06.java) | Compactador de Basura | 6171290547579 | 8811937976367 | [ver](soluciones/2025/dia06.md) |
 | [07](src/main/java/advent/code/y2025/Dia07.java) | Laboratorios | 1635 | 58097428661390 | [ver](soluciones/2025/dia07.md) |
 | [08](src/main/java/advent/code/y2025/Dia08.java) | Patio de Juegos | 171503 | 9069509600 | [ver](soluciones/2025/dia08.md) |
+| [09](src/main/java/advent/code/y2025/Dia09.java) | Sala de Cine | 4777824480 | 1542119040 | [ver](soluciones/2025/dia09.md) |
