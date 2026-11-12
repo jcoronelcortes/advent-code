@@ -74,13 +74,15 @@ while (true) {
 
     Punto adelante = posicion.mover(direccion);
     if (!mapa.estaDentro(adelante)) return new Recorrido(visitadas, false);
-    if (mapa.obtener(adelante) == OBSTACULO) {
+    if (mapa.obtener(adelante) == OBSTACULO || adelante.equals(obstaculoExtra)) {
         direccion = direccion.giroDerecha();
     } else {
         posicion = adelante;
     }
 }
 ```
+
+(En la parte 1 `obstaculoExtra` es `null`, así que solo cuentan los obstáculos del mapa; la parte 2 lo usa para probar un obstáculo nuevo.)
 
 Girar y avanzar son pasos **separados**: después de girar, el guardia vuelve a mirar qué tiene enfrente. Si justo ahí también hay un obstáculo, gira otra vez sin moverse.
 
