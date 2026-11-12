@@ -142,3 +142,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [01](src/main/java/advent/code/y2024/Dia01.java) | Histeria del Historiador | 2378066 | 18934359 | [ver](soluciones/2024/dia01.md) |
 | [02](src/main/java/advent/code/y2024/Dia02.java) | Reportes del Reno de Nariz Roja | 306 | 366 | [ver](soluciones/2024/dia02.md) |
 | [03](src/main/java/advent/code/y2024/Dia03.java) | Dale Vueltas | 178538786 | 102467299 | [ver](soluciones/2024/dia03.md) |
+| [04](src/main/java/advent/code/y2024/Dia04.java) | Búsqueda en Ceres | 2344 | 1815 | [ver](soluciones/2024/dia04.md) |
