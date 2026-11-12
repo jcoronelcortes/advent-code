@@ -19,9 +19,11 @@ src/
       BFS.java                # Búsqueda en anchura genérica
       y2025/
         Dia01.java            # Solución día 1
+        Dia02.java            # Solución día 2
     resources/
       inputs/y2025/
         day01.txt             # Input del día 1
+        day02.txt             # Input del día 2
   test/
     java/advent/code/
       PruebaPunto.java
@@ -30,9 +32,11 @@ src/
       PruebaBFS.java
       y2025/
         Dia01Prueba.java
+        Dia02Prueba.java
 soluciones/
   2025/
     dia01.md                  # Documentación detallada del día 1
+    dia02.md                  # Documentación detallada del día 2
 ```
 
 ## Cómo usar
@@ -66,4 +70,4 @@ Esto genera automáticamente la clase de solución, la clase de prueba y el arch
 | Día | Título | Parte 1 | Parte 2 | Documentación |
 |-----|--------|---------|---------|---------------|
 | [01](src/main/java/advent/code/y2025/Dia01.java) | Entrada Secreta | 1043 | 5963 | [ver](soluciones/2025/dia01.md) |
-| [02](src/main/java/advent/code/y2025/Dia02.java) | — | — | — | — |
+| [02](src/main/java/advent/code/y2025/Dia02.java) | Tienda de Regalos | 38310256125 | 58961152806 | [ver](soluciones/2025/dia02.md) |
