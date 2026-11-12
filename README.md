@@ -28,7 +28,7 @@ src/
       Dijkstra.java           # Camino de costo mínimo genérico (y A*)
       Camino.java             # Resultado de BFS y Dijkstra: nodos + costo
       y2025/
-        Dia01.java ... Dia04.java
+        Dia01.java ... Dia05.java
     resources/
       inputs/y2025/           # Inputs personales (NO se suben al repositorio)
         dia01.txt ...
@@ -38,7 +38,7 @@ src/
       PruebaPunto.java, PruebaDireccion.java, PruebaUtiles.java, PruebaMatematicas.java,
       PruebaRango.java, PruebaGrilla.java, PruebaBFS.java, PruebaDijkstra.java
       y2025/
-        Dia01Prueba.java ... Dia04Prueba.java
+        Dia01Prueba.java ... Dia05Prueba.java
 soluciones/
   2025/
     dia01.md ... dia03.md     # Documentación detallada de cada día
@@ -102,3 +102,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [02](src/main/java/advent/code/y2025/Dia02.java) | Tienda de Regalos | 38310256125 | 58961152806 | [ver](soluciones/2025/dia02.md) |
 | [03](src/main/java/advent/code/y2025/Dia03.java) | Vestíbulo | 17412 | 172681562473501 | [ver](soluciones/2025/dia03.md) |
 | [04](src/main/java/advent/code/y2025/Dia04.java) | Departamento de Impresión | 1551 | 9784 | [ver](soluciones/2025/dia04.md) |
+| [05](src/main/java/advent/code/y2025/Dia05.java) | Cafetería | 635 | 369761800782619 | [ver](soluciones/2025/dia05.md) |
