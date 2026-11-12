@@ -146,3 +146,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [05](src/main/java/advent/code/y2024/Dia05.java) | Cola de Impresión | 5991 | 5479 | [ver](soluciones/2024/dia05.md) |
 | [06](src/main/java/advent/code/y2024/Dia06.java) | Patrulla del Guardia | 5409 | 2022 | [ver](soluciones/2024/dia06.md) |
 | [07](src/main/java/advent/code/y2024/Dia07.java) | Reparación del Puente | 3351424677624 | 204976636995111 | [ver](soluciones/2024/dia07.md) |
+| [08](src/main/java/advent/code/y2024/Dia08.java) | Colinealidad Resonante | 329 | 1190 | [ver](soluciones/2024/dia08.md) |
