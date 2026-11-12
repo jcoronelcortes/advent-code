@@ -41,6 +41,7 @@ src/
   test/
     java/advent/code/
       RespuestasPrueba.java   # Regresión: cada día sigue dando la respuesta aceptada
+      PruebaDocumentacion.java # Los fragmentos de código de soluciones/ coinciden con el código
       PruebaPunto.java, PruebaDireccion.java, PruebaUtiles.java, PruebaMatematicas.java,
       PruebaRango.java, PruebaConjuntoRangos.java, PruebaGrilla.java, PruebaBFS.java,
       PruebaDijkstra.java, PruebaMemoizador.java, PruebaConjuntosDisjuntos.java,
