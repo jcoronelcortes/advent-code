@@ -21,7 +21,7 @@ src/
       Punto.java              # Coordenadas 2D (record)
       Punto3D.java            # Coordenadas 3D (record, long): distancia al cuadrado y Manhattan
       Direccion.java          # Enum de direcciones cardinales
-      Utiles.java             # Números (int y long) de texto, líneas no vacías, secciones
+      Utiles.java             # Números (int y long) de texto o por línea, líneas no vacías, secciones
       Matematicas.java        # MCD/MCM, aritmética modular, resto chino, Möbius, dígitos, suma/producto exactos
       Rango.java              # Intervalos [inicio, fin]: intersección, resta, unión
       ConjuntoRangos.java     # Unión de rangos: pertenencia (búsqueda binaria) y cantidad

@@ -38,7 +38,7 @@ mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025"
 
 Revisar antes de escribir código nuevo:
 
-- `Utiles` — `leerNumeros` (int) y `leerNumerosLargos` (long) desde texto; `lineasNoVacias` y `secciones` (bloques separados por línea en blanco)
+- `Utiles` — `leerNumeros` (int) y `leerNumerosLargos` (long) desde texto; `numerosPorLinea` / `numerosLargosPorLinea` (una lista por línea); `lineasNoVacias` y `secciones` (bloques separados por línea en blanco)
 - `Matematicas` — mcd/mcm, `modulo` no negativo, potencia e inverso modular, resto chino, `sumaAritmetica`, dígitos, primos, Möbius; `sumaExacta` y `productoExacto` (detectan desborde)
 - `Rango` — intervalo cerrado `[inicio, fin]`: parseo `"a-b"`, intersección, resta, unión de solapados
 - `ConjuntoRangos` — unión de rangos: `contiene` (búsqueda binaria) y `cantidad`, sin enumerar valores
@@ -54,7 +54,7 @@ Revisar antes de escribir código nuevo:
 
 ### Agregar un nuevo día
 
-1. Ejecutar `./nuevo-dia.sh {anio} {dia} "Título"`: genera clase, prueba, documentación, fila del README y enunciados vacíos `dia{DD}_parte{N}.txt` (y descarga el input si está definida `AOC_SESSION`)
+1. Ejecutar `./nuevo-dia.sh {anio} {dia} "Título"`: genera clase, prueba, documentación, fila del README y enunciados vacíos `dia{DD}_parte{N}.txt` (renombra los `_part{N}` en inglés, avisa si el input quedó en `inputs.y{anio}` y lo descarga si está definida `AOC_SESSION`)
 2. Pegar el input en `src/main/resources/inputs/y{anio}/dia{DD}.txt` (y opcionalmente el enunciado en `enunciados/{anio}/`)
 3. Completar el ejemplo del enunciado en `Dia{DD}Prueba.java` y quitar `@Disabled`
 4. Resolver, verificar la respuesta con un método independiente (fuerza bruta) y documentar en `soluciones/{anio}/dia{DD}.md`: enunciado redactado con palabras propias y debajo la solución, por cada parte

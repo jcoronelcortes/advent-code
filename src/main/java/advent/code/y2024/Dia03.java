@@ -3,7 +3,7 @@ package advent.code.y2024;
 import advent.code.Resolvedor;
 
 import java.util.List;
-import java.util.regex.Matcher;
+import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 /**
@@ -68,19 +68,27 @@ public class Dia03 implements Resolvedor {
     static long sumarMultiplicacionesHabilitadas(String memoria) {
         long total = 0;
         boolean habilitado = true;
-        Matcher instruccion = INSTRUCCION.matcher(memoria);
-        while (instruccion.find()) {
+        for (MatchResult instruccion : INSTRUCCION.matcher(memoria).results().toList()) {
             switch (instruccion.group()) {
                 case "do()" -> habilitado = true;
                 case "don't()" -> habilitado = false;
                 default -> {
-                    if (habilitado) {
-                        total += Long.parseLong(instruccion.group(1)) * Long.parseLong(instruccion.group(2));
-                    }
+                    if (habilitado) total += producto(instruccion);
                 }
             }
         }
         return total;
+    }
+
+    /**
+     * Producto de una instrucción {@code mul(X,Y)} reconocida por la
+     * expresión regular (grupos 1 y 2).
+     *
+     * @param multiplicacion coincidencia de {@code mul(X,Y)}
+     * @return {@code X · Y}
+     */
+    private static long producto(MatchResult multiplicacion) {
+        return Long.parseLong(multiplicacion.group(1)) * Long.parseLong(multiplicacion.group(2));
     }
 
     /**
@@ -90,12 +98,9 @@ public class Dia03 implements Resolvedor {
      * @return la suma de los productos
      */
     static long sumarMultiplicaciones(String memoria) {
-        long total = 0;
-        Matcher instruccion = MULTIPLICACION.matcher(memoria);
-        while (instruccion.find()) {
-            total += Long.parseLong(instruccion.group(1)) * Long.parseLong(instruccion.group(2));
-        }
-        return total;
+        return MULTIPLICACION.matcher(memoria).results()
+                .mapToLong(Dia03::producto)
+                .sum();
     }
 
     /**

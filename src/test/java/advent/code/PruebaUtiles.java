@@ -71,4 +71,14 @@ class PruebaUtiles {
         assertEquals(List.of(), Utiles.secciones(List.of("", "")));
         assertEquals(List.of(List.of("solo")), Utiles.secciones(List.of("solo")));
     }
+
+    @Test
+    @DisplayName("numerosPorLinea: una lista por línea, ignorando las vacías")
+    void numerosPorLinea() {
+        assertEquals(List.of(List.of(7, 6, 4), List.of(1, -2)),
+                Utiles.numerosPorLinea(List.of("7 6 4", "", "1,-2", " ")));
+        assertEquals(List.of(List.of(30000000000L, 1L)),
+                Utiles.numerosLargosPorLinea(List.of("30000000000   1")));
+        assertEquals(List.of(List.of()), Utiles.numerosPorLinea(List.of("sin números")));
+    }
 }

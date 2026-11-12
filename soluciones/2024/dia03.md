@@ -41,19 +41,16 @@ Una instrucción vale solo si está escrita **exactamente** así: `mul`, parént
 private static final Pattern MULTIPLICACION = Pattern.compile("mul\\((\\d{1,3}),(\\d{1,3})\\)");
 ```
 
-Cualquier variación (`mul[3,7]`, `mul(32,64]`, `mul ( 2 , 4 )`, un número de 4 dígitos) simplemente no coincide. Después basta con recorrer todas las coincidencias y sumar los productos:
+Cualquier variación (`mul[3,7]`, `mul(32,64]`, `mul ( 2 , 4 )`, un número de 4 dígitos) simplemente no coincide. Después basta con recorrer todas las coincidencias y sumar los productos. `Matcher.results()` (de la biblioteca estándar) las entrega como un stream, sin bucles:
 
 ```java
 // Dia03.java — sumarMultiplicaciones()
-long total = 0;
-Matcher instruccion = MULTIPLICACION.matcher(memoria);
-while (instruccion.find()) {
-    total += Long.parseLong(instruccion.group(1)) * Long.parseLong(instruccion.group(2));
-}
-return total;
+return MULTIPLICACION.matcher(memoria).results()
+        .mapToLong(Dia03::producto)
+        .sum();
 ```
 
-`find()` busca cada coincidencia a partir del final de la anterior, así que también encuentra instrucciones pegadas entre sí (`mul(2,3)mul(4,5)`) o justo después de basura (`mulmul(2,3)`).
+donde `producto` multiplica los grupos 1 y 2 de la coincidencia. Cada coincidencia se busca a partir del final de la anterior, así que también encuentra instrucciones pegadas entre sí (`mul(2,3)mul(4,5)`) o justo después de basura (`mulmul(2,3)`).
 
 #### Una sola memoria, no líneas sueltas
 
@@ -98,7 +95,7 @@ Teniendo en cuenta las instrucciones nuevas, ¿cuánto suman los resultados de l
 
 #### Recorrer las tres instrucciones en orden
 
-Ahora importa el **orden** de las instrucciones. Una sola expresión regular reconoce las tres, y como `find()` recorre la memoria de izquierda a derecha, las coincidencias salen en el orden en que aparecen:
+Ahora importa el **orden** de las instrucciones. Una sola expresión regular reconoce las tres, y como `results()` recorre la memoria de izquierda a derecha, las coincidencias salen en el orden en que aparecen:
 
 ```java
 // Dia03.java
@@ -110,12 +107,12 @@ Basta con llevar un estado, `habilitado`, que empieza en `true`:
 
 ```java
 // Dia03.java — sumarMultiplicacionesHabilitadas()
-switch (instruccion.group()) {
-    case "do()" -> habilitado = true;
-    case "don't()" -> habilitado = false;
-    default -> {
-        if (habilitado) {
-            total += Long.parseLong(instruccion.group(1)) * Long.parseLong(instruccion.group(2));
+for (MatchResult instruccion : INSTRUCCION.matcher(memoria).results().toList()) {
+    switch (instruccion.group()) {
+        case "do()" -> habilitado = true;
+        case "don't()" -> habilitado = false;
+        default -> {
+            if (habilitado) total += producto(instruccion);
         }
     }
 }

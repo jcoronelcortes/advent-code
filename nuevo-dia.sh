@@ -268,6 +268,25 @@ else
     echo "  (sin AOC_SESSION: el input hay que pegarlo a mano)"
 fi
 
+# Enunciados pegados con el nombre en inglés (diaNN_part1.txt): se renombran a diaNN_parte1.txt
+for PARTE in 1 2; do
+    EN_INGLES="${ENUNCIADOS}/dia${DIA_FMT}_part${PARTE}.txt"
+    EN_ESPANOL="${ENUNCIADOS}/dia${DIA_FMT}_parte${PARTE}.txt"
+    if [ -e "$EN_INGLES" ] && [ ! -s "$EN_ESPANOL" ]; then
+        mv "$EN_INGLES" "$EN_ESPANOL"
+        echo "  renombrado: $EN_INGLES → $EN_ESPANOL"
+    elif [ -e "$EN_INGLES" ]; then
+        echo "  ATENCIÓN: existen $EN_INGLES y $EN_ESPANOL; revisar cuál conservar"
+    fi
+done
+
+# Input pegado en una carpeta mal escrita (inputs.yAAAA en vez de inputs/yAAAA)
+MAL_UBICADO="src/main/resources/inputs.y${ANIO}/dia${DIA_FMT}.txt"
+if [ -e "$MAL_UBICADO" ]; then
+    echo "  ATENCIÓN: hay un input en $MAL_UBICADO; debería estar en $INPUT"
+    echo "            (esa carpeta no está en .gitignore: no la agregues a git)"
+fi
+
 # Enunciados vacíos con el nombre correcto (no se sobrescriben si ya tienen texto)
 for ENUNCIADO in "$ENUNCIADO_1" "$ENUNCIADO_2"; do
     if [ -e "$ENUNCIADO" ]; then

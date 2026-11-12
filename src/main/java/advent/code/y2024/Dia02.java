@@ -108,6 +108,6 @@ public class Dia02 implements Resolvedor {
      * @return niveles de cada reporte
      */
     static List<List<Integer>> leerReportes(List<String> lineas) {
-        return Utiles.lineasNoVacias(lineas).stream().map(Utiles::leerNumeros).toList();
+        return Utiles.numerosPorLinea(lineas);
     }
 }

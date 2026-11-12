@@ -85,6 +85,32 @@ public final class Utiles {
     }
 
     /**
+     * Los números de cada línea, por separado: una lista por línea no vacía.
+     * Es el formato de input más común después de la grilla (ej. 2024 días 1
+     * y 2: una fila de números por línea).
+     *
+     * <p>Ejemplo: {@code ["7 6 4", "", "1 2"]} → {@code [[7, 6, 4], [1, 2]]}</p>
+     *
+     * @param lineas líneas del input
+     * @return los números de cada línea no vacía, en orden
+     * @throws ArithmeticException si algún número no cabe en un {@code int}
+     *                             (usar {@link #numerosLargosPorLinea(List)})
+     */
+    public static List<List<Integer>> numerosPorLinea(List<String> lineas) {
+        return lineasNoVacias(lineas).stream().map(Utiles::leerNumeros).toList();
+    }
+
+    /**
+     * Igual que {@link #numerosPorLinea(List)}, pero con {@code long}.
+     *
+     * @param lineas líneas del input
+     * @return los números de cada línea no vacía, en orden
+     */
+    public static List<List<Long>> numerosLargosPorLinea(List<String> lineas) {
+        return lineasNoVacias(lineas).stream().map(Utiles::leerNumerosLargos).toList();
+    }
+
+    /**
      * Extrae todos los números enteros de múltiples líneas.
      *
      * @param lineas lista de líneas
