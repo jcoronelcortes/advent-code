@@ -30,7 +30,7 @@ src/
       Camino.java             # Resultado de BFS y Dijkstra: nodos + costo
       Memoizador.java         # Función recursiva con caché (programación dinámica)
       y2025/
-        Dia01.java ... Dia06.java
+        Dia01.java ... Dia07.java
     resources/
       inputs/y2025/           # Inputs personales (NO se suben al repositorio)
         dia01.txt ...
@@ -41,10 +41,10 @@ src/
       PruebaRango.java, PruebaConjuntoRangos.java, PruebaGrilla.java, PruebaBFS.java,
       PruebaDijkstra.java, PruebaMemoizador.java
       y2025/
-        Dia01Prueba.java ... Dia06Prueba.java
+        Dia01Prueba.java ... Dia07Prueba.java
 soluciones/
   2025/
-    dia01.md ... dia06.md     # Documentación detallada de cada día
+    dia01.md ... dia07.md     # Documentación detallada de cada día
 enunciados/                   # Enunciados copiados del sitio (NO se suben al repositorio)
 nuevo-dia.sh                  # Genera los archivos de un día nuevo
 ```
@@ -115,3 +115,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [04](src/main/java/advent/code/y2025/Dia04.java) | Departamento de Impresión | 1551 | 9784 | [ver](soluciones/2025/dia04.md) |
 | [05](src/main/java/advent/code/y2025/Dia05.java) | Cafetería | 635 | 369761800782619 | [ver](soluciones/2025/dia05.md) |
 | [06](src/main/java/advent/code/y2025/Dia06.java) | Compactador de Basura | 6171290547579 | 8811937976367 | [ver](soluciones/2025/dia06.md) |
+| [07](src/main/java/advent/code/y2025/Dia07.java) | Laboratorios | 1635 | 58097428661390 | [ver](soluciones/2025/dia07.md) |
