@@ -1,12 +1,13 @@
 package advent.code.y2025;
 
 import advent.code.BFS;
+import advent.code.CompresionCoordenadas;
 import advent.code.Grilla;
 import advent.code.Punto;
 import advent.code.Resolvedor;
+import advent.code.SumaAcumulada2D;
 import advent.code.Utiles;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -93,29 +94,16 @@ public class Dia09 implements Resolvedor {
      *
      * <p><b>Idea:</b> solo importan las coordenadas X e Y donde hay baldosas
      * rojas (unas 250 de cada una), porque los lados del polígono siempre
-     * caen sobre ellas. Cada X distinta se convierte en una columna de la
-     * grilla comprimida, y cada <em>hueco</em> entre dos X consecutivas en
-     * otra columna (lo mismo con las filas). Una celda de hueco representa
-     * muchas baldosas reales, pero todas están del mismo lado del polígono,
-     * porque ningún lado pasa por dentro de un hueco.</p>
-     *
-     * <pre>
-     * X reales:      2        7  8        11
-     * columnas:   0  1  2     3  4  5     6   7
-     *             ^  ^  ^     ^  ^  ^     ^   ^
-     *        borde  x=2 hueco x=7 x=8 hueco x=11 borde (siempre afuera)
-     * </pre>
-     *
-     * <p><b>Detalle importante:</b> entre dos coordenadas consecutivas (como
-     * 7 y 8) <em>no</em> se crea hueco, porque no hay ninguna baldosa entre
-     * ellas. Si se creara, una celda sin baldosas reales podría quedar
-     * "afuera" (por ejemplo, en una muesca de ancho cero de un polígono con
-     * forma de U) y rechazar por error un rectángulo que solo tiene baldosas
-     * rojas y verdes.</p>
+     * caen sobre ellas. {@link CompresionCoordenadas} convierte cada X e Y en
+     * un índice chico, dejando un hueco entre dos coordenadas solo si hay
+     * baldosas entre ellas. Una celda de hueco representa muchas baldosas
+     * reales, pero todas están del mismo lado del polígono, porque ningún
+     * lado pasa por dentro de un hueco.</p>
      *
      * <p>Sobre esa grilla se marcan los lados del polígono, se rellena el
-     * exterior con una BFS desde una esquina (que siempre está afuera) y se
-     * calculan sumas acumuladas 2D de las celdas exteriores. Así, saber si un
+     * exterior con una BFS desde una esquina (que siempre está afuera, porque
+     * la compresión deja un borde vacío) y se preparan sumas acumuladas
+     * ({@link SumaAcumulada2D}) de las celdas exteriores. Así, saber si un
      * rectángulo toca alguna celda exterior cuesta O(1).</p>
      */
     static final class PisoComprimido {
@@ -123,35 +111,24 @@ public class Dia09 implements Resolvedor {
         private static final char LADO = '#';
         private static final char AFUERA = 'o';
 
-        /** X distintas de los vértices, ordenadas, y su columna en la grilla comprimida. */
-        private final int[] columnasX;
-        private final int[] indiceColumna;
-
-        /** Y distintas de los vértices, ordenadas, y su fila en la grilla comprimida. */
-        private final int[] filasY;
-        private final int[] indiceFila;
-
-        /**
-         * {@code afueraAcumulado[f][c]} = cantidad de celdas exteriores en el
-         * rectángulo de filas {@code [0, f)} y columnas {@code [0, c)}.
-         */
-        private final int[][] afueraAcumulado;
+        private final CompresionCoordenadas columnas;
+        private final CompresionCoordenadas filas;
+        private final SumaAcumulada2D afuera;
 
         /**
          * @param rojas vértices del polígono en orden (cada uno comparte fila
          *              o columna con el siguiente, y el último con el primero)
          */
         PisoComprimido(List<Punto> rojas) {
-            columnasX = rojas.stream().mapToInt(Punto::x).distinct().sorted().toArray();
-            filasY = rojas.stream().mapToInt(Punto::y).distinct().sorted().toArray();
-            indiceColumna = comprimir(columnasX);
-            indiceFila = comprimir(filasY);
+            columnas = new CompresionCoordenadas(rojas.stream().map(Punto::x).toList());
+            filas = new CompresionCoordenadas(rojas.stream().map(Punto::y).toList());
 
-            // +2: el borde exterior a la derecha (o abajo) de la última coordenada
-            Grilla piso = new Grilla(indiceFila[filasY.length - 1] + 2, indiceColumna[columnasX.length - 1] + 2, '.');
+            Grilla piso = new Grilla(filas.tamanio(), columnas.tamanio(), '.');
             marcarLados(piso, rojas);
-            rellenarExterior(piso);
-            afueraAcumulado = sumasAcumuladas(piso);
+            BFS.explorar(new Punto(0, 0), punto -> piso.vecinos(punto, celda -> celda != LADO))
+                    .keySet()
+                    .forEach(punto -> piso.establecer(punto, AFUERA));
+            afuera = SumaAcumulada2D.contar(piso, celda -> celda == AFUERA);
         }
 
         /**
@@ -163,43 +140,12 @@ public class Dia09 implements Resolvedor {
          * @return {@code true} si no contiene ninguna baldosa exterior
          */
         boolean rectanguloAdentro(Punto a, Punto b) {
-            int columna1 = columna(Math.min(a.x(), b.x()));
-            int columna2 = columna(Math.max(a.x(), b.x()));
-            int fila1 = fila(Math.min(a.y(), b.y()));
-            int fila2 = fila(Math.max(a.y(), b.y()));
-            int afuera = afueraAcumulado[fila2 + 1][columna2 + 1]
-                    - afueraAcumulado[fila1][columna2 + 1]
-                    - afueraAcumulado[fila2 + 1][columna1]
-                    + afueraAcumulado[fila1][columna1];
-            return afuera == 0;
+            return afuera.suma(comprimir(a), comprimir(b)) == 0;
         }
 
-        /**
-         * Índice comprimido de cada coordenada ordenada. El índice 0 es el
-         * borde exterior; entre dos coordenadas se deja un índice de hueco
-         * solo si hay baldosas entre ellas (diferencia mayor que 1).
-         *
-         * @param valores coordenadas distintas, ordenadas
-         * @return índice comprimido de cada una
-         */
-        static int[] comprimir(int[] valores) {
-            int[] indices = new int[valores.length];
-            int siguiente = 1;
-            for (int i = 0; i < valores.length; i++) {
-                if (i > 0 && valores[i] - valores[i - 1] > 1) siguiente++;   // hueco con baldosas reales
-                indices[i] = siguiente++;
-            }
-            return indices;
-        }
-
-        /** Columna comprimida de una X real que es vértice del polígono. */
-        private int columna(int x) {
-            return indiceColumna[Arrays.binarySearch(columnasX, x)];
-        }
-
-        /** Fila comprimida de una Y real que es vértice del polígono. */
-        private int fila(int y) {
-            return indiceFila[Arrays.binarySearch(filasY, y)];
+        /** Posición en la grilla comprimida de una baldosa roja. */
+        private Punto comprimir(Punto baldosa) {
+            return new Punto(columnas.indice(baldosa.x()), filas.indice(baldosa.y()));
         }
 
         /** Marca con {@link #LADO} las celdas por donde pasan los lados del polígono. */
@@ -211,40 +157,14 @@ public class Dia09 implements Resolvedor {
                     throw new IllegalArgumentException("Baldosas consecutivas sin fila ni columna en común: "
                             + desde + " y " + hasta);
                 }
-                int columna1 = columna(Math.min(desde.x(), hasta.x()));
-                int columna2 = columna(Math.max(desde.x(), hasta.x()));
-                int fila1 = fila(Math.min(desde.y(), hasta.y()));
-                int fila2 = fila(Math.max(desde.y(), hasta.y()));
-                for (int fila = fila1; fila <= fila2; fila++) {
-                    for (int columna = columna1; columna <= columna2; columna++) {
+                Punto a = comprimir(desde);
+                Punto b = comprimir(hasta);
+                for (int fila = Math.min(a.y(), b.y()); fila <= Math.max(a.y(), b.y()); fila++) {
+                    for (int columna = Math.min(a.x(), b.x()); columna <= Math.max(a.x(), b.x()); columna++) {
                         piso.establecer(new Punto(columna, fila), LADO);
                     }
                 }
             }
-        }
-
-        /**
-         * Marca con {@link #AFUERA} todo lo alcanzable desde la esquina
-         * {@code (0, 0)} sin cruzar un lado. Esa esquina siempre está afuera
-         * porque la grilla tiene un borde vacío alrededor del polígono.
-         */
-        private void rellenarExterior(Grilla piso) {
-            BFS.explorar(new Punto(0, 0), punto -> piso.vecinos(punto, celda -> celda != LADO))
-                    .keySet()
-                    .forEach(punto -> piso.establecer(punto, AFUERA));
-        }
-
-        /** Sumas acumuladas 2D de las celdas exteriores. */
-        private static int[][] sumasAcumuladas(Grilla piso) {
-            int[][] suma = new int[piso.filas() + 1][piso.columnas() + 1];
-            for (int fila = 0; fila < piso.filas(); fila++) {
-                for (int columna = 0; columna < piso.columnas(); columna++) {
-                    int afuera = piso.obtener(new Punto(columna, fila)) == AFUERA ? 1 : 0;
-                    suma[fila + 1][columna + 1] = afuera + suma[fila][columna + 1]
-                            + suma[fila + 1][columna] - suma[fila][columna];
-                }
-            }
-            return suma;
         }
     }
 

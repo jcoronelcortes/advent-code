@@ -167,4 +167,24 @@ class PruebaMatematicas {
     void mobius_noPositivo() {
         assertThrows(IllegalArgumentException.class, () -> Matematicas.mobius(0));
     }
+
+    @Test
+    @DisplayName("sumaExacta y productoExacto: valores, colecciones y casos vacíos")
+    void aritmeticaExacta() {
+        assertEquals(6, Matematicas.sumaExacta(1, 2, 3));
+        assertEquals(6, Matematicas.sumaExacta(java.util.List.of(1L, 2L, 3L)));
+        assertEquals(24, Matematicas.productoExacto(2, 3, 4));
+        assertEquals(24, Matematicas.productoExacto(java.util.List.of(2L, 3L, 4L)));
+        assertEquals(0, Matematicas.sumaExacta());
+        assertEquals(1, Matematicas.productoExacto());
+    }
+
+    @Test
+    @DisplayName("sumaExacta y productoExacto: detectan el desborde")
+    void aritmeticaExacta_desborde() {
+        assertThrows(ArithmeticException.class, () -> Matematicas.sumaExacta(Long.MAX_VALUE, 1));
+        assertThrows(ArithmeticException.class, () -> Matematicas.productoExacto(1L << 32, 1L << 32));
+        assertThrows(ArithmeticException.class,
+                () -> Matematicas.productoExacto(java.util.List.of(Long.MAX_VALUE, 2L)));
+    }
 }

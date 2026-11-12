@@ -22,7 +22,7 @@ src/
       Punto3D.java            # Coordenadas 3D (record, long): distancia al cuadrado y Manhattan
       Direccion.java          # Enum de direcciones cardinales
       Utiles.java             # Números (int y long) de texto, líneas no vacías, secciones
-      Matematicas.java        # MCD/MCM, aritmética modular, resto chino, Möbius, dígitos
+      Matematicas.java        # MCD/MCM, aritmética modular, resto chino, Möbius, dígitos, suma/producto exactos
       Rango.java              # Intervalos [inicio, fin]: intersección, resta, unión
       ConjuntoRangos.java     # Unión de rangos: pertenencia (búsqueda binaria) y cantidad
       Grilla.java             # Grilla de caracteres (admite líneas de distinto largo): búsqueda, vecinos, rotaciones
@@ -31,10 +31,12 @@ src/
       Camino.java             # Resultado de BFS y Dijkstra: nodos + costo
       Memoizador.java         # Función recursiva con caché (programación dinámica)
       ConjuntosDisjuntos.java # Union-find: unir grupos, mismo grupo, tamaños
-      y2025/
-        Dia01.java ... Dia11.java
+      SumaAcumulada2D.java    # Suma de cualquier rectángulo en O(1)
+      CompresionCoordenadas.java # Coordenadas enormes → índices chicos, con huecos exactos
+      y{anio}/
+        Dia01.java ...        # Una clase por día (y2025: Dia01 ... Dia12)
     resources/
-      inputs/y2025/           # Inputs personales (NO se suben al repositorio)
+      inputs/y{anio}/         # Inputs personales (NO se suben al repositorio)
         dia01.txt ...
   test/
     java/advent/code/
@@ -42,12 +44,12 @@ src/
       PruebaPunto.java, PruebaDireccion.java, PruebaUtiles.java, PruebaMatematicas.java,
       PruebaRango.java, PruebaConjuntoRangos.java, PruebaGrilla.java, PruebaBFS.java,
       PruebaDijkstra.java, PruebaMemoizador.java, PruebaConjuntosDisjuntos.java,
-      PruebaPunto3D.java
-      y2025/
-        Dia01Prueba.java ... Dia11Prueba.java
+      PruebaPunto3D.java, PruebaSumaAcumulada2D.java, PruebaCompresionCoordenadas.java
+      y{anio}/
+        Dia01Prueba.java ...
 soluciones/
-  2025/
-    dia01.md ... dia11.md     # Documentación detallada de cada día
+  {anio}/
+    dia01.md ...              # Documentación detallada de cada día
 enunciados/                   # Enunciados copiados del sitio (NO se suben al repositorio)
 nuevo-dia.sh                  # Genera los archivos de un día nuevo
 ```
@@ -131,3 +133,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [09](src/main/java/advent/code/y2025/Dia09.java) | Sala de Cine | 4777824480 | 1542119040 | [ver](soluciones/2025/dia09.md) |
 | [10](src/main/java/advent/code/y2025/Dia10.java) | Fábrica | 491 | 20617 | [ver](soluciones/2025/dia10.md) |
 | [11](src/main/java/advent/code/y2025/Dia11.java) | Reactor | 749 | 420257875695750 | [ver](soluciones/2025/dia11.md) |
+| [12](src/main/java/advent/code/y2025/Dia12.java) | Granja de Árboles de Navidad | 538 | estrella final | [ver](soluciones/2025/dia12.md) |

@@ -124,7 +124,7 @@ Con coordenadas de hasta ~100 000, una grilla real de baldosas tendría ~10¹⁰
 
 #### Clave: compresión de coordenadas
 
-Los lados del polígono siempre caen sobre las coordenadas de las baldosas rojas, que son solo ~250 X distintas y ~250 Y distintas. Se arma una grilla **comprimida**:
+Los lados del polígono siempre caen sobre las coordenadas de las baldosas rojas, que son solo ~250 X distintas y ~250 Y distintas. Se arma una grilla **comprimida** con la utilidad `CompresionCoordenadas` (una para las X y otra para las Y):
 
 - cada X distinta es una columna, y cada **hueco** entre dos X consecutivas es otra columna (lo mismo con las Y y las filas);
 - se agrega una columna y una fila vacías en cada borde, que siempre quedan afuera.
@@ -148,16 +148,18 @@ En el input real hay un par de coordenadas Y consecutivas, aunque no cambia la r
 
 1. Se marcan los lados del polígono en la grilla comprimida.
 2. Se rellena el **exterior** con una BFS (`BFS.explorar`) desde la esquina `(0, 0)`, sin cruzar los lados.
-3. Se calculan **sumas acumuladas 2D** de las celdas exteriores. Con ellas, la cantidad de celdas exteriores dentro de cualquier rectángulo se obtiene con 4 accesos:
+3. Se calculan **sumas acumuladas 2D** de las celdas exteriores con la utilidad `SumaAcumulada2D`. Con ellas, la cantidad de celdas exteriores dentro de cualquier rectángulo se obtiene con 4 accesos a una tabla, en O(1):
 
 ```java
-// Dia09.java — PisoComprimido.rectanguloAdentro()
-int afuera = afueraAcumulado[fila2 + 1][columna2 + 1]
-        - afueraAcumulado[fila1][columna2 + 1]
-        - afueraAcumulado[fila2 + 1][columna1]
-        + afueraAcumulado[fila1][columna1];
-return afuera == 0;
+// Dia09.java — PisoComprimido
+afuera = SumaAcumulada2D.contar(piso, celda -> celda == AFUERA);
+...
+boolean rectanguloAdentro(Punto a, Punto b) {
+    return afuera.suma(comprimir(a), comprimir(b)) == 0;
+}
 ```
+
+Internamente, `suma` usa la fórmula de inclusión y exclusión: `S(y2, x2) − S(y1−1, x2) − S(y2, x1−1) + S(y1−1, x1−1)`, donde `S` es la suma de todo lo que está arriba y a la izquierda.
 
 Para cada uno de los ~123 000 pares, se calcula el área y, solo si supera la mejor hasta el momento, se consulta si está adentro.
 
@@ -166,7 +168,7 @@ Para cada uno de los ~123 000 pares, se calcula el área y, solo si supera la me
 - Prueba con el ejemplo (24), y con los rectángulos que muestra el enunciado (15, 3 y 24 adentro; el de 50 de la parte 1, afuera).
 - Un polígono rectangular permite el rectángulo entero.
 - Muescas: una de ancho cero no deja baldosas afuera (72); una con una columna de baldosas afuera sí limita el rectángulo (36).
-- Prueba de `comprimir`: deja hueco solo cuando hay baldosas entre dos coordenadas.
+- `CompresionCoordenadas` y `SumaAcumulada2D` tienen sus propias pruebas; la de sumas acumuladas incluye una prueba basada en propiedades contra la suma celda por celda.
 - Con el input real, dos scripts independientes en Python dan el mismo resultado:
   - un método **geométrico** sin grilla: un rectángulo está adentro si ningún lado del polígono cruza su interior y su centro está adentro (*ray casting*); confirma las esquinas `5942,67632` y `94645,50248`;
   - una compresión **exacta por baldosas** escrita aparte, que además se usó para confirmar los resultados de las pruebas de las muescas.

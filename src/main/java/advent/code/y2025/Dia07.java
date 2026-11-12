@@ -1,6 +1,7 @@
 package advent.code.y2025;
 
 import advent.code.Grilla;
+import advent.code.Matematicas;
 import advent.code.Punto;
 import advent.code.Resolvedor;
 
@@ -47,11 +48,7 @@ public class Dia07 implements Resolvedor {
      */
     @Override
     public String parte2(List<String> lineas) {
-        long lineasTemporales = 0;
-        for (long caminos : simular(Grilla.desdeLineas(lineas)).haces()) {
-            lineasTemporales = Math.addExact(lineasTemporales, caminos);
-        }
-        return String.valueOf(lineasTemporales);
+        return String.valueOf(Matematicas.sumaExacta(simular(Grilla.desdeLineas(lineas)).haces()));
     }
 
     /**

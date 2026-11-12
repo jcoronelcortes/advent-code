@@ -1,6 +1,7 @@
 package advent.code.y2025;
 
 import advent.code.Grilla;
+import advent.code.Matematicas;
 import advent.code.Resolvedor;
 
 import java.util.ArrayList;
@@ -151,8 +152,8 @@ public class Dia06 implements Resolvedor {
      */
     static long aplicar(char operacion, List<Long> numeros) {
         return switch (operacion) {
-            case '+' -> numeros.stream().reduce(0L, Math::addExact);
-            case '*' -> numeros.stream().reduce(1L, Math::multiplyExact);
+            case '+' -> Matematicas.sumaExacta(numeros);
+            case '*' -> Matematicas.productoExacto(numeros);
             default -> throw new IllegalArgumentException("Operación desconocida: '" + operacion + "'");
         };
     }

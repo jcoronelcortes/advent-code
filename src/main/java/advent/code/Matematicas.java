@@ -168,6 +168,64 @@ public final class Matematicas {
     }
 
     // -------------------------------------------------------------------------
+    // Aritmética exacta
+    // -------------------------------------------------------------------------
+
+    /**
+     * Suma con detección de desborde: si el resultado no cabe en un
+     * {@code long}, lanza {@link ArithmeticException} en vez de dar un número
+     * incorrecto en silencio. En AoC las respuestas suelen rondar 10¹⁵.
+     *
+     * @param valores valores a sumar
+     * @return la suma (0 si no hay valores)
+     * @throws ArithmeticException si se desborda
+     */
+    public static long sumaExacta(long... valores) {
+        long total = 0;
+        for (long valor : valores) total = Math.addExact(total, valor);
+        return total;
+    }
+
+    /**
+     * Igual que {@link #sumaExacta(long...)}, para una colección.
+     *
+     * @param valores valores a sumar
+     * @return la suma (0 si está vacía)
+     * @throws ArithmeticException si se desborda
+     */
+    public static long sumaExacta(Collection<Long> valores) {
+        long total = 0;
+        for (long valor : valores) total = Math.addExact(total, valor);
+        return total;
+    }
+
+    /**
+     * Producto con detección de desborde.
+     *
+     * @param valores valores a multiplicar
+     * @return el producto (1 si no hay valores)
+     * @throws ArithmeticException si se desborda
+     */
+    public static long productoExacto(long... valores) {
+        long total = 1;
+        for (long valor : valores) total = Math.multiplyExact(total, valor);
+        return total;
+    }
+
+    /**
+     * Igual que {@link #productoExacto(long...)}, para una colección.
+     *
+     * @param valores valores a multiplicar
+     * @return el producto (1 si está vacía)
+     * @throws ArithmeticException si se desborda
+     */
+    public static long productoExacto(Collection<Long> valores) {
+        long total = 1;
+        for (long valor : valores) total = Math.multiplyExact(total, valor);
+        return total;
+    }
+
+    // -------------------------------------------------------------------------
     // Series y dígitos
     // -------------------------------------------------------------------------
 

@@ -109,10 +109,4 @@ class Dia09Prueba {
         // El mayor rectángulo válido es 0..8 × 5..8 = 9 · 4 = 36
         assertEquals("36", dia09.parte2(u));
     }
-
-    @Test
-    @DisplayName("Parte 2: comprimir deja hueco solo si hay baldosas entre dos coordenadas")
-    void parte2_comprimir() {
-        assertArrayEquals(new int[]{1, 3, 4, 6}, Dia09.PisoComprimido.comprimir(new int[]{2, 7, 8, 11}));
-    }
 }

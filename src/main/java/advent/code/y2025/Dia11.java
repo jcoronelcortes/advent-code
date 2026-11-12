@@ -1,5 +1,6 @@
 package advent.code.y2025;
 
+import advent.code.Matematicas;
 import advent.code.Memoizador;
 import advent.code.Resolvedor;
 import advent.code.Utiles;
@@ -73,15 +74,15 @@ public class Dia11 implements Resolvedor {
      */
     static long contarCaminosPor(Map<String, List<String>> conexiones, String desde, String hasta,
                                  String a, String b) {
-        long primeroA = Math.multiplyExact(Math.multiplyExact(
+        long primeroA = Matematicas.productoExacto(
                 contarCaminos(conexiones, desde, a),
-                contarCaminos(conexiones, a, b)),
+                contarCaminos(conexiones, a, b),
                 contarCaminos(conexiones, b, hasta));
-        long primeroB = Math.multiplyExact(Math.multiplyExact(
+        long primeroB = Matematicas.productoExacto(
                 contarCaminos(conexiones, desde, b),
-                contarCaminos(conexiones, b, a)),
+                contarCaminos(conexiones, b, a),
                 contarCaminos(conexiones, a, hasta));
-        return Math.addExact(primeroA, primeroB);
+        return Matematicas.sumaExacta(primeroA, primeroB);
     }
 
     /**
