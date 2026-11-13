@@ -158,3 +158,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [16](src/main/java/advent/code/y2024/Dia16.java) | Laberinto de Renos | 160624 | 692 | [ver](soluciones/2024/dia16.md) |
 | [17](src/main/java/advent/code/y2024/Dia17.java) | Computadora Cronoespacial | 7,4,2,5,1,4,6,0,4 | 164278764924605 | [ver](soluciones/2024/dia17.md) |
 | [18](src/main/java/advent/code/y2024/Dia18.java) | Carrera en la RAM | 234 | 58,19 | [ver](soluciones/2024/dia18.md) |
+| [19](src/main/java/advent/code/y2024/Dia19.java) | Disposición de Toallas | 206 | 622121814629343 | [ver](soluciones/2024/dia19.md) |
