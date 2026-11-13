@@ -171,3 +171,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | Día | Título | Parte 1 | Parte 2 | Documentación |
 |-----|--------|---------|---------|---------------|
 | [01](src/main/java/advent/code/y2023/Dia01.java) | Calibración del Trebuchet | 54667 | 54203 | [ver](soluciones/2023/dia01.md) |
+| [02](src/main/java/advent/code/y2023/Dia02.java) | Enigma de los Cubos | 2285 | 77021 | [ver](soluciones/2023/dia02.md) |
