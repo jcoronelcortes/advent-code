@@ -187,3 +187,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [10](src/main/java/advent/code/y2023/Dia10.java) | Laberinto de Tuberías | 6690 | 525 | [ver](soluciones/2023/dia10.md) |
 | [11](src/main/java/advent/code/y2023/Dia11.java) | Expansión Cósmica | 9627977 | 644248339497 | [ver](soluciones/2023/dia11.md) |
 | [12](src/main/java/advent/code/y2023/Dia12.java) | Aguas Termales | 7204 | 1672318386674 | [ver](soluciones/2023/dia12.md) |
+| [13](src/main/java/advent/code/y2023/Dia13.java) | Punto de Incidencia | 30802 | 37876 | [ver](soluciones/2023/dia13.md) |
