@@ -163,10 +163,10 @@ class PruebaGrilla {
     }
 
     @Test
-    @DisplayName("vecinosDiagonales: 8 en el centro, 3 en la esquina")
-    void vecinosDiagonales() {
-        assertEquals(8, grilla.vecinosDiagonales(new Punto(1, 1)).size());
-        assertEquals(3, grilla.vecinosDiagonales(new Punto(3, 2)).size());
+    @DisplayName("vecinosConDiagonales: 8 en el centro, 3 en la esquina")
+    void vecinosConDiagonales() {
+        assertEquals(8, grilla.vecinosConDiagonales(new Punto(1, 1)).size());
+        assertEquals(3, grilla.vecinosConDiagonales(new Punto(3, 2)).size());
     }
 
     @Test

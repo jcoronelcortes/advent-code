@@ -72,7 +72,7 @@ public class Dia04 implements Resolvedor {
             if (grilla.obtener(rollo) != ROLLO) continue;   // ya se retiró
             grilla.establecer(rollo, VACIO);
             retirados++;
-            for (Punto vecino : grilla.vecinosDiagonales(rollo)) {
+            for (Punto vecino : grilla.vecinosConDiagonales(rollo)) {
                 if (grilla.obtener(vecino) == ROLLO && rollosVecinos(grilla, vecino) < LIMITE_VECINOS) {
                     pendientes.add(vecino);
                 }

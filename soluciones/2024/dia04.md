@@ -69,7 +69,7 @@ Toda aparición de `XMAS` empieza en una `X` y avanza en una de las **8 direccio
 Grilla sopa = Grilla.desdeLineas(lineas);
 long apariciones = 0;
 for (Punto inicio : sopa.buscarTodos(PALABRA.charAt(0))) {
-    for (Punto direccion : OCHO_DIRECCIONES) {
+    for (Punto direccion : Punto.OCHO_DIRECCIONES) {
         if (estaLaPalabra(sopa, inicio, direccion, PALABRA)) apariciones++;
     }
 }

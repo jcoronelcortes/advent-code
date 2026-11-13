@@ -56,9 +56,13 @@ class PruebaPunto {
     }
 
     @Test
-    @DisplayName("vecinosDiagonales retorna exactamente 8 vecinos")
-    void vecinosDiagonales() {
-        assertEquals(8, new Punto(0, 0).vecinosDiagonales().size());
+    @DisplayName("vecinosConDiagonales retorna los 8 vecinos distintos, en orden de lectura")
+    void vecinosConDiagonales() {
+        assertEquals(List.of(
+                new Punto(4, 6), new Punto(5, 6), new Punto(6, 6),
+                new Punto(4, 7),                  new Punto(6, 7),
+                new Punto(4, 8), new Punto(5, 8), new Punto(6, 8)),
+                new Punto(5, 7).vecinosConDiagonales());
     }
 
     @Test

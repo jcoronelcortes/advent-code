@@ -311,8 +311,8 @@ public final class Grilla {
      * @param punto posición central
      * @return vecinos dentro de los límites
      */
-    public List<Punto> vecinosDiagonales(Punto punto) {
-        return punto.vecinosDiagonales().stream().filter(this::estaDentro).toList();
+    public List<Punto> vecinosConDiagonales(Punto punto) {
+        return punto.vecinosConDiagonales().stream().filter(this::estaDentro).toList();
     }
 
     /**
@@ -326,7 +326,7 @@ public final class Grilla {
      */
     public int contarVecinos(Punto punto, char caracter) {
         int cantidad = 0;
-        for (Punto vecino : punto.vecinosDiagonales()) {
+        for (Punto vecino : punto.vecinosConDiagonales()) {
             if (estaDentro(vecino) && obtener(vecino) == caracter) cantidad++;
         }
         return cantidad;

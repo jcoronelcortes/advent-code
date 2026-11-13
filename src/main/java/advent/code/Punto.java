@@ -15,6 +15,15 @@ import java.util.List;
  */
 public record Punto(int x, int y) {
 
+    /**
+     * Los 8 desplazamientos a las posiciones vecinas (cardinales + diagonales),
+     * en orden de lectura: de arriba a abajo y de izquierda a derecha.
+     */
+    public static final List<Punto> OCHO_DIRECCIONES = List.of(
+            new Punto(-1, -1), new Punto(0, -1), new Punto(1, -1),
+            new Punto(-1, 0),                    new Punto(1, 0),
+            new Punto(-1, 1),  new Punto(0, 1),  new Punto(1, 1));
+
     /** Mueve el punto una posición en la dirección indicada. */
     public Punto mover(Direccion direccion) {
         return new Punto(x + direccion.dx(), y + direccion.dy());
@@ -50,14 +59,10 @@ public record Punto(int x, int y) {
     }
 
     /**
-     * Vecinos en las 8 direcciones (cardinales + diagonales).
+     * Vecinos en las 8 direcciones (cardinales + diagonales), en orden de lectura.
      */
-    public List<Punto> vecinosDiagonales() {
-        return List.of(
-                new Punto(x - 1, y - 1), new Punto(x, y - 1), new Punto(x + 1, y - 1),
-                new Punto(x - 1, y),                           new Punto(x + 1, y),
-                new Punto(x - 1, y + 1), new Punto(x, y + 1), new Punto(x + 1, y + 1)
-        );
+    public List<Punto> vecinosConDiagonales() {
+        return OCHO_DIRECCIONES.stream().map(this::sumar).toList();
     }
 
     /** Verifica si el punto está dentro de los límites de una grilla. */

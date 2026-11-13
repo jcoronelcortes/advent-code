@@ -13,15 +13,6 @@ import java.util.List;
 public class EntradaSalida {
 
     /**
-     * Imprime un mensaje en la consola.
-     *
-     * @param mensaje texto a imprimir
-     */
-    public static void imprimirLinea(String mensaje) {
-        System.out.println(mensaje);
-    }
-
-    /**
      * Lee el archivo de entrada desde {@code src/main/resources/inputs/y{anio}/dia{DD}.txt}.
      *
      * @param anio año del desafío (ej. 2025)

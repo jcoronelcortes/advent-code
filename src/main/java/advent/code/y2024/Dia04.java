@@ -20,11 +20,6 @@ public class Dia04 implements Resolvedor {
     /** Carácter que devuelve la grilla fuera de sus bordes: no coincide con ninguna letra. */
     private static final char AFUERA = '.';
 
-    /** Las 8 direcciones de lectura: horizontales, verticales y diagonales, en ambos sentidos. */
-    private static final List<Punto> OCHO_DIRECCIONES = List.of(
-            new Punto(1, 0), new Punto(-1, 0), new Punto(0, 1), new Punto(0, -1),
-            new Punto(1, 1), new Punto(1, -1), new Punto(-1, 1), new Punto(-1, -1));
-
     /**
      * Parte 1: cantidad de apariciones de {@code XMAS} en la sopa de letras.
      *
@@ -36,7 +31,7 @@ public class Dia04 implements Resolvedor {
         Grilla sopa = Grilla.desdeLineas(lineas);
         long apariciones = 0;
         for (Punto inicio : sopa.buscarTodos(PALABRA.charAt(0))) {
-            for (Punto direccion : OCHO_DIRECCIONES) {
+            for (Punto direccion : Punto.OCHO_DIRECCIONES) {
                 if (estaLaPalabra(sopa, inicio, direccion, PALABRA)) apariciones++;
             }
         }
