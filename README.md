@@ -199,3 +199,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [22](src/main/java/advent/code/y2023/Dia22.java) | Losas de Arena | 457 | 79122 | [ver](soluciones/2023/dia22.md) |
 | [23](src/main/java/advent/code/y2023/Dia23.java) | Una Larga Caminata | 2282 | 6646 | [ver](soluciones/2023/dia23.md) |
 | [24](src/main/java/advent/code/y2023/Dia24.java) | Nunca Me Digas las Probabilidades | 23760 | 888708704663413 | [ver](soluciones/2023/dia24.md) |
+| [25](src/main/java/advent/code/y2023/Dia25.java) | Sobrecarga de Nieve | 548960 | — | [ver](soluciones/2023/dia25.md) |
