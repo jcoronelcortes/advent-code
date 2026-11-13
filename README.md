@@ -155,3 +155,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [13](src/main/java/advent/code/y2024/Dia13.java) | Artilugio de Garra | 30973 | 95688837203288 | [ver](soluciones/2024/dia13.md) |
 | [14](src/main/java/advent/code/y2024/Dia14.java) | Reducto del Baño | 218433348 | 6512 | [ver](soluciones/2024/dia14.md) |
 | [15](src/main/java/advent/code/y2024/Dia15.java) | Problemas en el Almacén | 1457740 | 1467145 | [ver](soluciones/2024/dia15.md) |
+| [16](src/main/java/advent/code/y2024/Dia16.java) | Laberinto de Renos | 160624 | 692 | [ver](soluciones/2024/dia16.md) |
