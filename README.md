@@ -194,3 +194,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [17](src/main/java/advent/code/y2023/Dia17.java) | Crisol Torpe | 797 | 914 | [ver](soluciones/2023/dia17.md) |
 | [18](src/main/java/advent/code/y2023/Dia18.java) | Laguna del Lavaducto | 62573 | 54662804037719 | [ver](soluciones/2023/dia18.md) |
 | [19](src/main/java/advent/code/y2023/Dia19.java) | A Montones | 386787 | 131029523269531 | [ver](soluciones/2023/dia19.md) |
+| [20](src/main/java/advent/code/y2023/Dia20.java) | Propagación de Pulsos | 743871576 | 244151741342687 | [ver](soluciones/2023/dia20.md) |
