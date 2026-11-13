@@ -217,3 +217,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 |-----|--------|---------|---------|---------------|
 | [01](src/main/java/advent/code/y2022/Dia01.java) | Contando Calorías | 69912 | 208180 | [ver](soluciones/2022/dia01.md) |
 | [02](src/main/java/advent/code/y2022/Dia02.java) | Piedra, Papel o Tijera | 14531 | 11258 | [ver](soluciones/2022/dia02.md) |
+| [03](src/main/java/advent/code/y2022/Dia03.java) | Reorganización de Mochilas | 7878 | 2760 | [ver](soluciones/2022/dia03.md) |
