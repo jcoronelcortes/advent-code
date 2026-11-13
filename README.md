@@ -151,3 +151,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [09](src/main/java/advent/code/y2024/Dia09.java) | Desfragmentador de Disco | 6385338159127 | 6415163624282 | [ver](soluciones/2024/dia09.md) |
 | [10](src/main/java/advent/code/y2024/Dia10.java) | A Pie | 694 | 1497 | [ver](soluciones/2024/dia10.md) |
 | [11](src/main/java/advent/code/y2024/Dia11.java) | Piedras Plutonianas | 183248 | 218811774248729 | [ver](soluciones/2024/dia11.md) |
+| [12](src/main/java/advent/code/y2024/Dia12.java) | Grupos de Jardín | 1488414 | 911750 | [ver](soluciones/2024/dia12.md) |
