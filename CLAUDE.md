@@ -33,6 +33,7 @@ mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025"
 - `src/test/java/advent/code/y{anio}/Dia{DD}Prueba.java` — pruebas JUnit 5 por día con los ejemplos del enunciado
 - `src/test/java/advent/code/RespuestasPrueba.java` — regresión con las respuestas aceptadas; se omite si falta el input
 - `src/test/java/advent/code/PruebaDocumentacion.java` — verifica que los fragmentos de código de `soluciones/` (bloques que empiezan con `// Archivo.java`) sigan coincidiendo con el código; si se cambia código documentado, hay que actualizar el fragmento
+- `guia/` — guía general en español: `README.md` con el índice y el panorama, una sección por tipo de problema (algoritmos, Java, librerías, verificación) y un índice por día con enlaces a `soluciones/`; al resolver un día nuevo, agregarlo al índice por día
 - `soluciones/{anio}/dia{DD}.md` — documentación de cada día: por cada parte, el **enunciado** (redactado en español con palabras propias, nunca traducción literal) y debajo su **solución** (idea, implementación, verificación y resultado)
 
 ### Utilidades compartidas (`advent.code`)

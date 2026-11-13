@@ -4,6 +4,10 @@
 
 [Advent of Code](https://adventofcode.com) es una competencia anual de programación que se realiza cada diciembre. Consiste en 25 días de puzzles, donde cada día se publican dos problemas de dificultad creciente. Cada problema tiene un input personalizado y dos partes, siendo la segunda más compleja que la primera.
 
+## Guía
+
+En [`guia/`](guia/README.md) hay una guía con lo que hace falta saber para resolver este tipo de problemas: los 62 días de 2023, 2024 y 2025 agrupados en diez tipos, con los algoritmos, las partes de Java y las librerías que usa cada uno, cómo verificar las respuestas y un índice por día.
+
 ## Requisitos
 
 - Java 25
@@ -57,6 +61,9 @@ src/
 soluciones/
   {anio}/
     dia01.md ...              # Documentación detallada de cada día
+guia/
+  README.md                   # Guía por tipo de problema: índice y panorama
+  01-…md a 14-…md             # Una sección por tipo, más Java, librerías, verificación e índice por día
 enunciados/                   # Enunciados copiados del sitio (NO se suben al repositorio)
 nuevo-dia.sh                  # Genera los archivos de un día nuevo
 ```
