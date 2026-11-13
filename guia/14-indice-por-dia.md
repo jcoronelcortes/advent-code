@@ -69,3 +69,4 @@ Cada día con su tipo principal y la técnica de la parte 2, que suele ser la qu
 | 2023 | 2 | [Enigma de los Cubos](../soluciones/2023/dia02.md) | [Texto, listas y secuencias](01-texto-listas-y-secuencias.md) | Máximo por color |
 | 2023 | 1 | [Calibración del Trebuchet](../soluciones/2023/dia01.md) | [Texto, listas y secuencias](01-texto-listas-y-secuencias.md) | Buscar desde cada punta |
 | 2022 | 1 | [Contando Calorías](../soluciones/2022/dia01.md) | [Texto, listas y secuencias](01-texto-listas-y-secuencias.md) | Sumar por bloques y los k mayores |
+| 2022 | 2 | [Piedra, Papel o Tijera](../soluciones/2022/dia02.md) | [Matemática](06-matematica.md) | Figuras en círculo: aritmética módulo 3 |
