@@ -174,3 +174,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [02](src/main/java/advent/code/y2023/Dia02.java) | Enigma de los Cubos | 2285 | 77021 | [ver](soluciones/2023/dia02.md) |
 | [03](src/main/java/advent/code/y2023/Dia03.java) | Proporciones de Engranajes | 536202 | 78272573 | [ver](soluciones/2023/dia03.md) |
 | [04](src/main/java/advent/code/y2023/Dia04.java) | Rasca y Gana | 27059 | 5744979 | [ver](soluciones/2023/dia04.md) |
+| [05](src/main/java/advent/code/y2023/Dia05.java) | Si Le Das un Fertilizante a una Semilla | 484023871 | 46294175 | [ver](soluciones/2023/dia05.md) |
