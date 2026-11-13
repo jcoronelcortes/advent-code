@@ -165,3 +165,9 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [23](src/main/java/advent/code/y2024/Dia23.java) | Fiesta LAN | 1253 | ag,bt,cq,da,hp,hs,mi,pa,qd,qe,qi,ri,uq | [ver](soluciones/2024/dia23.md) |
 | [24](src/main/java/advent/code/y2024/Dia24.java) | Cables Cruzados | 49520947122770 | gjc,gvm,qjj,qsb,wmp,z17,z26,z39 | [ver](soluciones/2024/dia24.md) |
 | [25](src/main/java/advent/code/y2024/Dia25.java) | Crónica del Código | 3320 | estrella final | [ver](soluciones/2024/dia25.md) |
+
+### 2023
+
+| Día | Título | Parte 1 | Parte 2 | Documentación |
+|-----|--------|---------|---------|---------------|
+| [01](src/main/java/advent/code/y2023/Dia01.java) | Calibración del Trebuchet | 54667 | 54203 | [ver](soluciones/2023/dia01.md) |
