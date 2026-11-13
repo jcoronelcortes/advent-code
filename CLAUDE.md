@@ -46,6 +46,7 @@ Revisar antes de escribir código nuevo:
 - `Punto` (record, `x` = columna, `y` = fila, `parsear("x,y")`) y `Direccion` (enum con giros y `desdeFlecha` para `^ v < >`); `Punto3D` (record `long`, `distanciaCuadrada`, `parsear`)
 - `Grilla` — grilla de caracteres: búsqueda (`buscarUnico` para el punto de partida: falla si falta o se repite), vecinos con filtro, `contarVecinos`, `rellenar` (balde de pintura con arreglos: mucho más rápido que `BFS.explorar` en grillas grandes), rotaciones, copia; `desdeLineas` ignora líneas en blanco al final y `desdeLineas(lineas, ' ')` admite líneas de distinto largo
 - `Busqueda.primero(desde, hasta, condicion)` — búsqueda binaria: el menor valor que cumple una condición monótona (falso…falso, verdadero…verdadero), o vacío; no desborda aunque el intervalo abarque todos los `long`
+- `Ciclo.detectar(inicial, siguiente)` — para un estado que avanza con una regla fija: dónde empieza el ciclo, cuánto mide y los estados recorridos; `estadoEn(paso)` da el estado en cualquier paso (ej. mil millones) sin simularlo. Los estados deben tener `equals`/`hashCode` (un `record` sirve)
 - `BFS` y `Dijkstra` — búsquedas genéricas con la misma forma de uso; ambas devuelven costos `long` y `Camino<N>`. `Dijkstra` admite heurística (A*) y `nodosEnCaminosMinimos`
 - `ConjuntosDisjuntos` — union-find sobre índices `0..n-1`: `unir`, `mismoGrupo`, `tamanio`, `tamanios`, `cantidadGrupos`
 - `SumaAcumulada2D` — suma de cualquier rectángulo en O(1); `contar(grilla, condicion)` cuenta celdas

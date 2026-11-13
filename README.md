@@ -30,11 +30,13 @@ src/
       Dijkstra.java           # Camino de costo mínimo genérico (y A*)
       Camino.java             # Resultado de BFS y Dijkstra: nodos + costo
       Memoizador.java         # Función recursiva con caché (programación dinámica)
+      Busqueda.java           # Búsqueda binaria: el primer valor que cumple una condición monótona
+      Ciclo.java              # Detección de ciclos: el estado en cualquier paso sin simularlo
       ConjuntosDisjuntos.java # Union-find: unir grupos, mismo grupo, tamaños
       SumaAcumulada2D.java    # Suma de cualquier rectángulo en O(1)
       CompresionCoordenadas.java # Coordenadas enormes → índices chicos, con huecos exactos
       y{anio}/
-        Dia01.java ...        # Una clase por día (y2025: Dia01 ... Dia12)
+        Dia01.java ...        # Una clase por día (y2025: Dia01 ... Dia12; y2024: ... Dia25)
     resources/
       inputs/y{anio}/         # Inputs personales (NO se suben al repositorio)
         dia01.txt ...
@@ -45,7 +47,8 @@ src/
       PruebaPunto.java, PruebaDireccion.java, PruebaUtiles.java, PruebaMatematicas.java,
       PruebaRango.java, PruebaConjuntoRangos.java, PruebaGrilla.java, PruebaBFS.java,
       PruebaDijkstra.java, PruebaMemoizador.java, PruebaConjuntosDisjuntos.java,
-      PruebaPunto3D.java, PruebaSumaAcumulada2D.java, PruebaCompresionCoordenadas.java
+      PruebaPunto3D.java, PruebaSumaAcumulada2D.java, PruebaCompresionCoordenadas.java,
+      PruebaBusqueda.java, PruebaCiclo.java, PruebaPrincipal.java
       y{anio}/
         Dia01Prueba.java ...
 soluciones/

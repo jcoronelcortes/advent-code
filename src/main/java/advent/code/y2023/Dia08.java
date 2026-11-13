@@ -1,5 +1,6 @@
 package advent.code.y2023;
 
+import advent.code.Ciclo;
 import advent.code.Matematicas;
 import advent.code.Resolvedor;
 import advent.code.Utiles;
@@ -62,6 +63,14 @@ public class Dia08 implements Resolvedor {
     static boolean esFinFantasma(String nodo) {
         return nodo.endsWith("Z");
     }
+
+    /**
+     * El estado de un recorrido: el nodo actual y qué instrucción toca.
+     *
+     * @param nodo        el nodo
+     * @param instruccion la posición en las instrucciones
+     */
+    record Posicion(String nodo, int instruccion) {}
 
     /**
      * Los dos nodos a los que se llega desde un nodo.
@@ -143,12 +152,13 @@ public class Dia08 implements Resolvedor {
          *
          * <p>Que exista no está garantizado, así que se <b>comprueba</b>. El
          * estado del recorrido es el par (nodo, posición en las
-         * instrucciones): se avanza hasta que un estado se repite, y a partir
-         * de ahí todo se repite con el mismo largo de ciclo {@code λ}. Las
-         * llegadas hasta ese momento son entonces <em>todas</em> las
-         * llegadas, repetidas cada {@code λ} pasos. Si son exactamente los
-         * múltiplos de la primera, {@code g}, y {@code g} divide a {@code λ},
-         * las llegadas son los múltiplos de {@code g} para siempre.</p>
+         * instrucciones), y {@link Ciclo#detectar} avanza hasta que un estado
+         * se repite: a partir de ahí todo se repite con el mismo largo de
+         * ciclo {@code λ}. Las llegadas hasta ese momento son entonces
+         * <em>todas</em> las llegadas, repetidas cada {@code λ} pasos. Si son
+         * exactamente los múltiplos de la primera, {@code g}, y {@code g}
+         * divide a {@code λ}, las llegadas son los múltiplos de {@code g}
+         * para siempre.</p>
          *
          * @param inicio el nodo de partida
          * @param esFin  la condición de llegada
@@ -157,18 +167,16 @@ public class Dia08 implements Resolvedor {
          *                               son los múltiplos de la primera
          */
         long periodoDeLlegada(String inicio, Predicate<String> esFin) {
-            int largo = instrucciones.length();
-            Map<String, Long> vistos = new HashMap<>();   // "nodo:posición" → paso en que se vio
+            Ciclo<Posicion> recorrido = Ciclo.detectar(new Posicion(inicio, 0), posicion -> new Posicion(
+                    siguiente(posicion.nodo(), posicion.instruccion()),
+                    (posicion.instruccion() + 1) % instrucciones.length()));
+            // los pasos 1 … inicio + λ: el último es el primero que repite un estado
+            long paso = recorrido.estados().size();
+            long ciclo = recorrido.largo();
             List<Long> llegadas = new ArrayList<>();
-            String nodo = inicio;
-            long paso = 0;
-            while (vistos.putIfAbsent(nodo + ":" + paso % largo, paso) == null) {
-                nodo = siguiente(nodo, paso);
-                paso++;
-                if (esFin.test(nodo)) llegadas.add(paso);
+            for (long i = 1; i <= paso; i++) {
+                if (esFin.test(recorrido.estadoEn(i).nodo())) llegadas.add(i);
             }
-            // el estado del paso actual ya se había visto: el ciclo tiene largo λ
-            long ciclo = paso - vistos.get(nodo + ":" + paso % largo);
             if (llegadas.isEmpty()) throw new IllegalStateException("Desde " + inicio + " nunca se llega al destino");
             long periodo = llegadas.getFirst();
             boolean multiplos = ciclo % periodo == 0;

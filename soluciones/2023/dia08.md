@@ -102,14 +102,19 @@ Pero eso solo vale si las llegadas de cada fantasma son **exactamente los múlti
 
 #### Comprobar la periodicidad
 
-El recorrido de un fantasma depende solo del **estado** (nodo, posición en las instrucciones). Se avanza anotando los estados vistos hasta que uno se repite. A partir de ahí todo se repite con el mismo largo de ciclo `λ`, así que las llegadas anotadas hasta ese momento son **todas** las llegadas, repetidas cada `λ` pasos.
+El recorrido de un fantasma depende solo del **estado** (nodo, posición en las instrucciones). La utilidad `Ciclo.detectar` avanza ese estado hasta que uno se repite y devuelve los estados recorridos, dónde empieza el ciclo y cuánto mide (`λ`). A partir de ahí todo se repite cada `λ` pasos, así que las llegadas hasta ese momento son **todas** las llegadas:
 
 ```java
 // Dia08.java — Red.periodoDeLlegada()
-while (vistos.putIfAbsent(nodo + ":" + paso % largo, paso) == null) {
-    nodo = siguiente(nodo, paso);
-    paso++;
-    if (esFin.test(nodo)) llegadas.add(paso);
+Ciclo<Posicion> recorrido = Ciclo.detectar(new Posicion(inicio, 0), posicion -> new Posicion(
+        siguiente(posicion.nodo(), posicion.instruccion()),
+        (posicion.instruccion() + 1) % instrucciones.length()));
+// los pasos 1 … inicio + λ: el último es el primero que repite un estado
+long paso = recorrido.estados().size();
+long ciclo = recorrido.largo();
+List<Long> llegadas = new ArrayList<>();
+for (long i = 1; i <= paso; i++) {
+    if (esFin.test(recorrido.estadoEn(i).nodo())) llegadas.add(i);
 }
 ```
 
