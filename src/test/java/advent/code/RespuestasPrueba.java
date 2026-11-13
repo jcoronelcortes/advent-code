@@ -69,7 +69,8 @@ class RespuestasPrueba {
             "2023, 6, 4403592,      38017587",
             "2023, 7, 246163188,    245794069",
             "2023, 8, 13019,        13524038372771",
-            "2023, 9, 2043183816,   1118"
+            "2023, 9, 2043183816,   1118",
+            "2023, 10, 6690,        525"
     })
     void respuestas(int anio, int dia, String parte1, String parte2) throws Exception {
         assumeTrue(EntradaSalida.existeEntrada(anio, dia),

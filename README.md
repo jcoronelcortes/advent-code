@@ -181,3 +181,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [07](src/main/java/advent/code/y2023/Dia07.java) | Cartas de Camello | 246163188 | 245794069 | [ver](soluciones/2023/dia07.md) |
 | [08](src/main/java/advent/code/y2023/Dia08.java) | Páramo Embrujado | 13019 | 13524038372771 | [ver](soluciones/2023/dia08.md) |
 | [09](src/main/java/advent/code/y2023/Dia09.java) | Mantenimiento del Espejismo | 2043183816 | 1118 | [ver](soluciones/2023/dia09.md) |
+| [10](src/main/java/advent/code/y2023/Dia10.java) | Laberinto de Tuberías | 6690 | 525 | [ver](soluciones/2023/dia10.md) |
