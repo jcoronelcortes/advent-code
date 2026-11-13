@@ -85,11 +85,11 @@ Como los cables no tienen dirección, cada uno puede llevar flujo en cualquiera 
 
 ### Enunciado
 
-_Pendiente: aún no se ha publicado el enunciado de la segunda parte en el repositorio._
+El día 25 es el último del año y su segunda parte **no tiene un problema propio**: la segunda estrella se obtiene al completar todos los demás días.
 
 ### Solución
 
-TODO
+`parte2` devuelve el texto fijo `"estrella final"`, igual que el último día de 2024 y de 2025, para que la tabla anual y `RespuestasPrueba` traten este día como a los demás.
 
 ---
 
@@ -97,10 +97,10 @@ TODO
 
 | | Parte 1 | Parte 2 |
 |---|---|---|
-| **Pregunta** | Producto de los grupos al cortar tres cables | — |
+| **Pregunta** | Producto de los grupos al cortar tres cables | No tiene problema |
 | **Enfoque** | Flujo máximo = corte mínimo, con a lo sumo 4 caminos de aumento | — |
 | **Complejidad** | O(intentos × 4 × cables) | — |
-| **Resultado** | 548960 | — |
+| **Resultado** | 548960 | estrella final |
 
 ## Archivo de código
 

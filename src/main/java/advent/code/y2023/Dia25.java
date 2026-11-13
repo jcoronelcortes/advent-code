@@ -28,6 +28,9 @@ public class Dia25 implements Resolvedor {
     /** Cuántos cables se pueden cortar. */
     static final int CABLES = 3;
 
+    /** Lo que devuelve la parte 2, que no tiene un problema propio. */
+    static final String SIN_PARTE_2 = "estrella final";
+
     /**
      * Un corte de la red.
      *
@@ -52,14 +55,15 @@ public class Dia25 implements Resolvedor {
     }
 
     /**
-     * Parte 2: pendiente.
+     * Parte 2: el último día no tiene un segundo problema; la segunda
+     * estrella se obtiene al completar todos los demás días.
      *
-     * @param lineas el diagrama de conexiones
-     * @return la respuesta
+     * @param lineas el diagrama de conexiones (no se usa)
+     * @return {@link #SIN_PARTE_2}
      */
     @Override
     public String parte2(List<String> lineas) {
-        return "sin implementar";
+        return SIN_PARTE_2;
     }
 
     /**

@@ -2,7 +2,6 @@ package advent.code.y2023;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
@@ -134,9 +133,8 @@ class Dia25Prueba {
     // -------------------------------------------------------------------------
 
     @Test
-    @Disabled("TODO: completar el resultado esperado cuando se publique la parte 2")
-    @DisplayName("Parte 2: el ejemplo del enunciado")
-    void parte2_ejemploDelEnunciado() {
-        assertEquals("TODO", dia25.parte2(EJEMPLO));
+    @DisplayName("Parte 2: el último día no tiene segundo problema")
+    void parte2_sinProblema() {
+        assertEquals(Dia25.SIN_PARTE_2, dia25.parte2(EJEMPLO));
     }
 }
