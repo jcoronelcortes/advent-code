@@ -63,7 +63,8 @@ class RespuestasPrueba {
             "2024, 25, 3320,        estrella final",
             "2023, 1, 54667,        54203",
             "2023, 2, 2285,         77021",
-            "2023, 3, 536202,       78272573"
+            "2023, 3, 536202,       78272573",
+            "2023, 4, 27059,        5744979"
     })
     void respuestas(int anio, int dia, String parte1, String parte2) throws Exception {
         assumeTrue(EntradaSalida.existeEntrada(anio, dia),
