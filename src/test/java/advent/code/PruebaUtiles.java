@@ -81,4 +81,26 @@ class PruebaUtiles {
                 Utiles.numerosLargosPorLinea(List.of("30000000000   1")));
         assertEquals(List.of(List.of()), Utiles.numerosPorLinea(List.of("sin números")));
     }
+
+    @Test
+    @DisplayName("secciones con cantidad: devuelve las secciones si coinciden y falla si no")
+    void seccionesConCantidad() {
+        List<String> lineas = List.of("a", "", "b");
+        assertEquals(List.of(List.of("a"), List.of("b")), Utiles.secciones(lineas, 2));
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class, () -> Utiles.secciones(lineas, 3));
+        assertTrue(error.getMessage().contains("Se esperaban 3 secciones"), error.getMessage());
+    }
+
+    @Test
+    @DisplayName("leerNumeros con cantidad: devuelve los números si coinciden y falla si no")
+    void leerNumerosConCantidad() {
+        assertEquals(List.of(0, 4, 3, -3), Utiles.leerNumeros("p=0,4 v=3,-3", 4));
+        assertEquals(List.of(30000000000L, 1L), Utiles.leerNumerosLargos("30000000000 1", 2));
+        assertEquals(List.of(94L, 34L, 22L, 67L, 8400L, 5400L), Utiles.leerNumerosLargos(
+                List.of("Button A: X+94, Y+34", "Button B: X+22, Y+67", "Prize: X=8400, Y=5400"), 6));
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class, () -> Utiles.leerNumeros("1 2 3", 2));
+        assertTrue(error.getMessage().contains("Se esperaban 2 números y hay 3 en: 1 2 3"), error.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> Utiles.leerNumerosLargos("1", 2));
+        assertThrows(IllegalArgumentException.class, () -> Utiles.leerNumerosLargos(List.of("1", "2"), 3));
+    }
 }

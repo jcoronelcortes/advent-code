@@ -80,10 +80,8 @@ public class Dia01 implements Resolvedor {
         static Listas parsear(List<String> lineas) {
             List<Long> izquierda = new ArrayList<>();
             List<Long> derecha = new ArrayList<>();
-            for (List<Long> numeros : Utiles.numerosLargosPorLinea(lineas)) {
-                if (numeros.size() != 2) {
-                    throw new IllegalArgumentException("Se esperaban 2 números por línea y hay " + numeros);
-                }
+            for (String linea : Utiles.lineasNoVacias(lineas)) {
+                List<Long> numeros = Utiles.leerNumerosLargos(linea, 2);
                 izquierda.add(numeros.get(0));
                 derecha.add(numeros.get(1));
             }

@@ -94,7 +94,7 @@ class Dia12Prueba {
     /** Cada región como {@code "planta área perímetro"}, en orden de lectura. */
     private static List<String> describir(Grilla mapa) {
         return Dia12.regiones(mapa).stream()
-                .map(region -> region.planta() + " " + region.area() + " " + region.perimetro(mapa))
+                .map(region -> region.planta() + " " + region.area() + " " + region.perimetro())
                 .toList();
     }
 

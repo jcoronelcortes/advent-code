@@ -39,7 +39,7 @@ mvn exec:java -Dexec.mainClass="advent.code.Principal" -Dexec.args="2025"
 
 Revisar antes de escribir código nuevo:
 
-- `Utiles` — `leerNumeros` (int) y `leerNumerosLargos` (long) desde texto; `numerosPorLinea` / `numerosLargosPorLinea` (una lista por línea); `lineasNoVacias` y `secciones` (bloques separados por línea en blanco)
+- `Utiles` — `leerNumeros` (int) y `leerNumerosLargos` (long) desde texto; `numerosPorLinea` / `numerosLargosPorLinea` (una lista por línea); `lineasNoVacias` y `secciones` (bloques separados por línea en blanco); `secciones(lineas, n)`, `leerNumeros(texto, n)` y `leerNumerosLargos(texto o lineas, n)` exigen una cantidad exacta y fallan con un mensaje claro
 - `Matematicas` — mcd/mcm, `modulo` no negativo, potencia e inverso modular, resto chino, `sumaAritmetica`, dígitos, primos, Möbius; `sumaExacta` y `productoExacto` (detectan desborde)
 - `Rango` — intervalo cerrado `[inicio, fin]`: parseo `"a-b"`, intersección, resta, unión de solapados
 - `ConjuntoRangos` — unión de rangos: `contiene` (búsqueda binaria) y `cantidad`, sin enumerar valores

@@ -92,7 +92,7 @@ return OptionalLong.of(Math.addExact(Math.multiplyExact(a, COSTO_A), Math.multip
 
 Todo es aritmética entera exacta (con `Math.*Exact` para detectar desborde). Así no hay errores de redondeo al decidir si una solución es entera, como pasaría con `double`.
 
-Las máquinas se leen con `Utiles.secciones`, que separa los bloques por las líneas en blanco, y `Utiles.leerNumerosLargos`, que saca los 6 números de cada bloque.
+Las máquinas se leen con `Utiles.secciones`, que separa los bloques por las líneas en blanco, y `Utiles.leerNumerosLargos(bloque, 6)`, que saca los 6 números de cada bloque y falla si no son exactamente 6.
 
 #### Verificación
 

@@ -68,8 +68,8 @@ public class Dia14 implements Resolvedor {
      * @return el primer segundo de menor dispersión en ambos ejes
      */
     static long segundoMasAgrupado(List<Robot> robots, int ancho, int alto) {
-        int restoX = momentoMasAgrupado(robots, ancho, posicion -> posicion.x(), ancho, alto);
-        int restoY = momentoMasAgrupado(robots, alto, posicion -> posicion.y(), ancho, alto);
+        int restoX = momentoMasAgrupado(robots, ancho, Punto::x, ancho, alto);
+        int restoY = momentoMasAgrupado(robots, alto, Punto::y, ancho, alto);
         return Matematicas.restoChino(new long[]{restoX, restoY}, new long[]{ancho, alto});
     }
 
@@ -186,11 +186,9 @@ public class Dia14 implements Resolvedor {
      * @return los robots
      */
     static List<Robot> leerRobots(List<String> lineas) {
-        return Utiles.numerosPorLinea(lineas).stream()
-                .map(n -> {
-                    if (n.size() != 4) throw new IllegalArgumentException("Un robot debe tener 4 números: " + n);
-                    return new Robot(new Punto(n.get(0), n.get(1)), new Punto(n.get(2), n.get(3)));
-                })
+        return Utiles.lineasNoVacias(lineas).stream()
+                .map(linea -> Utiles.leerNumeros(linea, 4))
+                .map(n -> new Robot(new Punto(n.get(0), n.get(1)), new Punto(n.get(2), n.get(3))))
                 .toList();
     }
 }

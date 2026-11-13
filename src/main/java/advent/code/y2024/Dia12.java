@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.ToIntBiFunction;
+import java.util.function.ToIntFunction;
 
 /**
  * Año 2024 — Día 12: Grupos de Jardín
@@ -21,9 +21,6 @@ import java.util.function.ToIntBiFunction;
  * regiones separadas, y una región puede quedar dentro de otra.</p>
  */
 public class Dia12 implements Resolvedor {
-
-    /** Lados de una parcela cuadrada. */
-    private static final int LADOS = 4;
 
     /**
      * Parte 1: precio total de las cercas. El precio de una región es su
@@ -47,7 +44,7 @@ public class Dia12 implements Resolvedor {
      */
     @Override
     public String parte2(List<String> lineas) {
-        return String.valueOf(precioTotal(Grilla.desdeLineas(lineas), (region, mapa) -> region.lados()));
+        return String.valueOf(precioTotal(Grilla.desdeLineas(lineas), Region::lados));
     }
 
     /**
@@ -58,9 +55,9 @@ public class Dia12 implements Resolvedor {
      * @param medida medida de la cerca de una región
      * @return el precio total
      */
-    static long precioTotal(Grilla mapa, ToIntBiFunction<Region, Grilla> medida) {
+    static long precioTotal(Grilla mapa, ToIntFunction<Region> medida) {
         return regiones(mapa).stream()
-                .mapToLong(region -> (long) region.area() * medida.applyAsInt(region, mapa))
+                .mapToLong(region -> (long) region.area() * medida.applyAsInt(region))
                 .sum();
     }
 
@@ -78,18 +75,19 @@ public class Dia12 implements Resolvedor {
         }
 
         /**
-         * Lados de parcela que no tocan a otra parcela de la región: cada
-         * parcela aporta sus 4 lados menos los que comparte con vecinos de la
-         * misma planta. Un vecino con la misma letra siempre es de la misma
-         * región, porque la región incluye todo lo conectado.
+         * Lados de parcela que no tocan a otra parcela de la región: por cada
+         * parcela, cuántos de sus 4 vecinos no son de la región. Un vecino
+         * fuera del mapa tampoco es de la región, así que el borde del mapa
+         * cuenta solo.
          *
-         * @param mapa el mapa de parcelas
          * @return el perímetro
          */
-        int perimetro(Grilla mapa) {
+        int perimetro() {
             int perimetro = 0;
             for (Punto parcela : parcelas) {
-                perimetro += LADOS - mismaPlanta(mapa, parcela).size();
+                for (Punto vecino : parcela.vecinos()) {
+                    if (!parcelas.contains(vecino)) perimetro++;
+                }
             }
             return perimetro;
         }

@@ -100,7 +100,7 @@ Como el mapa está rodeado de paredes, la búsqueda nunca se sale de la grilla. 
 
 #### Utilidad nueva: `Direccion.desdeFlecha`
 
-Las flechas `^ v < >` aparecen en varios problemas de Advent of Code, así que su lectura se agregó a la utilidad `Direccion` en vez de quedar en este día. Los movimientos se leen uniendo todas las líneas de la segunda sección (`Utiles.secciones`) y convirtiendo cada carácter.
+Las flechas `^ v < >` aparecen en varios problemas de Advent of Code, así que su lectura se agregó a la utilidad `Direccion` en vez de quedar en este día. El input se separa con `Utiles.secciones(lineas, 2)`, que falla si no hay exactamente dos secciones (mapa y movimientos). Los movimientos se leen uniendo todas las líneas de la segunda sección y convirtiendo cada carácter.
 
 #### Verificación
 

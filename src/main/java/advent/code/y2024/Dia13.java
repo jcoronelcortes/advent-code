@@ -130,13 +130,8 @@ public class Dia13 implements Resolvedor {
      */
     static List<Maquina> leerMaquinas(List<String> lineas) {
         return Utiles.secciones(lineas).stream()
-                .map(bloque -> {
-                    List<Long> n = Utiles.leerNumerosLargos(bloque);
-                    if (n.size() != 6) {
-                        throw new IllegalArgumentException("Una máquina debe tener 6 números: " + bloque);
-                    }
-                    return new Maquina(n.get(0), n.get(1), n.get(2), n.get(3), n.get(4), n.get(5));
-                })
+                .map(bloque -> Utiles.leerNumerosLargos(bloque, 6))
+                .map(n -> new Maquina(n.get(0), n.get(1), n.get(2), n.get(3), n.get(4), n.get(5)))
                 .toList();
     }
 }

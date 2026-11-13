@@ -131,8 +131,8 @@ Revisar segundo a segundo funcionaría: las posiciones se repiten cada 101 × 10
 ```java
 // Dia14.java
 static long segundoMasAgrupado(List<Robot> robots, int ancho, int alto) {
-    int restoX = momentoMasAgrupado(robots, ancho, posicion -> posicion.x(), ancho, alto);
-    int restoY = momentoMasAgrupado(robots, alto, posicion -> posicion.y(), ancho, alto);
+    int restoX = momentoMasAgrupado(robots, ancho, Punto::x, ancho, alto);
+    int restoY = momentoMasAgrupado(robots, alto, Punto::y, ancho, alto);
     return Matematicas.restoChino(new long[]{restoX, restoY}, new long[]{ancho, alto});
 }
 ```

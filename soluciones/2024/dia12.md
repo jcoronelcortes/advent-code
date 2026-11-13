@@ -92,18 +92,20 @@ Así, las dos regiones de C del ejemplo grande quedan separadas solas: la BFS de
 
 #### El perímetro, parcela por parcela
 
-Cada parcela aporta sus 4 lados **menos** los que comparte con un vecino de la misma planta. No hace falta preguntar si ese vecino es de la *misma región*: si tiene la misma letra y se tocan, por definición están conectados.
+Cada lado de una parcela es parte del perímetro si del otro lado **no hay una parcela de la misma región**. Así que, por cada parcela, se cuentan los vecinos que no están en el conjunto de parcelas de la región:
 
 ```java
 // Dia12.java — Region.perimetro()
 int perimetro = 0;
 for (Punto parcela : parcelas) {
-    perimetro += LADOS - mismaPlanta(mapa, parcela).size();
+    for (Punto vecino : parcela.vecinos()) {
+        if (!parcelas.contains(vecino)) perimetro++;
+    }
 }
 return perimetro;
 ```
 
-Los lados contra el borde del mapa y contra otras plantas cuentan solos, porque `Grilla.vecinos` con filtro devuelve solo vecinos dentro del mapa y con la misma letra. Esto cubre las regiones dentro de otras: el lado entre una O y una X cuenta para el perímetro de las dos.
+No hace falta el mapa: un vecino fuera del mapa tampoco está en el conjunto, así que los lados contra el borde cuentan solos. Esto también cubre las regiones dentro de otras: el lado entre una O y una X cuenta para el perímetro de las dos, porque cada una tiene a la otra afuera de su conjunto.
 
 #### Verificación
 
@@ -197,14 +199,14 @@ Las dos partes solo cambian la medida de la cerca, así que comparten `precioTot
 
 ```java
 // Dia12.java
-static long precioTotal(Grilla mapa, ToIntBiFunction<Region, Grilla> medida) {
+static long precioTotal(Grilla mapa, ToIntFunction<Region> medida) {
     return regiones(mapa).stream()
-            .mapToLong(region -> (long) region.area() * medida.applyAsInt(region, mapa))
+            .mapToLong(region -> (long) region.area() * medida.applyAsInt(region))
             .sum();
 }
 ```
 
-con `Region::perimetro` en la parte 1 y `region.lados()` en la parte 2.
+con `Region::perimetro` en la parte 1 y `Region::lados` en la parte 2. Las dos medidas preguntan lo mismo, si una casilla es de la región, al conjunto de parcelas.
 
 #### Verificación
 
@@ -223,7 +225,7 @@ con `Region::perimetro` en la parte 1 y `region.lados()` en la parte 2.
 | | Parte 1 | Parte 2 |
 |---|---|---|
 | **Pregunta** | Suma de área × perímetro de cada región | Suma de área × cantidad de lados |
-| **Enfoque** | Una BFS por región; perímetro = 4 − vecinos iguales, por parcela | Lados = esquinas, contadas por parcela (convexas y cóncavas) |
+| **Enfoque** | Una BFS por región; perímetro = vecinos fuera de la región, por parcela | Lados = esquinas, contadas por parcela (convexas y cóncavas) |
 | **Complejidad** | O(parcelas) | O(parcelas) |
 | **Resultado** | 1488414 | 911750 |
 

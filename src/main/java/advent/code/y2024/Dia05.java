@@ -130,11 +130,7 @@ public class Dia05 implements Resolvedor {
          * @return el manual
          */
         static Manual parsear(List<String> lineas) {
-            List<List<String>> secciones = Utiles.secciones(lineas);
-            if (secciones.size() != 2) {
-                throw new IllegalArgumentException("Se esperaban 2 secciones (reglas y actualizaciones) y hay "
-                        + secciones.size());
-            }
+            List<List<String>> secciones = Utiles.secciones(lineas, 2);
             Set<Regla> reglas = new HashSet<>();
             for (List<Integer> regla : Utiles.numerosPorLinea(secciones.get(0))) {
                 reglas.add(new Regla(regla.get(0), regla.get(1)));

@@ -155,10 +155,7 @@ public class Dia15 implements Resolvedor {
          * @return el almacén al inicio
          */
         static Almacen parsear(List<String> lineas, boolean ancho) {
-            List<List<String>> secciones = Utiles.secciones(lineas);
-            if (secciones.size() != 2) {
-                throw new IllegalArgumentException("Se esperaban 2 secciones (mapa y movimientos) y hay " + secciones.size());
-            }
+            List<List<String>> secciones = Utiles.secciones(lineas, 2);
             List<Direccion> movimientos = String.join("", secciones.get(1)).chars()
                     .mapToObj(flecha -> Direccion.desdeFlecha((char) flecha))
                     .toList();

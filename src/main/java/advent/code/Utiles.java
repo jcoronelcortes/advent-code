@@ -65,6 +65,20 @@ public final class Utiles {
         return secciones;
     }
 
+    /**
+     * Igual que {@link #secciones(List)}, pero exige una cantidad exacta de
+     * secciones: falla con un mensaje claro si el input no tiene el formato
+     * esperado (ej. mapa y movimientos).
+     *
+     * @param lineas   líneas del input
+     * @param cantidad cantidad de secciones esperada
+     * @return las secciones
+     * @throws IllegalArgumentException si no hay exactamente esa cantidad
+     */
+    public static List<List<String>> secciones(List<String> lineas, int cantidad) {
+        return exigirCantidad(secciones(lineas), cantidad, "secciones separadas por línea en blanco", lineas);
+    }
+
     // -------------------------------------------------------------------------
     // Números
     // -------------------------------------------------------------------------
@@ -153,5 +167,57 @@ public final class Utiles {
             numeros.addAll(leerNumerosLargos(linea));
         }
         return numeros;
+    }
+
+    // -------------------------------------------------------------------------
+    // Números, con cantidad exacta
+    // -------------------------------------------------------------------------
+
+    /**
+     * Igual que {@link #leerNumeros(String)}, pero exige una cantidad exacta
+     * de números (ej. {@code p=0,4 v=3,-3} tiene 4).
+     *
+     * @param texto    cadena de entrada
+     * @param cantidad cantidad de números esperada
+     * @return los números, en orden
+     * @throws IllegalArgumentException si no hay exactamente esa cantidad
+     */
+    public static List<Integer> leerNumeros(String texto, int cantidad) {
+        return exigirCantidad(leerNumeros(texto), cantidad, "números", texto);
+    }
+
+    /**
+     * Igual que {@link #leerNumerosLargos(String)}, pero exige una cantidad
+     * exacta de números.
+     *
+     * @param texto    cadena de entrada
+     * @param cantidad cantidad de números esperada
+     * @return los números, en orden
+     * @throws IllegalArgumentException si no hay exactamente esa cantidad
+     */
+    public static List<Long> leerNumerosLargos(String texto, int cantidad) {
+        return exigirCantidad(leerNumerosLargos(texto), cantidad, "números", texto);
+    }
+
+    /**
+     * Igual que {@link #leerNumerosLargos(List)}, pero exige una cantidad
+     * exacta de números entre todas las líneas (ej. un bloque de 3 líneas
+     * que describe una máquina con 6 números).
+     *
+     * @param lineas   lista de líneas
+     * @param cantidad cantidad de números esperada
+     * @return los números, en orden
+     * @throws IllegalArgumentException si no hay exactamente esa cantidad
+     */
+    public static List<Long> leerNumerosLargos(List<String> lineas, int cantidad) {
+        return exigirCantidad(leerNumerosLargos(lineas), cantidad, "números", lineas);
+    }
+
+    private static <T> List<T> exigirCantidad(List<T> lista, int cantidad, String que, Object origen) {
+        if (lista.size() != cantidad) {
+            throw new IllegalArgumentException(
+                    "Se esperaban " + cantidad + " " + que + " y hay " + lista.size() + " en: " + origen);
+        }
+        return lista;
     }
 }
