@@ -53,4 +53,14 @@ class PruebaDireccion {
         assertEquals(new Punto(-1,  0), IZQUIERDA.comoPunto());
         assertEquals(new Punto( 1,  0), DERECHA.comoPunto());
     }
+
+    @Test
+    @DisplayName("desdeFlecha: ^ v < > y un carácter inválido")
+    void desdeFlecha() {
+        assertEquals(ARRIBA, Direccion.desdeFlecha('^'));
+        assertEquals(ABAJO, Direccion.desdeFlecha('v'));
+        assertEquals(IZQUIERDA, Direccion.desdeFlecha('<'));
+        assertEquals(DERECHA, Direccion.desdeFlecha('>'));
+        assertThrows(IllegalArgumentException.class, () -> Direccion.desdeFlecha('x'));
+    }
 }

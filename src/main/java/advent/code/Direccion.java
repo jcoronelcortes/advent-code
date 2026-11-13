@@ -23,6 +23,25 @@ public enum Direccion {
     }
 
     /** @return desplazamiento en el eje X (columna) */
+    /**
+     * Dirección que indica una flecha: {@code ^} arriba, {@code v} abajo,
+     * {@code <} izquierda y {@code >} derecha (como en las listas de
+     * movimientos de AoC).
+     *
+     * @param flecha uno de {@code ^ v < >}
+     * @return la dirección
+     * @throws IllegalArgumentException si no es una flecha
+     */
+    public static Direccion desdeFlecha(char flecha) {
+        return switch (flecha) {
+            case '^' -> ARRIBA;
+            case 'v' -> ABAJO;
+            case '<' -> IZQUIERDA;
+            case '>' -> DERECHA;
+            default -> throw new IllegalArgumentException("No es una flecha: '" + flecha + "'");
+        };
+    }
+
     public int dx() { return dx; }
 
     /** @return desplazamiento en el eje Y (fila) */

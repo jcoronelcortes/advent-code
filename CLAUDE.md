@@ -43,7 +43,7 @@ Revisar antes de escribir código nuevo:
 - `Matematicas` — mcd/mcm, `modulo` no negativo, potencia e inverso modular, resto chino, `sumaAritmetica`, dígitos, primos, Möbius; `sumaExacta` y `productoExacto` (detectan desborde)
 - `Rango` — intervalo cerrado `[inicio, fin]`: parseo `"a-b"`, intersección, resta, unión de solapados
 - `ConjuntoRangos` — unión de rangos: `contiene` (búsqueda binaria) y `cantidad`, sin enumerar valores
-- `Punto` (record, `x` = columna, `y` = fila) y `Direccion` (enum con giros); `Punto3D` (record `long`, `distanciaCuadrada`, `parsear`)
+- `Punto` (record, `x` = columna, `y` = fila) y `Direccion` (enum con giros y `desdeFlecha` para `^ v < >`); `Punto3D` (record `long`, `distanciaCuadrada`, `parsear`)
 - `Grilla` — grilla de caracteres: búsqueda (`buscarUnico` para el punto de partida: falla si falta o se repite), vecinos con filtro, `contarVecinos`, rotaciones, copia; `desdeLineas` ignora líneas en blanco al final y `desdeLineas(lineas, ' ')` admite líneas de distinto largo
 - `BFS` y `Dijkstra` — búsquedas genéricas con la misma forma de uso; ambas devuelven costos `long` y `Camino<N>`. `Dijkstra` admite heurística (A*) y `nodosEnCaminosMinimos`
 - `ConjuntosDisjuntos` — union-find sobre índices `0..n-1`: `unir`, `mismoGrupo`, `tamanio`, `tamanios`, `cantidadGrupos`
