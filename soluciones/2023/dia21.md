@@ -82,7 +82,7 @@ En el mapa infinito, partiendo de `S`, ¿en cuántas parcelas puede terminar el 
 
 #### El mapa infinito, con un BFS acotado
 
-El primer paso es poder contar en el mapa infinito para cantidades moderadas de pasos. Las coordenadas ya no se limitan al mapa: la posición `(x, y)` tiene lo que haya en `(x mod columnas, y mod filas)` (con `Math.floorMod`, que da restos no negativos). Para que el BFS termine, solo se exploran las posiciones a distancia Manhattan de a lo sumo el máximo que interesa. No se pierde nada: en un camino mínimo de largo `d`, todas las posiciones están a distancia Manhattan menor que `d`. El criterio de distancia y paridad de la parte 1 sigue valiendo.
+El primer paso es poder contar en el mapa infinito para cantidades moderadas de pasos. Las coordenadas ya no se limitan al mapa: la posición `(x, y)` tiene lo que haya en `(x mod columnas, y mod filas)`, con restos no negativos; eso lo hace `Grilla.obtenerCiclico`. Para que el BFS termine, solo se exploran las posiciones a distancia Manhattan de a lo sumo el máximo que interesa. No se pierde nada: en un camino mínimo de largo `d`, todas las posiciones están a distancia Manhattan menor que `d`. El criterio de distancia y paridad de la parte 1 sigue valiendo.
 
 #### Una cuadrática
 

@@ -152,21 +152,10 @@ class Dia24Prueba {
     }
 
     @Test
-    @DisplayName("Parte 2: si ninguna piedra choca con todos, falla con un mensaje claro; un sistema singular da null")
+    @DisplayName("Parte 2: si ninguna piedra choca con todos, falla con un mensaje claro")
     void parte2_sinSolucion() {
         List<String> conUnoDeMas = new ArrayList<>(EJEMPLO);
         conUnoDeMas.add("100, 100, 100 @ 1, 1, 1");
         assertThrows(IllegalStateException.class, () -> Dia24.lanzamiento(Dia24.leer(conUnoDeMas)));
-        Dia24.Racional cero = Dia24.Racional.de(BigInteger.ZERO), uno = Dia24.Racional.de(BigInteger.ONE);
-        assertNull(Dia24.resolver(new Dia24.Racional[][]{{uno, uno, uno}, {uno, uno, cero}}));
-    }
-
-    @Test
-    @DisplayName("Parte 2: las fracciones quedan reducidas y con denominador positivo")
-    void parte2_racional() {
-        Dia24.Racional a = new Dia24.Racional(BigInteger.valueOf(6), BigInteger.valueOf(-4));
-        assertEquals(new Dia24.Racional(BigInteger.valueOf(-3), BigInteger.valueOf(2)), a);
-        assertEquals(Dia24.Racional.de(BigInteger.ONE), a.dividir(a));
-        assertTrue(a.restar(a).esCero());
     }
 }

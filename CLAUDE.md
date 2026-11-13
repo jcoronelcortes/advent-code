@@ -43,14 +43,16 @@ Revisar antes de escribir código nuevo:
 - `Matematicas` — mcd/mcm, `modulo` no negativo, potencia e inverso modular, resto chino, `sumaAritmetica`, dígitos, primos, Möbius; `sumaExacta` y `productoExacto` (detectan desborde)
 - `Rango` — intervalo cerrado `[inicio, fin]`: parseo `"a-b"`, intersección, resta, unión de solapados
 - `ConjuntoRangos` — unión de rangos: `contiene` (búsqueda binaria) y `cantidad`, sin enumerar valores
-- `Punto` (record, `x` = columna, `y` = fila, `parsear("x,y")`) y `Direccion` (enum con giros y `desdeFlecha` para `^ v < >`); `Punto3D` (record `long`, `distanciaCuadrada`, `parsear`)
-- `Grilla` — grilla de caracteres: búsqueda (`buscarUnico` para el punto de partida: falla si falta o se repite), vecinos con filtro, `contarVecinos`, `rellenar` (balde de pintura con arreglos: mucho más rápido que `BFS.explorar` en grillas grandes), rotaciones, copia; `desdeLineas` ignora líneas en blanco al final y `desdeLineas(lineas, ' ')` admite líneas de distinto largo
+- `Punto` (record, `x` = columna, `y` = fila, `parsear("x,y")`) y `Direccion` (enum con giros, `esHorizontal`, `desdeFlecha` para `^ v < >` y `desdeLetra` para `U D L R`); `Punto3D` (record `long`, `distanciaCuadrada`, `parsear`)
+- `Grilla` — grilla de caracteres: búsqueda (`buscarUnico` para el punto de partida: falla si falta o se repite), vecinos con filtro, `contarVecinos`, `rellenar` (balde de pintura con arreglos: mucho más rápido que `BFS.explorar` en grillas grandes), `obtenerCiclico` (la grilla repetida infinitamente), rotaciones, copia; `desdeLineas` ignora líneas en blanco al final y `desdeLineas(lineas, ' ')` admite líneas de distinto largo
 - `Busqueda.primero(desde, hasta, condicion)` — búsqueda binaria: el menor valor que cumple una condición monótona (falso…falso, verdadero…verdadero), o vacío; no desborda aunque el intervalo abarque todos los `long`
 - `Ciclo.detectar(inicial, siguiente)` — para un estado que avanza con una regla fija: dónde empieza el ciclo, cuánto mide y los estados recorridos; `estadoEn(paso)` da el estado en cualquier paso (ej. mil millones) sin simularlo. Los estados deben tener `equals`/`hashCode` (un `record` sirve)
 - `BFS` y `Dijkstra` — búsquedas genéricas con la misma forma de uso; ambas devuelven costos `long` y `Camino<N>`. `Dijkstra` admite heurística (A*) y `nodosEnCaminosMinimos`
 - `ConjuntosDisjuntos` — union-find sobre índices `0..n-1`: `unir`, `mismoGrupo`, `tamanio`, `tamanios`, `cantidadGrupos`
 - `SumaAcumulada2D` — suma de cualquier rectángulo en O(1); `contar(grilla, condicion)` cuenta celdas
 - `CompresionCoordenadas` — coordenadas enormes → índices chicos con borde y huecos solo donde hay posiciones reales
+- `Poligono` — polígono de vértices enteros: `dobleArea` (Gauss), `puntosDelBorde`, `puntosInteriores` y `puntosCubiertos` (Pick); para contar casillas encerradas por un recorrido sin rellenar
+- `SistemaLineal` — eliminación gaussiana exacta con `BigFraction`: `resolverUnica`, y `escalonar` (forma escalonada reducida con pivotes y variables libres); `aumentada` arma la matriz desde coeficientes `long`
 - `Memoizador` — función recursiva con caché para programación dinámica (evita el `ConcurrentModificationException` de `computeIfAbsent` recursivo)
 - Librerías: Commons Lang3/IO/Math3, Guava (`RangeSet`, `Multiset`, `Table`), JGraphT; jqwik para pruebas basadas en propiedades
 - Java 25: `Gatherers.windowSliding`/`windowFixed` para recorrer ventanas consecutivas en streams

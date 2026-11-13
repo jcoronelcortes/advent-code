@@ -2,6 +2,7 @@ package advent.code.y2025;
 
 import advent.code.BFS;
 import advent.code.Resolvedor;
+import advent.code.SistemaLineal;
 import advent.code.Utiles;
 
 import org.apache.commons.math3.fraction.BigFraction;
@@ -144,7 +145,8 @@ public class Dia10 implements Resolvedor {
      * veces que el menor voltaje de los contadores que toca, porque los
      * contadores nunca bajan.</p>
      *
-     * <p>La eliminación usa fracciones exactas ({@link BigFraction}) para no
+     * <p>La eliminación usa fracciones exactas ({@link SistemaLineal}, con
+     * {@link BigFraction}) para no
      * perder precisión; después cada pivote se reescribe con enteros como
      * {@code x_p = (R − Σ C_f·x_f) / D}, para que la enumeración, que es la
      * parte costosa, use solo aritmética {@code long}.</p>
@@ -180,40 +182,11 @@ public class Dia10 implements Resolvedor {
             }
 
             // Forma escalonada reducida
-            List<Integer> columnasPivote = new ArrayList<>();
-            int fila = 0;
-            for (int columna = 0; columna < botones && fila < contadores; columna++) {
-                int elegida = -1;
-                for (int i = fila; i < contadores; i++) {
-                    if (!matriz[i][columna].equals(BigFraction.ZERO)) { elegida = i; break; }
-                }
-                if (elegida < 0) continue;
-                BigFraction[] temporal = matriz[fila]; matriz[fila] = matriz[elegida]; matriz[elegida] = temporal;
-
-                BigFraction pivote = matriz[fila][columna];
-                for (int j = 0; j <= botones; j++) matriz[fila][j] = matriz[fila][j].divide(pivote);
-                for (int i = 0; i < contadores; i++) {
-                    if (i == fila || matriz[i][columna].equals(BigFraction.ZERO)) continue;
-                    BigFraction factor = matriz[i][columna];
-                    for (int j = 0; j <= botones; j++) {
-                        matriz[i][j] = matriz[i][j].subtract(factor.multiply(matriz[fila][j]));
-                    }
-                }
-                columnasPivote.add(columna);
-                fila++;
-            }
-
-            // Una fila 0 = c con c ≠ 0 significa que no hay solución
-            boolean sinSolucion = false;
-            for (int i = fila; i < contadores; i++) {
-                if (!matriz[i][botones].equals(BigFraction.ZERO)) sinSolucion = true;
-            }
-            inconsistente = sinSolucion;
-
-            pivotes = columnasPivote.stream().mapToInt(Integer::intValue).toArray();
-            libres = java.util.stream.IntStream.range(0, botones)
-                    .filter(j -> !columnasPivote.contains(j))
-                    .toArray();
+            SistemaLineal.Escalonada escalonada = SistemaLineal.escalonar(matriz);
+            inconsistente = !escalonada.consistente();
+            pivotes = escalonada.pivotes();
+            libres = escalonada.libres();
+            matriz = escalonada.matriz();
 
             // x_p = b'_p − Σ a'_pf · x_f  →  multiplicar por el mcm de los denominadores
             constante = new long[pivotes.length];

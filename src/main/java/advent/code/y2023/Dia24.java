@@ -1,10 +1,13 @@
 package advent.code.y2023;
 
 import advent.code.Resolvedor;
+import advent.code.SistemaLineal;
 import advent.code.Utiles;
+import org.apache.commons.math3.fraction.BigFraction;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Año 2023 — Día 24: Nunca Me Digas las Probabilidades
@@ -69,7 +72,7 @@ public class Dia24 implements Resolvedor {
      *
      * <p>que son tres ecuaciones lineales en las seis incógnitas. Con dos
      * pares de granizos ({@code 0-j} y {@code 0-k}) hay seis ecuaciones, que
-     * se resuelven exactamente con fracciones. Si el sistema queda singular
+     * se resuelven exactamente con fracciones ({@link SistemaLineal}). Si el sistema queda singular
      * (por ejemplo, con velocidades paralelas), se prueba con otros granizos.
      * Al final se comprueba que la piedra tenga coordenadas enteras y choque
      * con <b>todos</b> los granizos en un instante no negativo.</p>
@@ -81,12 +84,12 @@ public class Dia24 implements Resolvedor {
     static Granizo lanzamiento(List<Granizo> granizos) {
         for (int j = 1; j < granizos.size(); j++) {
             for (int k = j + 1; k < granizos.size(); k++) {
-                Racional[][] sistema = new Racional[6][];
+                BigFraction[][] sistema = new BigFraction[6][];
                 System.arraycopy(ecuaciones(granizos.get(0), granizos.get(j)), 0, sistema, 0, 3);
                 System.arraycopy(ecuaciones(granizos.get(0), granizos.get(k)), 0, sistema, 3, 3);
-                Racional[] solucion = resolver(sistema);
-                if (solucion == null) continue;
-                Granizo piedra = aEnteros(solucion);
+                Optional<BigFraction[]> solucion = SistemaLineal.resolverUnica(sistema);
+                if (solucion.isEmpty()) continue;
+                Granizo piedra = aEnteros(solucion.get());
                 for (Granizo granizo : granizos) {
                     if (!choca(piedra, granizo)) {
                         throw new IllegalStateException("La piedra " + piedra + " no choca con " + granizo);
@@ -95,14 +98,14 @@ public class Dia24 implements Resolvedor {
                 return piedra;
             }
         }
-        throw new IllegalStateException("No se pudo determinar la piedra: todos los sistemas son singulares");
+        throw new IllegalStateException("No se pudo determinar la piedra: ningún sistema tiene solución única");
     }
 
     /**
      * Las tres ecuaciones lineales del par {@code (a, b)}, como filas
      * {@code [Px, Py, Pz, Vx, Vy, Vz | término independiente]}.
      */
-    private static Racional[][] ecuaciones(Granizo a, Granizo b) {
+    private static BigFraction[][] ecuaciones(Granizo a, Granizo b) {
         long ax = b.vx() - a.vx(), ay = b.vy() - a.vy(), az = b.vz() - a.vz();
         long bx = b.px() - a.px(), by = b.py() - a.py(), bz = b.pz() - a.pz();
         // c = p_b × v_b − p_a × v_a
@@ -112,10 +115,10 @@ public class Dia24 implements Resolvedor {
                 {0, az, -ay, 0, -bz, by},
                 {-az, 0, ax, bz, 0, -bx},
                 {ay, -ax, 0, -by, bx, 0}};
-        Racional[][] filas = new Racional[3][7];
+        BigFraction[][] filas = new BigFraction[3][7];
         for (int f = 0; f < 3; f++) {
-            for (int c = 0; c < 6; c++) filas[f][c] = Racional.de(BigInteger.valueOf(coeficientes[f][c]));
-            filas[f][6] = Racional.de(cb[f].subtract(ca[f]));
+            for (int c = 0; c < 6; c++) filas[f][c] = new BigFraction(coeficientes[f][c]);
+            filas[f][6] = new BigFraction(cb[f].subtract(ca[f]));
         }
         return filas;
     }
@@ -130,43 +133,14 @@ public class Dia24 implements Resolvedor {
                 x1.multiply(y2).subtract(y1.multiply(x2))};
     }
 
-    /**
-     * Resuelve un sistema cuadrado con eliminación gaussiana sobre
-     * fracciones exactas.
-     *
-     * @param sistema las filas, cada una con los coeficientes y al final el término independiente
-     * @return la solución, o {@code null} si el sistema es singular
-     */
-    static Racional[] resolver(Racional[][] sistema) {
-        int n = sistema.length;
-        Racional[][] m = new Racional[n][];
-        for (int f = 0; f < n; f++) m[f] = sistema[f].clone();
-        for (int col = 0; col < n; col++) {
-            int pivote = col;
-            while (pivote < n && m[pivote][col].esCero()) pivote++;
-            if (pivote == n) return null;
-            Racional[] temporal = m[col];
-            m[col] = m[pivote];
-            m[pivote] = temporal;
-            for (int f = 0; f < n; f++) {
-                if (f == col || m[f][col].esCero()) continue;
-                Racional factor = m[f][col].dividir(m[col][col]);
-                for (int c = col; c <= n; c++) m[f][c] = m[f][c].restar(factor.multiplicar(m[col][c]));
-            }
-        }
-        Racional[] solucion = new Racional[n];
-        for (int f = 0; f < n; f++) solucion[f] = m[f][n].dividir(m[f][f]);
-        return solucion;
-    }
-
     /** La solución como piedra, si todas sus coordenadas son enteras. */
-    private static Granizo aEnteros(Racional[] solucion) {
+    private static Granizo aEnteros(BigFraction[] solucion) {
         long[] valores = new long[6];
         for (int i = 0; i < 6; i++) {
-            if (!solucion[i].denominador().equals(BigInteger.ONE)) {
+            if (!solucion[i].getDenominator().equals(BigInteger.ONE)) {
                 throw new IllegalStateException("La piedra no tiene coordenadas enteras: " + List.of(solucion));
             }
-            valores[i] = solucion[i].numerador().longValueExact();
+            valores[i] = solucion[i].getNumerator().longValueExact();
         }
         return new Granizo(valores[0], valores[1], valores[2], valores[3], valores[4], valores[5]);
     }
@@ -179,59 +153,17 @@ public class Dia24 implements Resolvedor {
         long[] dp = {granizo.px() - piedra.px(), granizo.py() - piedra.py(), granizo.pz() - piedra.pz()};
         long[] dv = {piedra.vx() - granizo.vx(), piedra.vy() - granizo.vy(), piedra.vz() - granizo.vz()};
         // En cada eje: dp = t·dv. Si dv = 0, dp tiene que ser 0; si no, t = dp / dv para todos los ejes
-        Racional t = null;
+        BigFraction t = null;
         for (int eje = 0; eje < 3; eje++) {
             if (dv[eje] == 0) {
                 if (dp[eje] != 0) return false;
                 continue;
             }
-            Racional este = Racional.de(BigInteger.valueOf(dp[eje])).dividir(Racional.de(BigInteger.valueOf(dv[eje])));
+            BigFraction este = new BigFraction(dp[eje], dv[eje]);
             if (t != null && !t.equals(este)) return false;
             t = este;
         }
-        return t == null || t.numerador().signum() >= 0;
-    }
-
-    /**
-     * Una fracción exacta {@code numerador / denominador}, siempre reducida y
-     * con el denominador positivo (así dos fracciones iguales son
-     * {@code equals}).
-     */
-    record Racional(BigInteger numerador, BigInteger denominador) {
-
-        Racional {
-            if (denominador.signum() == 0) throw new ArithmeticException("División por cero");
-            if (denominador.signum() < 0) {
-                numerador = numerador.negate();
-                denominador = denominador.negate();
-            }
-            BigInteger mcd = numerador.gcd(denominador);
-            if (!mcd.equals(BigInteger.ONE) && mcd.signum() != 0) {
-                numerador = numerador.divide(mcd);
-                denominador = denominador.divide(mcd);
-            }
-        }
-
-        static Racional de(BigInteger entero) {
-            return new Racional(entero, BigInteger.ONE);
-        }
-
-        boolean esCero() {
-            return numerador.signum() == 0;
-        }
-
-        Racional restar(Racional otro) {
-            return new Racional(numerador.multiply(otro.denominador).subtract(otro.numerador.multiply(denominador)),
-                    denominador.multiply(otro.denominador));
-        }
-
-        Racional multiplicar(Racional otro) {
-            return new Racional(numerador.multiply(otro.numerador), denominador.multiply(otro.denominador));
-        }
-
-        Racional dividir(Racional otro) {
-            return new Racional(numerador.multiply(otro.denominador), denominador.multiply(otro.numerador));
-        }
+        return t == null || t.compareTo(BigFraction.ZERO) >= 0;
     }
 
     /**

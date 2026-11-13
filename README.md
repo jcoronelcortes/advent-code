@@ -20,12 +20,12 @@ src/
       EntradaSalida.java      # Lectura de archivos de input
       Punto.java              # Coordenadas 2D (record)
       Punto3D.java            # Coordenadas 3D (record, long): distancia al cuadrado y Manhattan
-      Direccion.java          # Enum de direcciones cardinales
+      Direccion.java          # Enum de direcciones cardinales: giros, flechas ^ v < > y letras U D L R
       Utiles.java             # Números (int y long) de texto o por línea, líneas no vacías, secciones
       Matematicas.java        # MCD/MCM, aritmética modular, resto chino, Möbius, dígitos, suma/producto exactos
       Rango.java              # Intervalos [inicio, fin]: intersección, resta, unión
       ConjuntoRangos.java     # Unión de rangos: pertenencia (búsqueda binaria) y cantidad
-      Grilla.java             # Grilla de caracteres (admite líneas de distinto largo): búsqueda, vecinos, rotaciones
+      Grilla.java             # Grilla de caracteres (admite líneas de distinto largo): búsqueda, vecinos, rotaciones, repetición infinita
       BFS.java                # Búsqueda en anchura genérica
       Dijkstra.java           # Camino de costo mínimo genérico (y A*)
       Camino.java             # Resultado de BFS y Dijkstra: nodos + costo
@@ -35,6 +35,8 @@ src/
       ConjuntosDisjuntos.java # Union-find: unir grupos, mismo grupo, tamaños
       SumaAcumulada2D.java    # Suma de cualquier rectángulo en O(1)
       CompresionCoordenadas.java # Coordenadas enormes → índices chicos, con huecos exactos
+      Poligono.java           # Área (Gauss) y puntos enteros del borde y del interior (Pick)
+      SistemaLineal.java      # Sistemas lineales exactos con fracciones (eliminación gaussiana)
       y{anio}/
         Dia01.java ...        # Una clase por día (y2025: Dia01 ... Dia12; y2024: ... Dia25)
     resources/
@@ -48,7 +50,8 @@ src/
       PruebaRango.java, PruebaConjuntoRangos.java, PruebaGrilla.java, PruebaBFS.java,
       PruebaDijkstra.java, PruebaMemoizador.java, PruebaConjuntosDisjuntos.java,
       PruebaPunto3D.java, PruebaSumaAcumulada2D.java, PruebaCompresionCoordenadas.java,
-      PruebaBusqueda.java, PruebaCiclo.java, PruebaPrincipal.java
+      PruebaBusqueda.java, PruebaCiclo.java, PruebaPoligono.java, PruebaSistemaLineal.java,
+      PruebaPrincipal.java
       y{anio}/
         Dia01Prueba.java ...
 soluciones/

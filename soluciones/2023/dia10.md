@@ -132,18 +132,7 @@ Solo quedan encerradas **4** casillas: los dos pares de abajo a la izquierda y a
 
 Los centros de las casillas del lazo, recorridas en orden, forman un **polígono** con vértices en coordenadas enteras. Las casillas encerradas son exactamente los **puntos enteros del interior** de ese polígono, y para contarlos alcanzan dos fórmulas clásicas.
 
-**Fórmula de Gauss** (o del "cordón de zapato"): el área de un polígono es la mitad del valor absoluto de la suma de `x[i]·y[i+1] − x[i+1]·y[i]` sobre todos sus lados. Se calcula el doble para quedarse con enteros:
-
-```java
-// Dia10.java — Lazo.dobleArea()
-long suma = 0;
-for (int i = 0; i < casillas.size(); i++) {
-    Punto actual = casillas.get(i);
-    Punto siguiente = casillas.get((i + 1) % casillas.size());
-    suma += (long) actual.x() * siguiente.y() - (long) siguiente.x() * actual.y();
-}
-return Math.abs(suma);
-```
+**Fórmula de Gauss** (o del "cordón de zapato"): el área de un polígono es la mitad del valor absoluto de la suma de `x[i]·y[i+1] − x[i+1]·y[i]` sobre todos sus lados. Se calcula el doble para quedarse con enteros.
 
 **Teorema de Pick**: para un polígono con vértices enteros, `área = interiores + borde / 2 − 1`, donde `borde` es la cantidad de puntos enteros sobre el borde. Acá el borde son las casillas del lazo (cada paso avanza exactamente una casilla). Despejando:
 
@@ -151,9 +140,11 @@ return Math.abs(suma);
 interiores = área − borde / 2 + 1   →   (2·área − borde + 2) / 2
 ```
 
+Las dos fórmulas están en la utilidad compartida `Poligono` (que también usa el día 18), así que contar las casillas encerradas es pasarle el lazo:
+
 ```java
 // Dia10.java — Lazo.casillasEncerradas()
-return (dobleArea() - casillas.size() + 2) / 2;
+return Poligono.puntosInteriores(casillas);
 ```
 
 Lo de "colarse entre tuberías" se resuelve solo: no hace falta recorrer los espacios de afuera, porque se cuentan directamente los puntos del interior del polígono. Por eso en la parte 1 convenía guardar el lazo **en orden**.

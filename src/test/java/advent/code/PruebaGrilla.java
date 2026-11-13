@@ -315,4 +315,22 @@ class PruebaGrilla {
         assertEquals(conBFS, mapa);
         assertEquals(conBFS.contar('o'), rellenadas);
     }
+
+    @Test
+    @DisplayName("obtenerCiclico: fuera de la grilla repite la grilla en todas las direcciones")
+    void obtenerCiclico() {
+        Grilla grilla = Grilla.desdeLineas(List.of("ab", "cd", "ef"));
+        assertEquals('a', grilla.obtenerCiclico(new Punto(0, 0)));
+        assertEquals('d', grilla.obtenerCiclico(new Punto(1, 1)));
+        assertEquals('a', grilla.obtenerCiclico(new Punto(2, 3)));      // una copia a la derecha y abajo
+        assertEquals('f', grilla.obtenerCiclico(new Punto(-1, -1)));    // la copia de arriba a la izquierda
+        assertEquals('c', grilla.obtenerCiclico(new Punto(-200, 301)));
+        for (int x = -7; x <= 7; x++) {
+            for (int y = -7; y <= 7; y++) {
+                Punto p = new Punto(x, y);
+                assertEquals(grilla.obtenerCiclico(p), grilla.obtenerCiclico(new Punto(x + 2, y + 3)));
+                if (grilla.estaDentro(p)) assertEquals(grilla.obtener(p), grilla.obtenerCiclico(p));
+            }
+        }
+    }
 }

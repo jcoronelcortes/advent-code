@@ -147,6 +147,19 @@ public final class Grilla {
     }
 
     /**
+     * Obtiene el carácter de una posición como si la grilla se repitiera
+     * infinitamente en todas las direcciones: {@code (x, y)} tiene lo mismo
+     * que {@code (x mod columnas, y mod filas)}, con restos no negativos (ej.
+     * 2023 día 21, un jardín infinito).
+     *
+     * @param punto cualquier posición, dentro o fuera de la grilla
+     * @return el carácter de la copia de la grilla en la que cae
+     */
+    public char obtenerCiclico(Punto punto) {
+        return celdas[Math.floorMod(punto.y(), filas())][Math.floorMod(punto.x(), columnas())];
+    }
+
+    /**
      * Cambia el carácter de una posición.
      *
      * @param punto posición {@code (x=columna, y=fila)}

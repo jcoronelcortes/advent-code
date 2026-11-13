@@ -3,6 +3,7 @@ package advent.code.y2023;
 import advent.code.BFS;
 import advent.code.Direccion;
 import advent.code.Grilla;
+import advent.code.Poligono;
 import advent.code.Punto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -186,7 +187,7 @@ class Dia10Prueba {
     @DisplayName("Parte 2: el lazo cuadrado encierra 1 casilla, y su área es 4")
     void parte2_cuadrado() {
         Dia10.Lazo lazo = Dia10.Lazo.desde(Grilla.desdeLineas(CUADRADO));
-        assertEquals(8, lazo.dobleArea());   // centros de (1,1) a (3,3): un cuadrado de 2 × 2
+        assertEquals(8, Poligono.dobleArea(lazo.casillas()));   // centros de (1,1) a (3,3): un cuadrado de 2 × 2
         assertEquals(1, lazo.casillasEncerradas());
     }
 

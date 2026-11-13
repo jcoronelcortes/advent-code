@@ -63,27 +63,24 @@ En vez de dibujar la zanja y rellenar el interior, se usa la misma idea que en e
 - La **fórmula de Gauss** (del "cordón de zapato") da su área: la mitad del valor absoluto de la suma de `x·y' − x'·y` sobre cada lado.
 - El **teorema de Pick** relaciona esa área con los puntos enteros: `área = interiores + borde/2 − 1`, donde `borde` es la cantidad de puntos enteros sobre el borde, o sea las casillas de la zanja (la suma de los metros).
 
-Lo que se cava es la zanja más el interior: `interiores + borde = área + borde/2 + 1`. Todo se calcula con el doble del área para no usar fracciones:
+Lo que se cava es la zanja más el interior: `interiores + borde = área + borde/2 + 1`. Las dos fórmulas están en la utilidad compartida `Poligono` (la misma que usa el día 10), así que alcanza con armar la lista de vértices, comprobar que la zanja vuelva al inicio y pedir los puntos cubiertos:
 
 ```java
 // Dia18.java — volumen()
-long x = 0, y = 0, dobleArea = 0, borde = 0;
+List<Punto> vertices = new ArrayList<>();
+Punto actual = new Punto(0, 0);
 for (Tramo tramo : tramos) {
-    long nuevoX = x + tramo.direccion().dx() * tramo.metros();
-    long nuevoY = y + tramo.direccion().dy() * tramo.metros();
-    dobleArea = Math.addExact(dobleArea,
-            Math.subtractExact(Math.multiplyExact(x, nuevoY), Math.multiplyExact(nuevoX, y)));
-    borde += tramo.metros();
-    x = nuevoX;
-    y = nuevoY;
+    vertices.add(actual);
+    actual = new Punto(Math.toIntExact(actual.x() + tramo.direccion().dx() * tramo.metros()),
+            Math.toIntExact(actual.y() + tramo.direccion().dy() * tramo.metros()));
 }
-if (x != 0 || y != 0) {
-    throw new IllegalArgumentException("La zanja no vuelve al inicio: termina en (" + x + ", " + y + ")");
+if (!actual.equals(new Punto(0, 0))) {
+    throw new IllegalArgumentException("La zanja no vuelve al inicio: termina en " + actual);
 }
-return (Math.abs(dobleArea) + borde) / 2 + 1;
+return Poligono.puntosCubiertos(vertices);
 ```
 
-Los productos usan operaciones exactas (`Math.multiplyExact` y compañía), que fallan en vez de desbordar en silencio; en esta parte sobra, pero en la parte 2 las coordenadas llegan a millones. El cálculo solo depende de la cantidad de tramos, no de su largo, y no importa si la zanja se recorre en sentido horario o antihorario (por el valor absoluto). Si la zanja no vuelve al inicio falla con un mensaje claro, igual que una línea que no tiene el formato esperado.
+`Poligono` calcula todo con el doble del área para no usar fracciones, y con operaciones exactas (`Math.addExact` y compañía), que fallan en vez de desbordar en silencio; en esta parte sobra, pero en la parte 2 las coordenadas llegan a millones. Por lo mismo, cada coordenada se pasa a `int` con `Math.toIntExact`. El cálculo solo depende de la cantidad de tramos, no de su largo, y no importa si la zanja se recorre en sentido horario o antihorario (por el valor absoluto). Si la zanja no vuelve al inicio falla con un mensaje claro, igual que una línea que no tiene el formato esperado.
 
 #### Verificación
 
@@ -132,7 +129,7 @@ Direccion direccion = switch (color.charAt(5)) {
 return new Tramo(direccion, Long.parseLong(color.substring(0, 5), 16));
 ```
 
-Las dos partes comparten el formato de la línea y la forma de leer el plan (`leerPlan` recibe la interpretación de cada línea). Con el input real las coordenadas llegan a unos 10 millones, así que los productos de la fórmula de Gauss rondan 10¹⁴ y caben holgados en un `long`; de todos modos se calculan con operaciones exactas.
+Las dos partes comparten el formato de la línea y la forma de leer el plan (`leerPlan` recibe la interpretación de cada línea). Con el input real las coordenadas llegan a unos 10 millones, así que caben en un `int` y los productos de la fórmula de Gauss rondan 10¹⁴, holgados en un `long`; de todos modos se calculan con operaciones exactas.
 
 #### Verificación
 

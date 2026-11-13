@@ -22,7 +22,6 @@ public enum Direccion {
         this.dy = dy;
     }
 
-    /** @return desplazamiento en el eje X (columna) */
     /**
      * Dirección que indica una flecha: {@code ^} arriba, {@code v} abajo,
      * {@code <} izquierda y {@code >} derecha (como en las listas de
@@ -42,6 +41,29 @@ public enum Direccion {
         };
     }
 
+    /**
+     * Dirección que indica una letra: {@code U} arriba (<em>up</em>), {@code D}
+     * abajo, {@code L} izquierda y {@code R} derecha (como en los planes de
+     * movimiento de AoC, ej. 2023 día 18).
+     *
+     * @param letra uno de {@code U D L R}
+     * @return la dirección
+     * @throws IllegalArgumentException si no es una de esas letras
+     */
+    public static Direccion desdeLetra(char letra) {
+        return switch (letra) {
+            case 'U' -> ARRIBA;
+            case 'D' -> ABAJO;
+            case 'L' -> IZQUIERDA;
+            case 'R' -> DERECHA;
+            default -> throw new IllegalArgumentException("No es una dirección U/D/L/R: '" + letra + "'");
+        };
+    }
+
+    /** @return si es izquierda o derecha (se mueve en el eje X) */
+    public boolean esHorizontal() { return dy == 0; }
+
+    /** @return desplazamiento en el eje X (columna) */
     public int dx() { return dx; }
 
     /** @return desplazamiento en el eje Y (fila) */

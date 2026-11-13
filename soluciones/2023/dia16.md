@@ -65,7 +65,7 @@ Cada casilla decide, según la dirección de entrada, hacia dónde sigue el haz 
 
 ```java
 // Dia16.java — salidas()
-boolean horizontal = entrada == Direccion.IZQUIERDA || entrada == Direccion.DERECHA;
+boolean horizontal = entrada.esHorizontal();
 return switch (casilla) {
     case '.' -> List.of(entrada);
     case '/' -> List.of(horizontal ? entrada.giroIzquierda() : entrada.giroDerecha());

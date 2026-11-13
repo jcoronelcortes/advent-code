@@ -130,7 +130,8 @@ public class Dia21 implements Resolvedor {
      * {@code maximo} pasos.
      *
      * <p>Las coordenadas no se limitan al mapa: una posición {@code (x, y)}
-     * tiene lo que tenga {@code (x mod columnas, y mod filas)}. Para que el
+     * tiene lo que tenga {@code (x mod columnas, y mod filas)}
+     * ({@link Grilla#obtenerCiclico}). Para que el
      * BFS termine, solo se exploran las posiciones a distancia Manhattan de a
      * lo sumo {@code maximo} desde {@code S}; no se pierde nada, porque en un
      * camino mínimo de largo {@code d ≤ maximo} todas las posiciones están a
@@ -144,8 +145,7 @@ public class Dia21 implements Resolvedor {
         Punto inicio = mapa.buscarUnico(INICIO);
         return BFS.explorar(inicio, p -> p.vecinos().stream()
                 .filter(v -> v.distanciaManhattan(inicio) <= maximo)
-                .filter(v -> mapa.obtener(new Punto(Math.floorMod(v.x(), mapa.columnas()),
-                        Math.floorMod(v.y(), mapa.filas()))) != ROCA)
+                .filter(v -> mapa.obtenerCiclico(v) != ROCA)
                 .toList());
     }
 

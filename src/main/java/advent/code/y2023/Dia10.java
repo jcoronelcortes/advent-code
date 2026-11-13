@@ -2,6 +2,7 @@ package advent.code.y2023;
 
 import advent.code.Direccion;
 import advent.code.Grilla;
+import advent.code.Poligono;
 import advent.code.Punto;
 import advent.code.Resolvedor;
 
@@ -134,43 +135,20 @@ public class Dia10 implements Resolvedor {
         }
 
         /**
-         * El doble del área del polígono que forman los centros de las
-         * casillas del lazo, con la fórmula de Gauss (del "cordón de
-         * zapato"): la suma de {@code x[i]·y[i+1] − x[i+1]·y[i]} sobre todos
-         * los lados. Se devuelve el doble para que sea entero.
-         *
-         * @return el doble del área (siempre positivo)
-         */
-        long dobleArea() {
-            long suma = 0;
-            for (int i = 0; i < casillas.size(); i++) {
-                Punto actual = casillas.get(i);
-                Punto siguiente = casillas.get((i + 1) % casillas.size());
-                suma += (long) actual.x() * siguiente.y() - (long) siguiente.x() * actual.y();
-            }
-            return Math.abs(suma);
-        }
-
-        /**
          * Cuántas casillas quedan encerradas por el lazo.
          *
-         * <p>Los centros de las casillas del lazo son los vértices de un
-         * polígono con coordenadas enteras, y las casillas encerradas son los
-         * puntos enteros de su interior. El <b>teorema de Pick</b> dice que
-         * {@code área = interiores + borde / 2 − 1}, donde {@code borde} es
-         * la cantidad de puntos enteros sobre el borde: acá, las casillas del
-         * lazo (cada paso del recorrido avanza una casilla). Despejando,
-         * {@code interiores = área − borde / 2 + 1}, todo multiplicado por 2
-         * para no usar fracciones.</p>
-         *
-         * <p>Así no hace falta preocuparse por "colarse entre tuberías": se
+         * <p>Los centros de las casillas del lazo, en orden, son los vértices
+         * de un polígono con coordenadas enteras, y las casillas encerradas
+         * son los puntos enteros de su interior: se cuentan con la fórmula de
+         * Gauss y el teorema de Pick ({@link Poligono#puntosInteriores}).
+         * Así no hace falta preocuparse por "colarse entre tuberías": se
          * cuentan los puntos de adentro del polígono, sin recorrer los
          * espacios de afuera.</p>
          *
          * @return la cantidad de casillas encerradas
          */
         long casillasEncerradas() {
-            return (dobleArea() - casillas.size() + 2) / 2;
+            return Poligono.puntosInteriores(casillas);
         }
     }
 }

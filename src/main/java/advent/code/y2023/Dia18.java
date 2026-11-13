@@ -1,8 +1,11 @@
 package advent.code.y2023;
 
 import advent.code.Direccion;
+import advent.code.Poligono;
+import advent.code.Punto;
 import advent.code.Resolvedor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -76,13 +79,7 @@ public class Dia18 implements Resolvedor {
      */
     static Tramo leerTramo(String linea) {
         Matcher partes = partes(linea);
-        Direccion direccion = switch (partes.group(1)) {
-            case "U" -> Direccion.ARRIBA;
-            case "D" -> Direccion.ABAJO;
-            case "L" -> Direccion.IZQUIERDA;
-            default -> Direccion.DERECHA;
-        };
-        return new Tramo(direccion, Long.parseLong(partes.group(2)));
+        return new Tramo(Direccion.desdeLetra(partes.group(1).charAt(0)), Long.parseLong(partes.group(2)));
     }
 
     /**
@@ -118,38 +115,32 @@ public class Dia18 implements Resolvedor {
     /**
      * Cuántas casillas quedan cavadas: la zanja más todo su interior.
      *
-     * <p>Los centros de las casillas de la zanja forman un polígono con
-     * vértices enteros en los extremos de cada tramo. Su área sale de la
-     * fórmula de Gauss (del "cordón de zapato"), sumando
-     * {@code x·y' − x'·y} por cada lado. El <b>teorema de Pick</b> relaciona
-     * esa área con los puntos enteros: {@code área = interiores + borde/2 − 1},
-     * donde {@code borde} son los puntos sobre el borde, es decir las casillas
-     * de la zanja (la suma de los metros). Las casillas cavadas son
-     * {@code interiores + borde = área + borde/2 + 1}.</p>
+     * <p>Los centros de las casillas de la zanja forman un polígono cuyos
+     * vértices son los extremos de cada tramo, con coordenadas enteras. Las
+     * casillas cavadas son los puntos enteros del interior más los del borde
+     * (las casillas de la zanja), y se cuentan con la fórmula de Gauss y el
+     * teorema de Pick ({@link Poligono#puntosCubiertos}).</p>
      *
      * <p>No hace falta dibujar la laguna: el cálculo depende solo de la
-     * cantidad de tramos, no de lo grandes que sean. Los productos se hacen
-     * con operaciones exactas, que fallan en vez de desbordar en silencio si
-     * las coordenadas fueran demasiado grandes.</p>
+     * cantidad de tramos, no de lo grandes que sean. Las cuentas son exactas
+     * y fallan en vez de desbordar en silencio si las coordenadas fueran
+     * demasiado grandes.</p>
      *
      * @param tramos los tramos de la zanja, en orden
      * @return la cantidad de casillas cavadas
      * @throws IllegalArgumentException si los tramos no cierran el lazo
      */
     static long volumen(List<Tramo> tramos) {
-        long x = 0, y = 0, dobleArea = 0, borde = 0;
+        List<Punto> vertices = new ArrayList<>();
+        Punto actual = new Punto(0, 0);
         for (Tramo tramo : tramos) {
-            long nuevoX = x + tramo.direccion().dx() * tramo.metros();
-            long nuevoY = y + tramo.direccion().dy() * tramo.metros();
-            dobleArea = Math.addExact(dobleArea,
-                    Math.subtractExact(Math.multiplyExact(x, nuevoY), Math.multiplyExact(nuevoX, y)));
-            borde += tramo.metros();
-            x = nuevoX;
-            y = nuevoY;
+            vertices.add(actual);
+            actual = new Punto(Math.toIntExact(actual.x() + tramo.direccion().dx() * tramo.metros()),
+                    Math.toIntExact(actual.y() + tramo.direccion().dy() * tramo.metros()));
         }
-        if (x != 0 || y != 0) {
-            throw new IllegalArgumentException("La zanja no vuelve al inicio: termina en (" + x + ", " + y + ")");
+        if (!actual.equals(new Punto(0, 0))) {
+            throw new IllegalArgumentException("La zanja no vuelve al inicio: termina en " + actual);
         }
-        return (Math.abs(dobleArea) + borde) / 2 + 1;
+        return Poligono.puntosCubiertos(vertices);
     }
 }

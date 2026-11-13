@@ -110,13 +110,13 @@ Son tres ecuaciones (una por coordenada) en las seis incógnitas `Px, Py, Pz, Vx
 
 #### Resolver exacto y comprobar
 
-Los coeficientes llegan a unos 10¹⁷, así que el sistema se resuelve con **eliminación gaussiana sobre fracciones exactas** (un `Racional` con `BigInteger`, siempre reducido). Si el sistema queda singular (por ejemplo, con velocidades paralelas) se prueba con otros granizos. Al final no se confía en el álgebra: se exige que la solución tenga coordenadas enteras y se comprueba que la piedra choque con **cada uno** de los granizos, en un mismo instante no negativo en los tres ejes.
+Los coeficientes llegan a unos 10¹⁷, así que el sistema se resuelve con **eliminación gaussiana sobre fracciones exactas**, con la utilidad compartida `SistemaLineal` (que trabaja con `BigFraction` de Commons Math y también usa 2025 día 10). Si el sistema queda singular (por ejemplo, con velocidades paralelas) se prueba con otros granizos. Al final no se confía en el álgebra: se exige que la solución tenga coordenadas enteras y se comprueba que la piedra choque con **cada uno** de los granizos, en un mismo instante no negativo en los tres ejes.
 
 ```java
 // Dia24.java — lanzamiento()
-Racional[] solucion = resolver(sistema);
-if (solucion == null) continue;
-Granizo piedra = aEnteros(solucion);
+Optional<BigFraction[]> solucion = SistemaLineal.resolverUnica(sistema);
+if (solucion.isEmpty()) continue;
+Granizo piedra = aEnteros(solucion.get());
 for (Granizo granizo : granizos) {
     if (!choca(piedra, granizo)) {
         throw new IllegalStateException("La piedra " + piedra + " no choca con " + granizo);
@@ -133,8 +133,7 @@ Con el input real, la piedra sale de (363206674204110, 368909610239045, 15659242
 - La piedra del ejemplo es exactamente `24, 13, 10 @ -3, 1, 2`, y choca con cada granizo en el instante que da el enunciado (5, 3, 4, 6 y 1).
 - `choca` exige el mismo instante en los tres ejes, no negativo, y maneja los ejes en los que la piedra y el granizo van a la misma velocidad.
 - En el ejemplo, coincide con una **fuerza bruta** que prueba todos los instantes de choque chicos con los dos primeros granizos, deduce la piedra de esos dos choques y se queda con las que chocan con todos: sale una sola, la misma.
-- Si se agrega un granizo con el que ninguna piedra puede chocar, falla con un mensaje claro; un sistema singular se detecta.
-- Las fracciones quedan reducidas y con denominador positivo.
+- Si se agrega un granizo con el que ninguna piedra puede chocar, falla con un mensaje claro.
 - Con el input real, un script independiente en Python usa un método completamente distinto: **busca la velocidad**. Si dos granizos tienen la misma velocidad en un eje, la distancia entre ellos en ese eje no cambia, y la piedra los alcanza a los dos, así que esa distancia tiene que ser múltiplo de la diferencia de velocidades entre la piedra y ellos. Eso deja **una sola velocidad candidata** por eje entre −1000 y 1000. Con ella saca la posición de los dos primeros granizos, comprueba que choque con todos, y obtiene la misma piedra.
 
 **Resultado con el input real: 888708704663413**

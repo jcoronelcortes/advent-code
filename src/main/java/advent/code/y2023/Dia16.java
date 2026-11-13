@@ -143,7 +143,7 @@ public class Dia16 implements Resolvedor {
      * @throws IllegalArgumentException si la casilla tiene un carácter desconocido
      */
     static List<Direccion> salidas(char casilla, Direccion entrada) {
-        boolean horizontal = entrada == Direccion.IZQUIERDA || entrada == Direccion.DERECHA;
+        boolean horizontal = entrada.esHorizontal();
         return switch (casilla) {
             case '.' -> List.of(entrada);
             case '/' -> List.of(horizontal ? entrada.giroIzquierda() : entrada.giroDerecha());
