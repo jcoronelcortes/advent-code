@@ -190,3 +190,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [13](src/main/java/advent/code/y2023/Dia13.java) | Punto de Incidencia | 30802 | 37876 | [ver](soluciones/2023/dia13.md) |
 | [14](src/main/java/advent/code/y2023/Dia14.java) | Plato Reflector Parabólico | 107053 | 88371 | [ver](soluciones/2023/dia14.md) |
 | [15](src/main/java/advent/code/y2023/Dia15.java) | Biblioteca de Lentes | 516657 | 210906 | [ver](soluciones/2023/dia15.md) |
+| [16](src/main/java/advent/code/y2023/Dia16.java) | El Suelo Será Lava | 8125 | 8489 | [ver](soluciones/2023/dia16.md) |
