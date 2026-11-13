@@ -192,3 +192,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [15](src/main/java/advent/code/y2023/Dia15.java) | Biblioteca de Lentes | 516657 | 210906 | [ver](soluciones/2023/dia15.md) |
 | [16](src/main/java/advent/code/y2023/Dia16.java) | El Suelo Será Lava | 8125 | 8489 | [ver](soluciones/2023/dia16.md) |
 | [17](src/main/java/advent/code/y2023/Dia17.java) | Crisol Torpe | 797 | 914 | [ver](soluciones/2023/dia17.md) |
+| [18](src/main/java/advent/code/y2023/Dia18.java) | Laguna del Lavaducto | 62573 | 54662804037719 | [ver](soluciones/2023/dia18.md) |
