@@ -127,32 +127,55 @@ La parte 1 ya detectaba ciclos (un estado de posición y dirección que se repit
 
 #### Clave: solo importan las celdas del recorrido original
 
-Hay ~16 000 celdas libres, pero un obstáculo nuevo solo cambia algo si el guardia **choca** con él. Si se pone en una celda por la que el guardia nunca pasaba, el recorrido es exactamente el mismo y el guardia sale del mapa como antes. Así que alcanza con probar las ~5400 celdas del **recorrido original** (menos la posición inicial, que el enunciado excluye):
-
-```java
-// Dia06.java — parte2()
-Grilla mapa = Grilla.desdeLineas(lineas);
-Punto inicio = buscarGuardia(mapa);
-long posiciones = patrullar(mapa).visitadas().stream()
-        .filter(candidata -> !candidata.equals(inicio))
-        .filter(candidata -> patrullar(mapa, candidata).enCiclo())
-        .count();
-```
+Hay ~16 000 celdas libres, pero un obstáculo nuevo solo cambia algo si el guardia **choca** con él. Si se pone en una celda por la que el guardia nunca pasaba, el recorrido es exactamente el mismo y el guardia sale del mapa como antes. Así que alcanza con probar las ~5400 celdas del **recorrido original** (menos la posición inicial, que el enunciado excluye).
 
 #### El obstáculo extra como parámetro
 
-En vez de copiar la grilla y escribirle un `#` en cada una de las miles de pruebas, `patrullar` recibe el obstáculo nuevo como parámetro y lo trata igual que a los del mapa:
+En vez de copiar la grilla y escribirle un `#` en cada una de las miles de pruebas, el obstáculo nuevo se pasa como parámetro y se trata igual que a los del mapa. Así lo hace `patrullar`, y también el simulador rápido de más abajo:
 
 ```java
 // Dia06.java — patrullar()
 if (mapa.obtener(adelante) == OBSTACULO || adelante.equals(obstaculoExtra)) {
 ```
 
-Son ~5400 simulaciones de unos miles de pasos cada una: tarda ~0,7 s.
+#### Optimización: empezar donde cambia algo, y simular con arreglos
+
+Con `patrullar` tal cual, son ~5400 simulaciones completas de miles de pasos cada una, con conjuntos de objetos `Estado`: tardaba ~1 s. Dos ideas lo bajan a ~11 ms:
+
+**1. Empezar justo antes del obstáculo.** Hasta que el guardia intenta entrar por primera vez a la celda del obstáculo nuevo, su recorrido es **idéntico** al original. Así que, en una sola pasada del recorrido original, se guarda para cada celda el estado del guardia justo antes de entrar a ella por primera vez (`antesDeEntrar`), y cada prueba arranca desde ahí:
+
+```java
+// Dia06.java — parte2()
+Grilla mapa = Grilla.desdeLineas(lineas);
+DetectorDeCiclos detector = new DetectorDeCiclos(mapa);
+long posiciones = antesDeEntrar(mapa).entrySet().stream()
+        .filter(entrada -> detector.quedaAtrapado(entrada.getValue(), entrada.getKey()))
+        .count();
+```
+
+**2. Un simulador con arreglos (`DetectorDeCiclos`).** Para la parte 2 no hace falta el conjunto de posiciones visitadas, solo saber si hay ciclo:
+
+- los obstáculos se guardan en un `boolean[]` indexado por celda;
+- solo se guardan los estados en los que el guardia **gira**. Todo ciclo incluye algún giro, porque en línea recta el guardia termina saliendo del mapa; así que si hay ciclo, se repite un estado de giro;
+- los estados vistos se marcan con el número de prueba en una tabla de enteros que nunca se vacía: un estado "está visto" solo si su marca es la de la prueba actual.
+
+```java
+// Dia06.java — DetectorDeCiclos.quedaAtrapado()
+if (obstaculo[siguiente] || siguiente == extra) {
+    int estado = (y * ancho + x) * DIRECCIONES + direccion.ordinal();
+    if (vistoEnGeneracion[estado] == generacion) return true;
+    vistoEnGeneracion[estado] = generacion;
+    direccion = direccion.giroDerecha();
+} else {
+```
+
+`patrullar` sigue siendo la versión de referencia, más fácil de leer, y la usa la parte 1. Las pruebas comparan las dos versiones.
 
 #### Verificación
 
 - Prueba con el ejemplo (6), y comprobando que las 6 posiciones `O` de los diagramas del enunciado provocan un ciclo.
+- El simulador rápido da lo mismo que `patrullar` en cada celda del recorrido del ejemplo, y un mismo detector reutilizado entre pruebas no arrastra estados de una prueba a la otra. `antesDeEntrar` cubre todo el recorrido salvo la posición inicial.
+- Con el input real, un chequeo puntual comparó `patrullar` con el simulador rápido en las 5408 celdas candidatas: coinciden en todas (2022 con ciclo).
 - En el ejemplo, probar **todas** las celdas libres da lo mismo que probar solo el recorrido original; un obstáculo fuera del recorrido no cambia nada.
 - Con el input real, un script independiente en Python usa **otro criterio** para detectar el bucle: en vez de guardar estados, considera que el guardia está atrapado si da más pasos que `4 × celdas` (la cantidad de estados posibles). Obtiene el mismo resultado.
 
@@ -165,7 +188,7 @@ Son ~5400 simulaciones de unos miles de pasos cada una: tarda ~0,7 s.
 | | Parte 1 | Parte 2 |
 |---|---|---|
 | **Pregunta** | Posiciones distintas que visita el guardia | Posiciones de un obstáculo nuevo que lo atrapan en un bucle |
-| **Enfoque** | Simular el protocolo con `Direccion`, detectando ciclos por (posición, dirección) | Probar un obstáculo en cada celda del recorrido original |
+| **Enfoque** | Simular el protocolo con `Direccion`, detectando ciclos por (posición, dirección) | Probar un obstáculo en cada celda del recorrido original, desde justo antes de entrar, con un simulador de arreglos |
 | **Complejidad** | O(pasos del recorrido) | O(celdas del recorrido × pasos) |
 | **Resultado** | 5409 | 2022 |
 

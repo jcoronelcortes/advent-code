@@ -1,6 +1,5 @@
 package advent.code.y2025;
 
-import advent.code.BFS;
 import advent.code.CompresionCoordenadas;
 import advent.code.Grilla;
 import advent.code.Punto;
@@ -101,7 +100,7 @@ public class Dia09 implements Resolvedor {
      * lado pasa por dentro de un hueco.</p>
      *
      * <p>Sobre esa grilla se marcan los lados del polígono, se rellena el
-     * exterior con una BFS desde una esquina (que siempre está afuera, porque
+     * exterior con {@link Grilla#rellenar} desde una esquina (que siempre está afuera, porque
      * la compresión deja un borde vacío) y se preparan sumas acumuladas
      * ({@link SumaAcumulada2D}) de las celdas exteriores. Así, saber si un
      * rectángulo toca alguna celda exterior cuesta O(1).</p>
@@ -125,9 +124,7 @@ public class Dia09 implements Resolvedor {
 
             Grilla piso = new Grilla(filas.tamanio(), columnas.tamanio(), '.');
             marcarLados(piso, rojas);
-            BFS.explorar(new Punto(0, 0), punto -> piso.vecinos(punto, celda -> celda != LADO))
-                    .keySet()
-                    .forEach(punto -> piso.establecer(punto, AFUERA));
+            piso.rellenar(new Punto(0, 0), celda -> celda != LADO, AFUERA);
             afuera = SumaAcumulada2D.contar(piso, celda -> celda == AFUERA);
         }
 

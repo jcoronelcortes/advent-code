@@ -70,6 +70,15 @@ Con 1000 cajas hay `1000 · 999 / 2 ≈ 500 000` pares: se calculan todos y se o
 
 Se verificó con el input real que no hay distancias empatadas en el corte de las 1000 conexiones, así que el orden de los empates no afecta la respuesta.
 
+**Cada par en un solo `long`.** Crear medio millón de objetos `Par` y ordenarlos con un comparador tardaba ~135 ms. Para evitarlo, cada par se guarda en un único número: la distancia al cuadrado en los bits altos y los índices de las dos cajas en los bajos (10 bits cada uno alcanzan para 1000 cajas):
+
+```java
+// Dia08.java — paresOrdenados()
+claves[k++] = (distancia << (2 * bitsIndice)) | ((long) i << bitsIndice) | j;
+```
+
+Ordenar un `long[]` es mucho más rápido que ordenar objetos, y ordenar esas claves equivale a ordenar por distancia, y a igual distancia por índices (el mismo orden de antes). Con 20 bits para los índices, a la distancia le quedan 43 bits (hasta ~8,8 · 10¹²), de sobra para los ~3 · 10¹⁰ posibles. Si alguna no entrara, el código falla con un error en vez de mezclar bits. `paresOrdenados` sigue devolviendo una `List<Par>`, pero es una vista que arma cada `Par` recién cuando se lo pide, y solo se piden los que se usan. Así, cada parte tarda ~30 ms.
+
 #### 2. Unir con conjuntos disjuntos (union-find)
 
 Para saber qué cajas están en el mismo circuito se agregó la utilidad **`ConjuntosDisjuntos`**: mantiene una partición de los elementos `0..n-1` y permite unir dos grupos y consultar su tamaño en tiempo casi constante (con compresión de caminos y unión por tamaño). Las cajas se identifican por su posición en el input.

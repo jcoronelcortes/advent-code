@@ -5,8 +5,8 @@ import advent.code.Punto3D;
 import advent.code.Resolvedor;
 import advent.code.Utiles;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.AbstractList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -112,24 +112,53 @@ public class Dia08 implements Resolvedor {
     record Par(int a, int b, long distanciaCuadrada) {}
 
     /**
-     * Todos los pares de cajas, del más cercano al más lejano.
+     * Todos los pares de cajas, del más cercano al más lejano (a igual
+     * distancia, por índices).
      *
      * <p>Se compara la distancia <b>al cuadrado</b>: ordena igual que la
-     * distancia real y es exacta con enteros, sin raíces ni {@code double}.
-     * Con 1000 cajas son ~500 000 pares.</p>
+     * distancia real y es exacta con enteros, sin raíces ni {@code double}.</p>
+     *
+     * <p>Con 1000 cajas son ~500 000 pares. Para no crear y ordenar medio
+     * millón de objetos, cada par se guarda en un solo {@code long}: la
+     * distancia en los bits altos y los dos índices en los bajos. Ordenar
+     * esos números ordena por distancia, y a igual distancia por índices.
+     * La lista devuelta es una vista que arma cada {@link Par} recién cuando
+     * se lo pide, y solo se piden los que se usan.</p>
      *
      * @param cajas posiciones de las cajas
      * @return pares ordenados por distancia creciente
+     * @throws IllegalArgumentException si las distancias son tan grandes que
+     *         no entran junto con los índices en 63 bits
      */
     static List<Par> paresOrdenados(List<Punto3D> cajas) {
-        List<Par> pares = new ArrayList<>(cajas.size() * (cajas.size() - 1) / 2);
+        int bitsIndice = Math.max(1, 32 - Integer.numberOfLeadingZeros(cajas.size() - 1));
+        long maximaDistancia = 1L << (Long.SIZE - 1 - 2 * bitsIndice);
+        long mascara = (1L << bitsIndice) - 1;
+        long[] claves = new long[cajas.size() * (cajas.size() - 1) / 2];
+        int k = 0;
         for (int i = 0; i < cajas.size(); i++) {
             for (int j = i + 1; j < cajas.size(); j++) {
-                pares.add(new Par(i, j, cajas.get(i).distanciaCuadrada(cajas.get(j))));
+                long distancia = cajas.get(i).distanciaCuadrada(cajas.get(j));
+                if (distancia >= maximaDistancia) {
+                    throw new IllegalArgumentException("Distancia demasiado grande para codificar el par: " + distancia);
+                }
+                claves[k++] = (distancia << (2 * bitsIndice)) | ((long) i << bitsIndice) | j;
             }
         }
-        pares.sort(Comparator.comparingLong(Par::distanciaCuadrada));
-        return pares;
+        Arrays.sort(claves);
+        return new AbstractList<>() {
+            @Override
+            public Par get(int indice) {
+                long clave = claves[indice];
+                return new Par((int) ((clave >>> bitsIndice) & mascara), (int) (clave & mascara),
+                        clave >>> (2 * bitsIndice));
+            }
+
+            @Override
+            public int size() {
+                return claves.length;
+            }
+        };
     }
 
     /**

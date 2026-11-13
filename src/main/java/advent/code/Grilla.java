@@ -29,6 +29,8 @@ import java.util.function.Predicate;
  */
 public final class Grilla {
 
+    private static final Direccion[] DIRECCIONES = Direccion.values();
+
     private final char[][] celdas;
 
     /**
@@ -351,6 +353,57 @@ public final class Grilla {
     // -------------------------------------------------------------------------
     // Transformaciones (devuelven una grilla nueva)
     // -------------------------------------------------------------------------
+
+    /**
+     * Rellena con un carácter la zona conectada (sin diagonales) que empieza
+     * en un punto: todas las celdas transitables que se alcanzan desde ahí.
+     * Es el "balde de pintura" de un editor de imágenes; sirve, por ejemplo,
+     * para marcar el exterior de un polígono dibujado en la grilla.
+     *
+     * <p>Hace lo mismo que una BFS ({@link BFS#explorar}) seguida de
+     * {@link #establecer} en cada celda alcanzada, pero con arreglos
+     * indexados por celda en vez de {@code HashMap} y {@code Punto}: en
+     * grillas de cientos de miles de celdas es muchas veces más rápido.</p>
+     *
+     * <p>Primero se recorre la zona y recién después se escribe el relleno,
+     * así que {@code transitable} nunca ve el carácter de relleno.</p>
+     *
+     * @param inicio      punto de partida
+     * @param transitable qué celdas forman parte de la zona
+     * @param relleno     carácter que se escribe en la zona
+     * @return cantidad de celdas rellenadas ({@code 0} si el inicio está
+     *         fuera de la grilla o no es transitable)
+     */
+    public int rellenar(Punto inicio, Predicate<Character> transitable, char relleno) {
+        if (!estaDentro(inicio) || !transitable.test(obtener(inicio))) return 0;
+        int ancho = columnas();
+        boolean[] alcanzada = new boolean[filas() * ancho];
+        int[] cola = new int[filas() * ancho];
+        int frente = 0;
+        int fin = 0;
+        int primera = inicio.y() * ancho + inicio.x();
+        alcanzada[primera] = true;
+        cola[fin++] = primera;
+        while (frente < fin) {
+            int actual = cola[frente++];
+            int x = actual % ancho;
+            int y = actual / ancho;
+            for (Direccion direccion : DIRECCIONES) {
+                int vecinoX = x + direccion.dx();
+                int vecinoY = y + direccion.dy();
+                if (vecinoX < 0 || vecinoY < 0 || vecinoX >= ancho || vecinoY >= filas()) continue;
+                int vecino = vecinoY * ancho + vecinoX;
+                if (!alcanzada[vecino] && transitable.test(celdas[vecinoY][vecinoX])) {
+                    alcanzada[vecino] = true;
+                    cola[fin++] = vecino;
+                }
+            }
+        }
+        for (int i = 0; i < fin; i++) {
+            celdas[cola[i] / ancho][cola[i] % ancho] = relleno;
+        }
+        return fin;
+    }
 
     /**
      * Crea una copia independiente de la grilla.

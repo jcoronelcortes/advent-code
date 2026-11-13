@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -125,5 +126,40 @@ class Dia06Prueba {
         assertEquals(Dia06.patrullar(mapa).visitadas(), Dia06.patrullar(mapa, new Punto(0, 0)).visitadas());
         assertFalse(Dia06.patrullar(mapa).visitadas().contains(new Punto(0, 0)));
         assertFalse(mapa.buscarTodos('.').contains(inicio));
+    }
+
+    @Test
+    @DisplayName("Parte 2: el detector rápido coincide con patrullar para cada celda del recorrido del ejemplo")
+    void parte2_detectorCoincideConPatrullar() {
+        Grilla mapa = Grilla.desdeLineas(EJEMPLO);
+        Dia06.DetectorDeCiclos detector = new Dia06.DetectorDeCiclos(mapa);
+        Map<Punto, Dia06.Estado> antes = Dia06.antesDeEntrar(mapa);
+        assertFalse(antes.isEmpty());
+        antes.forEach((candidata, estado) -> assertEquals(
+                Dia06.patrullar(mapa, candidata).enCiclo(), detector.quedaAtrapado(estado, candidata),
+                "obstáculo en " + candidata));
+    }
+
+    @Test
+    @DisplayName("Parte 2: antesDeEntrar cubre todo el recorrido original salvo la posición inicial")
+    void parte2_antesDeEntrarCubreElRecorrido() {
+        Grilla mapa = Grilla.desdeLineas(EJEMPLO);
+        Set<Punto> esperadas = new HashSet<>(Dia06.patrullar(mapa).visitadas());
+        esperadas.remove(mapa.buscarUnico('^'));
+        assertEquals(esperadas, Dia06.antesDeEntrar(mapa).keySet());
+    }
+
+    @Test
+    @DisplayName("Parte 2: el detector reutilizado entre pruebas no arrastra estados de la anterior")
+    void parte2_detectorReutilizable() {
+        Grilla mapa = Grilla.desdeLineas(EJEMPLO);
+        Dia06.DetectorDeCiclos detector = new Dia06.DetectorDeCiclos(mapa);
+        Map<Punto, Dia06.Estado> antes = Dia06.antesDeEntrar(mapa);
+        Punto conCiclo = new Punto(3, 6);   // primera 'O' de los diagramas del enunciado
+        Punto sinCiclo = antes.keySet().stream().filter(c -> !Dia06.patrullar(mapa, c).enCiclo()).findFirst().orElseThrow();
+        for (int i = 0; i < 3; i++) {
+            assertTrue(detector.quedaAtrapado(antes.get(conCiclo), conCiclo));
+            assertFalse(detector.quedaAtrapado(antes.get(sinCiclo), sinCiclo));
+        }
     }
 }

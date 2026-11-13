@@ -161,7 +161,7 @@ En el input real hay un par de coordenadas Y consecutivas, aunque no cambia la r
 #### Rellenar el exterior y consultar en O(1)
 
 1. Se marcan los lados del polígono en la grilla comprimida.
-2. Se rellena el **exterior** con una BFS (`BFS.explorar`) desde la esquina `(0, 0)`, sin cruzar los lados.
+2. Se rellena el **exterior** desde la esquina `(0, 0)`, sin cruzar los lados, con `Grilla.rellenar` (el "balde de pintura"). Es una búsqueda en anchura escrita con arreglos indexados por celda. La grilla comprimida tiene unas 250 000 celdas, y con una BFS genérica (`BFS.explorar`, que guarda cada celda en un `HashMap`) este paso tardaba ~90 ms; con `rellenar` tarda unos pocos milisegundos.
 3. Se calculan **sumas acumuladas 2D** de las celdas exteriores con la utilidad `SumaAcumulada2D`. Con ellas, la cantidad de celdas exteriores dentro de cualquier rectángulo se obtiene con 4 accesos a una tabla, en O(1):
 
 ```java
@@ -196,7 +196,7 @@ Para cada uno de los ~123 000 pares, se calcula el área y, solo si supera la me
 | | Parte 1 | Parte 2 |
 |---|---|---|
 | **Pregunta** | Rectángulo más grande con baldosas rojas en esquinas opuestas | Lo mismo, pero dentro del polígono |
-| **Enfoque** | Probar todos los pares; área con extremos incluidos, en `long` | Compresión de coordenadas + BFS del exterior + sumas acumuladas 2D |
+| **Enfoque** | Probar todos los pares; área con extremos incluidos, en `long` | Compresión de coordenadas + relleno del exterior + sumas acumuladas 2D |
 | **Complejidad** | O(n²), con n baldosas | O(n²) |
 | **Resultado** | 4777824480 | 1542119040 |
 

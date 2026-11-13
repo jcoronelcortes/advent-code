@@ -264,4 +264,55 @@ class PruebaGrilla {
         assertThrows(IllegalArgumentException.class, () -> mapa.buscarUnico('S'));   // no está
         assertThrows(IllegalArgumentException.class, () -> mapa.buscarUnico('#'));   // está dos veces
     }
+
+    @Test
+    @DisplayName("rellenar: pinta solo la zona conectada sin diagonales, y no cruza los bordes")
+    void rellenar() {
+        Grilla mapa = Grilla.desdeLineas(List.of(
+                "..#..",
+                "..#..",
+                "###..",
+                "...#.",
+                "....#"));
+        assertEquals(4, mapa.rellenar(new Punto(0, 0), c -> c == '.', 'o'));
+        assertEquals(String.join("\n",
+                "oo#..",
+                "oo#..",
+                "###..",
+                "...#.",
+                "....#"), mapa.toString());
+        // la zona de la derecha llega hasta (3, 2) y (4, 3), pero no cruza el '#' en diagonal hacia abajo a la izquierda
+        assertEquals(7, mapa.rellenar(new Punto(4, 0), c -> c == '.', 'x'));
+        assertEquals('x', mapa.obtener(new Punto(4, 3)));
+        assertEquals('.', mapa.obtener(new Punto(0, 3)));
+    }
+
+    @Test
+    @DisplayName("rellenar: un inicio fuera de la grilla o no transitable no cambia nada")
+    void rellenarSinInicioValido() {
+        Grilla mapa = Grilla.desdeLineas(List.of("..", "#."));
+        Grilla original = mapa.copiar();
+        assertEquals(0, mapa.rellenar(new Punto(0, 1), c -> c == '.', 'o'));
+        assertEquals(0, mapa.rellenar(new Punto(5, 5), c -> c == '.', 'o'));
+        assertEquals(original, mapa);
+    }
+
+    @Test
+    @DisplayName("rellenar: da lo mismo que BFS.explorar seguido de establecer")
+    void rellenarComoBFS() {
+        Grilla mapa = Grilla.desdeLineas(List.of(
+                "....#....",
+                ".##.#.##.",
+                ".#..#..#.",
+                ".#.###.#.",
+                ".#.....#.",
+                ".#######.",
+                "........."));
+        Grilla conBFS = mapa.copiar();
+        BFS.explorar(new Punto(0, 0), p -> conBFS.vecinos(p, c -> c != '#')).keySet()
+                .forEach(p -> conBFS.establecer(p, 'o'));
+        int rellenadas = mapa.rellenar(new Punto(0, 0), c -> c != '#', 'o');
+        assertEquals(conBFS, mapa);
+        assertEquals(conBFS.contar('o'), rellenadas);
+    }
 }
