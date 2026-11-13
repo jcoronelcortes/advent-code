@@ -1,5 +1,6 @@
 package advent.code;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -63,12 +64,10 @@ public class Principal {
      * se omiten en silencio (todavía no se resolvieron o falta pegar el input).
      */
     private static void ejecutarAnio(int anio) throws Exception {
-        String formato = "%-4s  %-20s  %10s  %-20s  %10s%n";
         System.out.println("=== Año " + anio + " ===");
-        System.out.printf(formato, "Día", "Parte 1", "ms", "Parte 2", "ms");
 
+        List<List<String>> filas = new ArrayList<>();
         double total = 0;
-        int ejecutados = 0;
         for (int dia = 1; dia <= ULTIMO_DIA; dia++) {
             if (!EntradaSalida.existeEntrada(anio, dia)) continue;
             Resolvedor resolvedor;
@@ -81,14 +80,52 @@ public class Principal {
             List<String> lineas = EntradaSalida.leerEntrada(anio, dia);
             Medicion parte1 = medir(() -> resolvedor.parte1(lineas));
             Medicion parte2 = medir(() -> resolvedor.parte2(lineas));
-            System.out.printf(formato, String.format("%02d", dia),
+            filas.add(List.of(String.format("%02d", dia),
                     parte1.resultado(), String.format("%.1f", parte1.milisegundos()),
-                    parte2.resultado(), String.format("%.1f", parte2.milisegundos()));
-
+                    parte2.resultado(), String.format("%.1f", parte2.milisegundos())));
             total += parte1.milisegundos() + parte2.milisegundos();
-            ejecutados++;
         }
-        System.out.printf("%d días en %.1f ms%n", ejecutados, total);
+
+        tabla(List.of("Día", "Parte 1", "ms", "Parte 2", "ms"), filas).forEach(System.out::println);
+        System.out.printf("%d días en %.1f ms%n", filas.size(), total);
+    }
+
+    /**
+     * Arma las líneas de la tabla anual con cada columna tan ancha como su
+     * texto más largo (encabezado incluido), para que las respuestas largas
+     * no desalineen las demás columnas. Las columnas de tiempo ({@code ms})
+     * se alinean a la derecha; las demás, a la izquierda.
+     *
+     * @param encabezados los títulos de las columnas
+     * @param filas       los valores de cada fila, en el mismo orden
+     * @return las líneas, empezando por la de encabezados, sin espacios al final
+     */
+    static List<String> tabla(List<String> encabezados, List<List<String>> filas) {
+        int[] anchos = new int[encabezados.size()];
+        for (int columna = 0; columna < anchos.length; columna++) {
+            anchos[columna] = encabezados.get(columna).length();
+            for (List<String> fila : filas) anchos[columna] = Math.max(anchos[columna], fila.get(columna).length());
+        }
+        List<String> lineas = new ArrayList<>();
+        for (List<String> fila : concatenar(encabezados, filas)) {
+            StringBuilder linea = new StringBuilder();
+            for (int columna = 0; columna < anchos.length; columna++) {
+                if (columna > 0) linea.append("  ");
+                String valor = fila.get(columna);
+                String relleno = " ".repeat(anchos[columna] - valor.length());
+                boolean derecha = encabezados.get(columna).equals("ms");
+                linea.append(derecha ? relleno + valor : valor + relleno);
+            }
+            lineas.add(linea.toString().stripTrailing());
+        }
+        return lineas;
+    }
+
+    private static List<List<String>> concatenar(List<String> encabezados, List<List<String>> filas) {
+        List<List<String>> todas = new ArrayList<>();
+        todas.add(encabezados);
+        todas.addAll(filas);
+        return todas;
     }
 
     /** Resultado de una parte y el tiempo que tardó. */
