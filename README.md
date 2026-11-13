@@ -180,3 +180,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [06](src/main/java/advent/code/y2023/Dia06.java) | Espera y Verás | 4403592 | 38017587 | [ver](soluciones/2023/dia06.md) |
 | [07](src/main/java/advent/code/y2023/Dia07.java) | Cartas de Camello | 246163188 | 245794069 | [ver](soluciones/2023/dia07.md) |
 | [08](src/main/java/advent/code/y2023/Dia08.java) | Páramo Embrujado | 13019 | 13524038372771 | [ver](soluciones/2023/dia08.md) |
+| [09](src/main/java/advent/code/y2023/Dia09.java) | Mantenimiento del Espejismo | 2043183816 | 1118 | [ver](soluciones/2023/dia09.md) |
