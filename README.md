@@ -164,3 +164,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [22](src/main/java/advent/code/y2024/Dia22.java) | Mercado de Monos | 17163502021 | 1938 | [ver](soluciones/2024/dia22.md) |
 | [23](src/main/java/advent/code/y2024/Dia23.java) | Fiesta LAN | 1253 | ag,bt,cq,da,hp,hs,mi,pa,qd,qe,qi,ri,uq | [ver](soluciones/2024/dia23.md) |
 | [24](src/main/java/advent/code/y2024/Dia24.java) | Cables Cruzados | 49520947122770 | gjc,gvm,qjj,qsb,wmp,z17,z26,z39 | [ver](soluciones/2024/dia24.md) |
+| [25](src/main/java/advent/code/y2024/Dia25.java) | Crónica del Código | 3320 | estrella final | [ver](soluciones/2024/dia25.md) |
