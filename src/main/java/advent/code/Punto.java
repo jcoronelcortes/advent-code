@@ -24,6 +24,20 @@ public record Punto(int x, int y) {
             new Punto(-1, 0),                    new Punto(1, 0),
             new Punto(-1, 1),  new Punto(0, 1),  new Punto(1, 1));
 
+    /**
+     * Crea un punto a partir de un texto con dos números, por ejemplo
+     * {@code "5,4"} o {@code "p=-3,7"}. El primero es {@code x} (columna) y
+     * el segundo {@code y} (fila).
+     *
+     * @param texto texto con exactamente dos números enteros
+     * @return el punto
+     * @throws IllegalArgumentException si el texto no tiene dos números
+     */
+    public static Punto parsear(String texto) {
+        List<Integer> numeros = Utiles.leerNumeros(texto, 2);
+        return new Punto(numeros.get(0), numeros.get(1));
+    }
+
     /** Mueve el punto una posición en la dirección indicada. */
     public Punto mover(Direccion direccion) {
         return new Punto(x + direccion.dx(), y + direccion.dy());

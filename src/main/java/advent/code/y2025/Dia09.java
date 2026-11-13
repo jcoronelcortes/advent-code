@@ -172,8 +172,6 @@ public class Dia09 implements Resolvedor {
      * @return baldosas rojas en el orden del input
      */
     static List<Punto> leerBaldosas(List<String> lineas) {
-        return Utiles.numerosPorLinea(lineas).stream()
-                .map(numeros -> new Punto(numeros.get(0), numeros.get(1)))
-                .toList();
+        return Utiles.lineasNoVacias(lineas).stream().map(Punto::parsear).toList();
     }
 }

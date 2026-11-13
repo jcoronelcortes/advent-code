@@ -124,10 +124,15 @@ public class Dia17 implements Resolvedor {
         private final int[] programa;
 
         Computadora(long a, long b, long c, List<Integer> programa) {
+            this(a, b, c, programa.stream().mapToInt(Integer::intValue).toArray());
+        }
+
+        /** El programa nunca se modifica, así que varias computadoras pueden compartir el arreglo. */
+        private Computadora(long a, long b, long c, int[] programa) {
             this.a = a;
             this.b = b;
             this.c = c;
-            this.programa = programa.stream().mapToInt(Integer::intValue).toArray();
+            this.programa = programa;
         }
 
         /**
@@ -151,9 +156,13 @@ public class Dia17 implements Resolvedor {
 
         List<Integer> programa() { return Arrays.stream(programa).boxed().toList(); }
 
-        /** Una computadora nueva con el mismo programa y {@code B}, {@code C}, pero otro {@code A}. */
+        /**
+         * Una computadora nueva con el mismo programa, {@code B} y {@code C},
+         * pero otro {@code A}. Comparte el arreglo del programa en vez de
+         * copiarlo: la parte 2 crea una por cada candidato.
+         */
         Computadora conA(long nuevoA) {
-            return new Computadora(nuevoA, b, c, programa());
+            return new Computadora(nuevoA, b, c, programa);
         }
 
         /**

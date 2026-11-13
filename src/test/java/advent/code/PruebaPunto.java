@@ -11,6 +11,20 @@ import static org.junit.jupiter.api.Assertions.*;
 class PruebaPunto {
 
     @Test
+    @DisplayName("parsear: x es el primer número (columna) e y el segundo (fila), con texto y negativos")
+    void parsear() {
+        assertEquals(new Punto(5, 4), Punto.parsear("5,4"));
+        assertEquals(new Punto(-3, 7), Punto.parsear("p=-3,7"));
+    }
+
+    @Test
+    @DisplayName("parsear: rechaza textos sin exactamente 2 números")
+    void parsear_invalido() {
+        assertThrows(IllegalArgumentException.class, () -> Punto.parsear("5"));
+        assertThrows(IllegalArgumentException.class, () -> Punto.parsear("1,2,3"));
+    }
+
+    @Test
     @DisplayName("mover se desplaza en la dirección correcta")
     void mover() {
         Punto origen = new Punto(3, 3);
