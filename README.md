@@ -153,3 +153,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [11](src/main/java/advent/code/y2024/Dia11.java) | Piedras Plutonianas | 183248 | 218811774248729 | [ver](soluciones/2024/dia11.md) |
 | [12](src/main/java/advent/code/y2024/Dia12.java) | Grupos de Jardín | 1488414 | 911750 | [ver](soluciones/2024/dia12.md) |
 | [13](src/main/java/advent/code/y2024/Dia13.java) | Artilugio de Garra | 30973 | 95688837203288 | [ver](soluciones/2024/dia13.md) |
+| [14](src/main/java/advent/code/y2024/Dia14.java) | Reducto del Baño | 218433348 | 6512 | [ver](soluciones/2024/dia14.md) |
