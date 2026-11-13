@@ -7,6 +7,11 @@
 # Si está definida la variable AOC_SESSION (cookie de sesión de AoC),
 # también descarga el input.
 #
+# Si el enunciado de la parte 1 ya está pegado, muestra el título original
+# en inglés para traducirlo; y si falta el título en español, se detiene sin
+# crear nada (los archivos no se sobrescriben, así que quedarían con
+# "Título pendiente").
+#
 # Crea (sin sobrescribir los que ya existan):
 #   - src/main/java/advent/code/y<anio>/DiaNN.java         clase de la solución
 #   - src/test/java/advent/code/y<anio>/DiaNNPrueba.java   pruebas con el ejemplo del enunciado
@@ -38,6 +43,27 @@ ENUNCIADOS="enunciados/${ANIO}"
 ENUNCIADO_1="${ENUNCIADOS}/dia${DIA_FMT}_parte1.txt"
 ENUNCIADO_2="${ENUNCIADOS}/dia${DIA_FMT}_parte2.txt"
 
+echo "Año ${ANIO} — Día ${DIA_NUM}: ${TITULO}"
+
+# Título original en inglés, si el enunciado de la parte 1 ya está pegado
+# (con el nombre en español o en inglés). Su primera línea es "--- Day N: Título ---".
+for POSIBLE in "$ENUNCIADO_1" "${ENUNCIADOS}/dia${DIA_FMT}_part1.txt"; do
+    if [ -s "$POSIBLE" ]; then
+        ORIGINAL=$(head -n 1 "$POSIBLE" | sed -n 's/^--- Day [0-9]*: \(.*\) ---[[:space:]]*$/\1/p')
+        if [ -n "$ORIGINAL" ]; then
+            echo "  título original: ${ORIGINAL}"
+            if [ "$TITULO" = "Título pendiente" ]; then
+                # Sin crear nada: los archivos no se sobrescriben, así que quedarían con "Título pendiente"
+                echo
+                echo "Falta el título en español. No se creó ningún archivo; ejecutar por ejemplo:"
+                echo "  ./nuevo-dia.sh ${ANIO} ${DIA_NUM} \"<traducción de: ${ORIGINAL}>\""
+                exit 1
+            fi
+        fi
+        break
+    fi
+done
+
 mkdir -p "$(dirname "$CLASE")" "$(dirname "$PRUEBA")" "$(dirname "$DOC")" "$(dirname "$INPUT")" "$ENUNCIADOS"
 
 # Escribe stdin en el archivo solo si todavía no existe
@@ -52,7 +78,6 @@ crear() {
     fi
 }
 
-echo "Año ${ANIO} — Día ${DIA_NUM}: ${TITULO}"
 
 # -----------------------------------------------------------------------------
 # Clase de la solución

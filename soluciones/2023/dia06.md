@@ -33,29 +33,24 @@ Si se aprieta el botón `h` ms en una carrera de `T`, el bote va a velocidad `h`
 
 #### Búsqueda binaria con enteros
 
-`h₀` se encuentra con una búsqueda binaria en la mitad creciente `[0, T / 2]`:
+En la mitad creciente `[0, T / 2]`, "supera el récord" es **monótono**: si un `h` lo supera, todos los mayores (hasta la mitad) también. Así que `h₀` se encuentra con una búsqueda binaria, usando la utilidad `Busqueda.primero`, que devuelve el menor valor de un intervalo que cumple una condición monótona (o vacío si ninguno la cumple):
 
 ```java
 // Dia06.java — formasDeGanar()
-long mitad = tiempo / 2;
-if (distancia(mitad, tiempo) <= record) return 0;   // ni el mejor h alcanza
-long bajo = 0;        // no gana (h = 0 recorre 0, y el récord no es negativo)
-long alto = mitad;    // gana
-while (alto - bajo > 1) {
-    long medio = bajo + (alto - bajo) / 2;
-    if (distancia(medio, tiempo) > record) alto = medio;
-    else bajo = medio;
-}
-return tiempo - 2 * alto + 1;
+if (tiempo < 0) throw new IllegalArgumentException("El tiempo no puede ser negativo: " + tiempo);
+OptionalLong primero = Busqueda.primero(0, tiempo / 2, h -> distancia(h, tiempo) > record);
+return primero.isPresent() ? tiempo - 2 * primero.getAsLong() + 1 : 0;
 ```
+
+Si ni siquiera el mejor `h` (la mitad) supera el récord, no hay formas de ganar. Un récord negativo no necesita un caso aparte: todos los `h` lo superan, `h₀` es 0 y las formas son `T + 1`.
 
 También se podría resolver la ecuación cuadrática `h² − T·h + récord = 0` con la fórmula de la raíz, pero en `double` los redondeos son delicados justo en el caso que más importa: cuando la distancia **empata** con el récord (en la tercera carrera del ejemplo, apretar 10 ms da exactamente 200, y empatar no alcanza). La búsqueda binaria usa solo enteros y compara exactamente. Con tiempos de dos cifras sería igual de fácil probar todos los `h`, pero así el método no depende del tamaño de los números.
 
 #### Verificación
 
 - Prueba con el ejemplo (288), con las **distancias** de la carrera de 7 ms y con las formas de ganar cada carrera (4, 8 y 9), incluido el empate en 200.
-- La búsqueda binaria coincide con la **fuerza bruta** (probar cada `h` de 0 a `T`) en todas las carreras de hasta 60 ms, con todos los récords posibles.
-- Un récord negativo o líneas que no coinciden fallan con un mensaje claro.
+- La búsqueda binaria coincide con la **fuerza bruta** (probar cada `h` de 0 a `T`) en todas las carreras de hasta 60 ms, con todos los récords posibles (incluido −1, que gana con cualquier `h`).
+- Un tiempo negativo, una cantidad de líneas distinta de dos o líneas que no coinciden fallan con un mensaje claro. Las dos líneas se leen con `Utiles.lineasNoVacias(lineas, 2)`, que exige la cantidad exacta.
 - Con el input real, un script independiente en Python prueba todos los `h` de cada carrera y obtiene el mismo resultado.
 
 **Resultado con el input real: 4403592**
@@ -90,13 +85,12 @@ Cada línea se convierte en un solo número quitándole todo lo que no sea cifra
 ```java
 // Dia06.java
 public String parte2(List<String> lineas) {
-    List<String> datos = Utiles.lineasNoVacias(lineas);
-    if (datos.size() != 2) throw new IllegalArgumentException("Se esperaban dos líneas: Time y Distance");
+    List<String> datos = Utiles.lineasNoVacias(lineas, 2);   // Time y Distance
     return String.valueOf(formasDeGanar(juntarCifras(datos.get(0)), juntarCifras(datos.get(1))));
 }
 ```
 
-En el input real la carrera dura casi **50 millones** de ms y el récord tiene 15 cifras. Probar cada `h` sería posible (son 50 millones de multiplicaciones), pero la búsqueda binaria de la parte 1 necesita unas 25 comparaciones y termina en menos de un milisegundo. Las distancias llegan a unos 6 × 10<sup>14</sup>: caben en un `long`, y `distancia` usa `Math.multiplyExact` por si no cupieran.
+En el input real la carrera dura casi **50 millones** de ms y el récord tiene 15 cifras. Probar cada `h` sería posible (son 50 millones de multiplicaciones), pero la búsqueda binaria de la parte 1 (`Busqueda.primero`) necesita unas 25 comparaciones y termina en menos de un milisegundo. Las distancias llegan a unos 6 × 10<sup>14</sup>: caben en un `long`, y `distancia` usa `Math.multiplyExact` por si no cupieran.
 
 #### Verificación
 

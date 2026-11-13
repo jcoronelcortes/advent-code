@@ -1,6 +1,7 @@
 package advent.code.y2024;
 
 import advent.code.BFS;
+import advent.code.Busqueda;
 import advent.code.Grilla;
 import advent.code.Punto;
 import advent.code.Resolvedor;
@@ -89,12 +90,10 @@ public class Dia18 implements Resolvedor {
      *
      * <p>Cada byte solo agrega un obstáculo, así que si la salida es
      * inalcanzable después de k bytes, también lo es después de más. Eso
-     * permite una <b>búsqueda binaria</b> sobre la cantidad de bytes caídos,
-     * con una BFS en cada paso: unas 12 BFS en vez de una por byte.</p>
-     *
-     * <p>Invariante: con {@code alcanzable} bytes hay camino y con
-     * {@code bloqueado} no. El primer byte que bloquea es el número
-     * {@code bloqueado} (contando desde 1).</p>
+     * permite una <b>búsqueda binaria</b> ({@link Busqueda#primero}) sobre la
+     * cantidad de bytes caídos, con una BFS en cada paso: unas 12 BFS en vez
+     * de una por byte. Si la primera cantidad sin camino es {@code k}, el
+     * byte que bloquea es el número {@code k} (contando desde 1).</p>
      *
      * @param bytes las posiciones de los bytes, en orden
      * @param lado  coordenada máxima
@@ -103,20 +102,12 @@ public class Dia18 implements Resolvedor {
      *                                  si ya lo está antes de que caiga nada
      */
     static Punto primerByteQueBloquea(List<Punto> bytes, int lado) {
-        if (pasosMinimos(bytes, lado, 0).isEmpty()) {
+        long bloqueado = Busqueda.primero(0, bytes.size(), cantidad -> pasosMinimos(bytes, lado, (int) cantidad).isEmpty())
+                .orElseThrow(() -> new IllegalArgumentException("Ningún byte bloquea la salida"));
+        if (bloqueado == 0) {
             throw new IllegalArgumentException("La salida es inalcanzable antes de que caiga algún byte");
         }
-        if (pasosMinimos(bytes, lado, bytes.size()).isPresent()) {
-            throw new IllegalArgumentException("Ningún byte bloquea la salida");
-        }
-        int alcanzable = 0;
-        int bloqueado = bytes.size();
-        while (bloqueado - alcanzable > 1) {
-            int medio = (alcanzable + bloqueado) >>> 1;
-            if (pasosMinimos(bytes, lado, medio).isPresent()) alcanzable = medio;
-            else bloqueado = medio;
-        }
-        return bytes.get(bloqueado - 1);
+        return bytes.get((int) bloqueado - 1);
     }
 
     /**

@@ -36,6 +36,20 @@ public final class Utiles {
     }
 
     /**
+     * Igual que {@link #lineasNoVacias(List)}, pero exige una cantidad exacta
+     * de líneas: falla con un mensaje claro si el input no tiene el formato
+     * esperado (ej. 2023 día 6: una línea {@code Time} y una {@code Distance}).
+     *
+     * @param lineas   líneas del input
+     * @param cantidad cantidad de líneas no vacías esperada
+     * @return las líneas no vacías
+     * @throws IllegalArgumentException si no hay exactamente esa cantidad
+     */
+    public static List<String> lineasNoVacias(List<String> lineas, int cantidad) {
+        return exigirCantidad(lineasNoVacias(lineas), cantidad, "líneas no vacías", lineas);
+    }
+
+    /**
      * Separa el input en secciones delimitadas por líneas en blanco, un
      * formato muy común en AoC (ej. 2025 día 5: rangos, línea en blanco, IDs).
      *

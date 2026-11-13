@@ -69,7 +69,7 @@ class Dia06Prueba {
     @DisplayName("Parte 1: coincide con la fuerza bruta en todas las carreras de hasta 60 ms y todos los récords posibles")
     void parte1_coincideConFuerzaBruta() {
         for (long tiempo = 0; tiempo <= 60; tiempo++) {
-            for (long record = 0; record <= tiempo * tiempo / 4 + 1; record++) {
+            for (long record = -1; record <= tiempo * tiempo / 4 + 1; record++) {   // con −1, todo h gana
                 assertEquals(formasPorFuerzaBruta(tiempo, record), Dia06.formasDeGanar(tiempo, record),
                         "tiempo " + tiempo + ", récord " + record);
             }
@@ -79,7 +79,7 @@ class Dia06Prueba {
     @Test
     @DisplayName("Parte 1: datos inválidos fallan con un mensaje claro")
     void parte1_datosInvalidos() {
-        assertThrows(IllegalArgumentException.class, () -> Dia06.formasDeGanar(7, -1));
+        assertThrows(IllegalArgumentException.class, () -> Dia06.formasDeGanar(-1, 0));
         assertThrows(IllegalArgumentException.class, () -> dia06.parte1(List.of("Time: 7 15")));
         assertThrows(IllegalArgumentException.class, () -> dia06.parte1(List.of("Time: 7 15", "Distance: 9")));
     }

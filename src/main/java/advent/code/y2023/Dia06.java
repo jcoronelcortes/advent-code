@@ -1,9 +1,11 @@
 package advent.code.y2023;
 
+import advent.code.Busqueda;
 import advent.code.Resolvedor;
 import advent.code.Utiles;
 
 import java.util.List;
+import java.util.OptionalLong;
 
 /**
  * Año 2023 — Día 6: Espera y Verás
@@ -27,8 +29,7 @@ public class Dia06 implements Resolvedor {
      */
     @Override
     public String parte1(List<String> lineas) {
-        List<String> datos = Utiles.lineasNoVacias(lineas);
-        if (datos.size() != 2) throw new IllegalArgumentException("Se esperaban dos líneas: Time y Distance");
+        List<String> datos = Utiles.lineasNoVacias(lineas, 2);   // Time y Distance
         List<Long> tiempos = Utiles.leerNumerosLargos(datos.get(0));
         List<Long> records = Utiles.leerNumerosLargos(datos.get(1), tiempos.size());
         long producto = 1;
@@ -47,8 +48,7 @@ public class Dia06 implements Resolvedor {
      */
     @Override
     public String parte2(List<String> lineas) {
-        List<String> datos = Utiles.lineasNoVacias(lineas);
-        if (datos.size() != 2) throw new IllegalArgumentException("Se esperaban dos líneas: Time y Distance");
+        List<String> datos = Utiles.lineasNoVacias(lineas, 2);   // Time y Distance
         return String.valueOf(formasDeGanar(juntarCifras(datos.get(0)), juntarCifras(datos.get(1))));
     }
 
@@ -81,27 +81,20 @@ public class Dia06 implements Resolvedor {
      * intervalo {@code [h₀, T − h₀]}, donde {@code h₀} es el menor que supera
      * el récord, y son {@code T − 2·h₀ + 1}.</p>
      *
-     * <p>{@code h₀} se busca con una <b>búsqueda binaria</b> en la mitad
-     * creciente, {@code [0, T / 2]}, usando solo enteros: así no hay errores
-     * de redondeo como con la fórmula de la raíz cuadrada en {@code double},
-     * que importan justo cuando la distancia empata con el récord.</p>
+     * <p>{@code h₀} se busca con {@link Busqueda#primero} (búsqueda
+     * binaria) en la mitad creciente, {@code [0, T / 2]}, donde "supera el
+     * récord" es monótono. Usa solo enteros: así no hay errores de redondeo
+     * como con la fórmula de la raíz cuadrada en {@code double}, que importan
+     * justo cuando la distancia empata con el récord.</p>
      *
      * @param tiempo la duración de la carrera
      * @param record la distancia a superar (estrictamente)
      * @return la cantidad de formas de ganar (0 si no hay ninguna)
-     * @throws IllegalArgumentException si el tiempo o el récord son negativos
+     * @throws IllegalArgumentException si el tiempo es negativo
      */
     static long formasDeGanar(long tiempo, long record) {
-        if (tiempo < 0 || record < 0) throw new IllegalArgumentException("Tiempo y récord no pueden ser negativos");
-        long mitad = tiempo / 2;
-        if (distancia(mitad, tiempo) <= record) return 0;   // ni el mejor h alcanza
-        long bajo = 0;        // no gana (h = 0 recorre 0, y el récord no es negativo)
-        long alto = mitad;    // gana
-        while (alto - bajo > 1) {
-            long medio = bajo + (alto - bajo) / 2;
-            if (distancia(medio, tiempo) > record) alto = medio;
-            else bajo = medio;
-        }
-        return tiempo - 2 * alto + 1;
+        if (tiempo < 0) throw new IllegalArgumentException("El tiempo no puede ser negativo: " + tiempo);
+        OptionalLong primero = Busqueda.primero(0, tiempo / 2, h -> distancia(h, tiempo) > record);
+        return primero.isPresent() ? tiempo - 2 * primero.getAsLong() + 1 : 0;
     }
 }

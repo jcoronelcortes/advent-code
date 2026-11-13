@@ -11,6 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class PruebaUtiles {
 
     @Test
+    @DisplayName("lineasNoVacias con cantidad: devuelve las líneas o falla con un mensaje claro")
+    void lineasNoVacias_cantidad() {
+        List<String> lineas = List.of("Time: 7", "", "Distance: 9", "");
+        assertEquals(List.of("Time: 7", "Distance: 9"), Utiles.lineasNoVacias(lineas, 2));
+        IllegalArgumentException error = assertThrows(IllegalArgumentException.class,
+                () -> Utiles.lineasNoVacias(lineas, 3));
+        assertTrue(error.getMessage().contains("Se esperaban 3 líneas no vacías y hay 2"));
+    }
+
+    @Test
     @DisplayName("leerNumeros extrae enteros positivos de una cadena")
     void leerNumeros_positivos() {
         assertEquals(List.of(1, 2, 3), Utiles.leerNumeros("1 2 3"));

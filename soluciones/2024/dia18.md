@@ -105,19 +105,19 @@ Así que la respuesta del ejemplo es `6,1`.
 
 Probar byte por byte con una BFS cada vez funcionaría, pero son miles de BFS. Hay algo mejor: cada byte solo **agrega** un obstáculo, nunca saca uno. Entonces, si con k bytes la salida es inalcanzable, con más bytes también lo es. La respuesta "¿hay camino con k bytes?" es **sí, sí, …, sí, no, no, …, no**, y alcanza con encontrar dónde cambia: una **búsqueda binaria**.
 
+La utilidad `Busqueda.primero` hace la búsqueda binaria: devuelve la menor cantidad de bytes, entre 0 y todos, con la que **no** hay camino:
+
 ```java
 // Dia18.java — primerByteQueBloquea()
-int alcanzable = 0;
-int bloqueado = bytes.size();
-while (bloqueado - alcanzable > 1) {
-    int medio = (alcanzable + bloqueado) >>> 1;
-    if (pasosMinimos(bytes, lado, medio).isPresent()) alcanzable = medio;
-    else bloqueado = medio;
+long bloqueado = Busqueda.primero(0, bytes.size(), cantidad -> pasosMinimos(bytes, lado, (int) cantidad).isEmpty())
+        .orElseThrow(() -> new IllegalArgumentException("Ningún byte bloquea la salida"));
+if (bloqueado == 0) {
+    throw new IllegalArgumentException("La salida es inalcanzable antes de que caiga algún byte");
 }
-return bytes.get(bloqueado - 1);
+return bytes.get((int) bloqueado - 1);
 ```
 
-La invariante es que con `alcanzable` bytes hay camino y con `bloqueado` no. Antes de empezar se comprueban los dos extremos (sin bytes tiene que haber camino, y con todos no); si alguno falla, se lanza una excepción con un mensaje claro. Al terminar, los dos están pegados y el byte que bloquea es el número `bloqueado`, que en la lista (indexada desde 0) está en `bloqueado - 1`.
+Si ninguna cantidad bloquea la salida, la búsqueda devuelve vacío; si ya sin bytes no hay camino, devuelve 0. Los dos casos fallan con un mensaje claro. Si no, el byte que bloquea es el número `bloqueado`, que en la lista (indexada desde 0) está en `bloqueado - 1`.
 
 Cada paso reutiliza `pasosMinimos` de la parte 1. Con 3450 bytes son unas **12 BFS** y termina en unos 20 ms.
 

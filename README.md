@@ -105,6 +105,8 @@ mvn test
 
 Genera la clase de solución, la clase de prueba (con los tests de ejemplo marcados `@Disabled` hasta completarlos), la documentación en `soluciones/`, la fila en la tabla de este README, el archivo del input y los archivos de enunciado vacíos (`diaNN_parte1.txt` y `diaNN_parte2.txt`, para solo pegar el texto con el nombre correcto). No sobrescribe archivos que ya existan.
 
+Si el enunciado de la parte 1 ya está pegado, el script muestra el **título original** en inglés para traducirlo. Si en ese caso falta el título en español, se detiene sin crear nada y muestra el comando a ejecutar.
+
 **Descarga automática del input (opcional):** si está definida la variable de entorno `AOC_SESSION` con el valor de la cookie `session` de adventofcode.com, el script descarga el input una sola vez (si el archivo ya tiene contenido no lo vuelve a pedir). La cookie se define en el shell, nunca en el repositorio:
 
 ```bash
