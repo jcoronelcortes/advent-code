@@ -160,3 +160,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [18](src/main/java/advent/code/y2024/Dia18.java) | Carrera en la RAM | 234 | 58,19 | [ver](soluciones/2024/dia18.md) |
 | [19](src/main/java/advent/code/y2024/Dia19.java) | Disposición de Toallas | 206 | 622121814629343 | [ver](soluciones/2024/dia19.md) |
 | [20](src/main/java/advent/code/y2024/Dia20.java) | Condición de Carrera | 1360 | 1005476 | [ver](soluciones/2024/dia20.md) |
+| [21](src/main/java/advent/code/y2024/Dia21.java) | Enigma de los Teclados | 163086 | 198466286401228 | [ver](soluciones/2024/dia21.md) |
