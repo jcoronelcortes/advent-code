@@ -157,3 +157,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [15](src/main/java/advent/code/y2024/Dia15.java) | Problemas en el Almacén | 1457740 | 1467145 | [ver](soluciones/2024/dia15.md) |
 | [16](src/main/java/advent/code/y2024/Dia16.java) | Laberinto de Renos | 160624 | 692 | [ver](soluciones/2024/dia16.md) |
 | [17](src/main/java/advent/code/y2024/Dia17.java) | Computadora Cronoespacial | 7,4,2,5,1,4,6,0,4 | 164278764924605 | [ver](soluciones/2024/dia17.md) |
+| [18](src/main/java/advent/code/y2024/Dia18.java) | Carrera en la RAM | 234 | 58,19 | [ver](soluciones/2024/dia18.md) |
