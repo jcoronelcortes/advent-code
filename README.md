@@ -156,3 +156,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [14](src/main/java/advent/code/y2024/Dia14.java) | Reducto del Baño | 218433348 | 6512 | [ver](soluciones/2024/dia14.md) |
 | [15](src/main/java/advent/code/y2024/Dia15.java) | Problemas en el Almacén | 1457740 | 1467145 | [ver](soluciones/2024/dia15.md) |
 | [16](src/main/java/advent/code/y2024/Dia16.java) | Laberinto de Renos | 160624 | 692 | [ver](soluciones/2024/dia16.md) |
+| [17](src/main/java/advent/code/y2024/Dia17.java) | Computadora Cronoespacial | 7,4,2,5,1,4,6,0,4 | 164278764924605 | [ver](soluciones/2024/dia17.md) |
