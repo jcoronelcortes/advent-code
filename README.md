@@ -186,3 +186,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [09](src/main/java/advent/code/y2023/Dia09.java) | Mantenimiento del Espejismo | 2043183816 | 1118 | [ver](soluciones/2023/dia09.md) |
 | [10](src/main/java/advent/code/y2023/Dia10.java) | Laberinto de Tuberías | 6690 | 525 | [ver](soluciones/2023/dia10.md) |
 | [11](src/main/java/advent/code/y2023/Dia11.java) | Expansión Cósmica | 9627977 | 644248339497 | [ver](soluciones/2023/dia11.md) |
+| [12](src/main/java/advent/code/y2023/Dia12.java) | Aguas Termales | 7204 | 1672318386674 | [ver](soluciones/2023/dia12.md) |
