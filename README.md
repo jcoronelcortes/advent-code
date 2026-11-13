@@ -197,3 +197,4 @@ Después de resolver un día, agregar sus respuestas a `RespuestasPrueba` para p
 | [20](src/main/java/advent/code/y2023/Dia20.java) | Propagación de Pulsos | 743871576 | 244151741342687 | [ver](soluciones/2023/dia20.md) |
 | [21](src/main/java/advent/code/y2023/Dia21.java) | Contador de Pasos | 3542 | 593174122420825 | [ver](soluciones/2023/dia21.md) |
 | [22](src/main/java/advent/code/y2023/Dia22.java) | Losas de Arena | 457 | 79122 | [ver](soluciones/2023/dia22.md) |
+| [23](src/main/java/advent/code/y2023/Dia23.java) | Una Larga Caminata | 2282 | 6646 | [ver](soluciones/2023/dia23.md) |
