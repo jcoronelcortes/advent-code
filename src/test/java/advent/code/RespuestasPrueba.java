@@ -57,7 +57,8 @@ class RespuestasPrueba {
             "2024, 19, 206,         622121814629343",
             "2024, 20, 1360,        1005476",
             "2024, 21, 163086,      198466286401228",
-            "2024, 22, 17163502021, 1938"
+            "2024, 22, 17163502021, 1938",
+            "2024, 23, 1253,        'ag,bt,cq,da,hp,hs,mi,pa,qd,qe,qi,ri,uq'"
     })
     void respuestas(int anio, int dia, String parte1, String parte2) throws Exception {
         assumeTrue(EntradaSalida.existeEntrada(anio, dia),
