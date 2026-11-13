@@ -2,7 +2,7 @@
 
 [← Anterior: Verificar la respuesta](13-verificar-la-respuesta.md) · [Índice](README.md)
 
-Cada día con su tipo principal y la técnica de la parte 2, que suele ser la que define el problema. El título lleva a la documentación completa del día en `soluciones/`, y el tipo a su sección de esta guía.
+Cada día con su tipo principal y la técnica de la parte 2, que suele ser la que define el problema. El título lleva a la documentación completa del día en `soluciones/`, y el tipo a su sección de esta guía. El panorama de la guía analiza 2023, 2024 y 2025; los días de 2022 se agregan al final de esta tabla a medida que se resuelven.
 
 | Año | Día | Título | Tipo | Técnica clave |
 | --- | --: | --- | --- | --- |
@@ -68,3 +68,4 @@ Cada día con su tipo principal y la técnica de la parte 2, que suele ser la qu
 | 2023 | 3 | [Proporciones de Engranajes](../soluciones/2023/dia03.md) | [Grillas y simulación](02-grillas-y-simulacion.md) | Rachas de cifras y sus 8 vecinos |
 | 2023 | 2 | [Enigma de los Cubos](../soluciones/2023/dia02.md) | [Texto, listas y secuencias](01-texto-listas-y-secuencias.md) | Máximo por color |
 | 2023 | 1 | [Calibración del Trebuchet](../soluciones/2023/dia01.md) | [Texto, listas y secuencias](01-texto-listas-y-secuencias.md) | Buscar desde cada punta |
+| 2022 | 1 | [Contando Calorías](../soluciones/2022/dia01.md) | [Texto, listas y secuencias](01-texto-listas-y-secuencias.md) | Sumar por bloques y los k mayores |
